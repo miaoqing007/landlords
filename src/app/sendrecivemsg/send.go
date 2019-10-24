@@ -1,5 +1,5 @@
 package sendrecivemsg
 
-func SendMsgToClient(msg []byte) {
-	SendMsgChan <- msg
+func SendByteToClient(byte []byte) {
+	SendMsgChan <- byte
 }

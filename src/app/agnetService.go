@@ -1,7 +1,7 @@
 package main
 
 import (
-	"app/sendrecivemsg"
+	"app/session"
 	"bufio"
 	"flag"
 	"fmt"
@@ -11,46 +11,57 @@ import (
 
 func agentRun() {
 	flag.Parse()
-	var l net.Listener
-	var err error
-	l, err = net.Listen("tcp", *host+":"+*port)
+	lestener, err := net.Listen("tcp", *host+":"+*port)
 	if err != nil {
 		fmt.Println("listen error:", err)
 		os.Exit(1)
 	}
-	defer l.Close()
+	defer lestener.Close()
 	fmt.Println("listening on " + *host + ":" + *port)
 	for {
-		conn, err := l.Accept()
+		conn, err := lestener.Accept()
 		if err != nil {
 			fmt.Println("accept error:", err)
 			os.Exit(1)
 		}
 		fmt.Printf("message %s->%s\n", conn.RemoteAddr(), conn.LocalAddr())
-		go handleRequest(conn)
-		go sendrecivemsg.RecieveMsgFromClient()
+		sess := session.NewSession()
+		go handleRequest(conn, sess)
+		go handWriteResp(conn, sess)
+		go sess.ListenRecieveChan()
 	}
 }
 
-func handleRequest(conn net.Conn) {
+func handleRequest(conn net.Conn, sess *session.Session) {
 	ip := conn.RemoteAddr().String()
 	defer func() {
 		fmt.Println("disconnect:" + ip)
+		sess.AddDieChan()
 		conn.Close()
 	}()
 	reader := bufio.NewReader(conn)
-	//writer := bufio.NewWriter(conn)
 	for {
 		b, _, err := reader.ReadLine()
 		if err != nil {
 			return
 		}
-		//select {
-		//case msg := <-sendrecivemsg.SendMsgChan:
-		//	writer.Write(msg)
-		//	writer.Flush()
-		//}
-		sendrecivemsg.ReciveMsgChan <- b
+		sess.AddRecieveChan(b)
 	}
-	fmt.Println("Closed Server!")
+}
+
+func handWriteResp(conn net.Conn, sess *session.Session) {
+	ch := make(chan []byte, 1)
+	sess.EvaluationSendChan(ch)
+	for {
+		select {
+		case msg := <-ch:
+			writer := bufio.NewWriter(conn)
+			writer.Write(msg)
+			writer.Write([]byte("\n"))
+			writer.Flush()
+		case <-sess.Die:
+
+			return
+		}
+	}
 }

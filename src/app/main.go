@@ -9,5 +9,4 @@ var port = flag.String("port", "9999", "port")
 
 func main() {
 	agentRun()
-
 }

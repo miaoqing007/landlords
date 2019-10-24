@@ -6,14 +6,21 @@ import (
 	"app/session"
 )
 
-func RecieveMsgFromClient() {
+func ReceiveMsgFromClient(byte []byte) {
+	ReciveMsgChan <- byte
+}
+
+func ListenReceiveChan() {
 	for msg := range ReciveMsgChan {
 		reader := packet.Reader(msg)
 		c, err := reader.ReadS16()
 		if err != nil {
 			return
 		}
-		executeHandler(c, &session.Session{}, reader)
+		bytes := executeHandler(c, &session.Session{}, reader)
+		for _, byte := range bytes {
+			SendByteToClient(byte)
+		}
 	}
 }
 

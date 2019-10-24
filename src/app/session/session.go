@@ -1,4 +1,37 @@
 package session
 
 type Session struct {
+	Die         chan struct{}
+	recieveChan chan []byte
+	sendChan    chan []byte
+}
+
+func NewSession() *Session {
+	s := &Session{}
+	s.Die = make(chan struct{}, 1)
+	s.recieveChan = make(chan []byte, 1)
+	s.sendChan = make(chan []byte, 1)
+	return s
+}
+
+func (s *Session) AddRecieveChan(byte []byte) {
+	s.recieveChan <- byte
+}
+
+func (s *Session) AddSendRecieveChan(byte []byte) {
+	s.sendChan <- byte
+}
+
+func (s *Session) ListenRecieveChan() {
+	for msg := range s.recieveChan {
+
+	}
+}
+
+func (s *Session) EvaluationSendChan(ch chan []byte) {
+	s.sendChan = ch
+}
+
+func (s *Session) AddDieChan() {
+	s.Die <- struct{}{}
 }

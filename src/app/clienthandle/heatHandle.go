@@ -6,8 +6,9 @@ import (
 	"fmt"
 )
 
-func P_heart_beat_req(session *session.Session, packet *packet.Packet) [][]byte {
+func P_heart_beat_req(session *session.Session, reader *packet.Packet) [][]byte {
 	fmt.Println("heart")
-
-	return nil
+	return [][]byte{
+		packet.Pack(369, nil, nil),
+	}
 }
