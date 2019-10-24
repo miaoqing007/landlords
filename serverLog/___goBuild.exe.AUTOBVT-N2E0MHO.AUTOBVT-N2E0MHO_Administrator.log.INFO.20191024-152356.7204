@@ -1,0 +1,13 @@
+Log file created at: 2019/10/24 15:23:56
+Running on machine: AUTOBVT-N2E0MHO
+Binary: Built with gc go1.9.2 for windows/amd64
+Log line format: [IWEF]mmdd hh:mm:ss.uuuuuu threadid file:line] msg
+I1024 15:23:56.424000    7204 agnetService.go:22] listening on :9999
+I1024 15:24:19.680000    7204 agnetService.go:29] message [::1]:57032->[::1]:9999
+I1024 15:24:19.680000    7204 agnetService.go:47] err=EOF
+I1024 15:24:19.680000    7204 agnetService.go:39] disconnect:[::1]:57032
+I1024 15:24:19.680000    7204 agnetService.go:90] disconnect Write
+I1024 15:24:35.395000    7204 agnetService.go:29] message [::1]:57037->[::1]:9999
+I1024 15:24:45.562000    7204 agnetService.go:47] err=read tcp [::1]:9999->[::1]:57037: wsarecv: An existing connection was forcibly closed by the remote host.
+I1024 15:24:45.562000    7204 agnetService.go:39] disconnect:[::1]:57037
+I1024 15:24:45.562000    7204 agnetService.go:90] disconnect Write
