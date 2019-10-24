@@ -1,10 +1,12 @@
 package main
 
 import (
+	"app/client_handle"
+	"app/misc/packet"
 	"app/session"
 	"bufio"
 	"flag"
-	"fmt"
+	"github.com/golang/glog"
 	"net"
 	"os"
 )
@@ -13,29 +15,28 @@ func agentRun() {
 	flag.Parse()
 	lestener, err := net.Listen("tcp", *host+":"+*port)
 	if err != nil {
-		fmt.Println("listen error:", err)
+		glog.Info("listen error:", err)
 		os.Exit(1)
 	}
 	defer lestener.Close()
-	fmt.Println("listening on " + *host + ":" + *port)
+	glog.Info("listening on " + *host + ":" + *port)
 	for {
 		conn, err := lestener.Accept()
 		if err != nil {
-			fmt.Println("accept error:", err)
+			glog.Info("accept error:", err)
 			os.Exit(1)
 		}
-		fmt.Printf("message %s->%s\n", conn.RemoteAddr(), conn.LocalAddr())
+		glog.Infof("message %s->%s\n", conn.RemoteAddr(), conn.LocalAddr())
 		sess := session.NewSession()
 		go handleRequest(conn, sess)
 		go handWriteResp(conn, sess)
-		go sess.ListenRecieveChan()
 	}
 }
 
 func handleRequest(conn net.Conn, sess *session.Session) {
 	ip := conn.RemoteAddr().String()
 	defer func() {
-		fmt.Println("disconnect:" + ip)
+		glog.Info("disconnect:" + ip)
 		sess.AddDieChan()
 		conn.Close()
 	}()
@@ -43,10 +44,36 @@ func handleRequest(conn net.Conn, sess *session.Session) {
 	for {
 		b, _, err := reader.ReadLine()
 		if err != nil {
+			glog.Info("err=", err)
 			return
 		}
-		sess.AddRecieveChan(b)
+		reader := packet.Reader(b)
+		c, err := reader.ReadS16()
+		if err != nil {
+			glog.Info("err=", err)
+			return
+		}
+		bytes := executeHandler(c, sess, reader)
+		for _, byt := range bytes {
+			sess.AddSendChan(byt)
+		}
 	}
+}
+
+func executeHandler(code int16, sess *session.Session, reader *packet.Packet) [][]byte {
+	//defer helper.PrintPanicStack()
+
+	handle := client_handle.Handlers[code]
+	if handle == nil {
+		return nil
+	}
+	//t := time.Now().UnixNano()
+	// handle request
+	retByte := handle(sess, reader)
+	//testPack := client_handler.HandlersTime[code]
+	//testPack.Num++
+	//testPack.TotalTime = testPack.TotalTime + float64(time.Now().UnixNano()-t)/float64(time.Millisecond)
+	return retByte
 }
 
 func handWriteResp(conn net.Conn, sess *session.Session) {
@@ -60,7 +87,7 @@ func handWriteResp(conn net.Conn, sess *session.Session) {
 			writer.Write([]byte("\n"))
 			writer.Flush()
 		case <-sess.Die:
-
+			glog.Info("disconnect Write")
 			return
 		}
 	}

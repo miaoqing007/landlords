@@ -18,14 +18,8 @@ func (s *Session) AddRecieveChan(byte []byte) {
 	s.recieveChan <- byte
 }
 
-func (s *Session) AddSendRecieveChan(byte []byte) {
+func (s *Session) AddSendChan(byte []byte) {
 	s.sendChan <- byte
-}
-
-func (s *Session) ListenRecieveChan() {
-	for msg := range s.recieveChan {
-
-	}
 }
 
 func (s *Session) EvaluationSendChan(ch chan []byte) {
