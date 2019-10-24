@@ -6,7 +6,7 @@ type Session struct {
 	Die         chan struct{}
 	recieveChan chan []byte
 	sendChan    chan []byte
-	Player      *manager.Player
+	*manager.Player
 }
 
 func NewSession() *Session {
@@ -34,5 +34,10 @@ func (s *Session) AddDieChan() {
 }
 
 func (s *Session) InitUser() {
-
+	s.Player = &manager.Player{}
+	userManger, err := manager.NewUserManager("1")
+	if err != nil {
+		return
+	}
+	s.UserManager = userManger
 }

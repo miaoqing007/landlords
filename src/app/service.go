@@ -1,6 +1,6 @@
 package main
 
 const (
-	ServerHost = "127.0.0.1"
+	ServerHost = "192.168.1.29"
 	ServerPort = "8888"
 )
