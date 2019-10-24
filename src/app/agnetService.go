@@ -5,21 +5,19 @@ import (
 	"app/misc/packet"
 	"app/session"
 	"bufio"
-	"flag"
 	"github.com/golang/glog"
 	"net"
 	"os"
 )
 
 func agentRun() {
-	flag.Parse()
-	lestener, err := net.Listen("tcp", *host+":"+*port)
+	lestener, err := net.Listen("tcp", ServerHost+":"+ServerPort)
 	if err != nil {
 		glog.Info("listen error:", err)
 		os.Exit(1)
 	}
 	defer lestener.Close()
-	glog.Info("listening on " + *host + ":" + *port)
+	glog.Info("listening on " + ServerHost + ":" + ServerPort)
 	for {
 		conn, err := lestener.Accept()
 		if err != nil {

@@ -4,11 +4,15 @@ import (
 	"flag"
 	"fmt"
 	"github.com/golang/glog"
+	"io/ioutil"
+	"os"
+	"time"
 )
 
 const (
 	logDir         = "serverLog"
 	MaxLogFileSize = 1024 * 1024 * 5
+	FileSaveTime   = 12 * time.Hour
 )
 
 func InitLog() {
@@ -21,4 +25,33 @@ func InitLog() {
 	//flag.Set("v", conv.FormatInt(Unc))  // 配置V输出的等级。
 	flag.Parse()
 	glog.MaxSize = MaxLogFileSize
+
+	go findAndRemoveOutTimeLogFile()
+}
+
+func findAndRemoveOutTimeLogFile() {
+	ticker := time.NewTicker(10 * time.Second)
+	for {
+		select {
+		case <-ticker.C:
+			if err := removeOutTimeLogFile(); err != nil {
+				glog.Errorf("clean outTime LogFile Failed err(%v)", err)
+			}
+		}
+	}
+}
+
+func removeOutTimeLogFile() error {
+	files, err := ioutil.ReadDir(logDir)
+	if err != nil {
+		return err
+	}
+	for _, file := range files {
+		if time.Since(file.ModTime()).Seconds() > time.Duration(FileSaveTime).Seconds() {
+			if err := os.Remove(logDir + "\\" + file.Name()); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
 }
