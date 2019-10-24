@@ -2,7 +2,6 @@ package log
 
 import (
 	"flag"
-	"fmt"
 	"github.com/golang/glog"
 	"io/ioutil"
 	"os"
@@ -17,7 +16,6 @@ const (
 
 func InitLog() {
 	if !CreateDir(logDir) {
-		fmt.Println("CreateDir() failed, logDir = ", logDir)
 		return
 	}
 	flag.Set("alsologtostderr", "true") // 日志写入文件的同时，输出到stderr

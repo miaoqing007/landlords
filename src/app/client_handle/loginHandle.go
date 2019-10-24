@@ -6,5 +6,6 @@ import (
 )
 
 func P_user_login_req(session *session.Session, packet *packet.Packet) [][]byte {
+	session.InitUser()
 	return nil
 }

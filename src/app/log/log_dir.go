@@ -16,12 +16,10 @@ const (
 
 func CreateDir(name string) bool {
 	if IsDir(name) {
-		fmt.Printf("%s is already a directory.\n", name)
 		return true
 	}
 
 	if createDirImpl(name) {
-		fmt.Println("Create directory successfully.")
 		return true
 	}
 

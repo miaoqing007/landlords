@@ -1,9 +1,12 @@
 package session
 
+import "app/manager"
+
 type Session struct {
 	Die         chan struct{}
 	recieveChan chan []byte
 	sendChan    chan []byte
+	Player      *manager.Player
 }
 
 func NewSession() *Session {
@@ -28,4 +31,8 @@ func (s *Session) EvaluationSendChan(ch chan []byte) {
 
 func (s *Session) AddDieChan() {
 	s.Die <- struct{}{}
+}
+
+func (s *Session) InitUser() {
+
 }
