@@ -20,13 +20,16 @@ func ComparisonTwoPlayersCards(wasteCards, newCards []string) bool {
 	if wasteType == enmu.ERROR_TYPE {
 		return false
 	}
+	if wasteType == enmu.KING_BOMB {
+		return false
+	}
 	newType := judgeCardsType(newArrayCards)
 	if newType == enmu.ERROR_TYPE {
 		return false
 	}
 	if len(newArrayCards) == len(wasteArrayCards) {
 		if newType == wasteType {
-			return comparisonTwoPalyerCardsSize(newArrayCards, wasteArrayCards)
+			return comparisonTwoPalyerCardsSize(newArrayCards, wasteArrayCards, newType)
 		} else if newType == enmu.KING_BOMB || newType == enmu.BOMB {
 			return true
 		}
@@ -144,7 +147,12 @@ func judgeArrayIfIsSingle_Alone(array []int) bool {
 	return true
 }
 
-func comparisonTwoPalyerCardsSize(newCards, wasteCards []int) bool {
+func comparisonTwoPalyerCardsSize(newCards, wasteCards []int, Type enmu.CardType) bool {
+	if Type == enmu.THREE_AND_ONE {
+		sort.Ints(newCards)
+		sort.Ints(wasteCards)
+		return newCards[1] > wasteCards[1]
+	}
 	nc := 0
 	wc := 0
 	for _, v := range newCards {

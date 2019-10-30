@@ -28,9 +28,9 @@ func agentRun() {
 		}
 		glog.Infof("message %s->%s\n", conn.RemoteAddr(), conn.LocalAddr())
 		sess := session.NewSession()
+		registry.Register(sess.Id, sess)
 		go handleRequest(conn, sess)
 		go handWriteResp(conn, sess)
-		registry.Register(sess.Id, sess)
 	}
 }
 
@@ -38,8 +38,8 @@ func handleRequest(conn net.Conn, sess *session.Session) {
 	ip := conn.RemoteAddr().String()
 	defer func() {
 		glog.Info("disconnect:" + ip)
-		sess.AddDieChan()
 		registry.UnRegister(sess.Id)
+		sess.AddDieChan()
 		conn.Close()
 	}()
 	reader := bufio.NewReader(conn)
