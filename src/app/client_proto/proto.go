@@ -4,6 +4,7 @@ package client_proto
 
 import "app/misc/packet"
 import "fmt"
+import "strings"
 
 type S_null_struct struct {
 }
@@ -47,16 +48,17 @@ func PKT_auto_id(reader *packet.Packet) (tbl S_auto_id, err error) {
 }
 
 type S_entity_id struct {
-	F_id uint64
+	F_id string
 }
 
 func (p S_entity_id) Pack(w *packet.Packet) {
-	w.WriteU64(p.F_id)
+	w.WriteString(p.F_id)
 }
 
 func PKT_entity_id(reader *packet.Packet) (tbl S_entity_id, err error) {
-	tbl.F_id, err = reader.ReadU64()
+	tbl.F_id, err = reader.ReadString()
 	checkErr(err)
+	tbl.F_id = strings.TrimSpace(tbl.F_id)
 
 	return
 }
@@ -72,6 +74,78 @@ func (p S_item_id) Pack(w *packet.Packet) {
 func PKT_item_id(reader *packet.Packet) (tbl S_item_id, err error) {
 	tbl.F_id, err = reader.ReadU32()
 	checkErr(err)
+
+	return
+}
+
+type S_player_cards struct {
+	F_player_1   []string
+	F_player_2   []string
+	F_plyaer_3   []string
+	F_hole_cards []string
+	F_roomId     string
+}
+
+func (p S_player_cards) Pack(w *packet.Packet) {
+	w.WriteU16(uint16(len(p.F_player_1)))
+	for k := range p.F_player_1 {
+		w.WriteString(p.F_player_1[k])
+	}
+	w.WriteU16(uint16(len(p.F_player_2)))
+	for k := range p.F_player_2 {
+		w.WriteString(p.F_player_2[k])
+	}
+	w.WriteU16(uint16(len(p.F_plyaer_3)))
+	for k := range p.F_plyaer_3 {
+		w.WriteString(p.F_plyaer_3[k])
+	}
+	w.WriteU16(uint16(len(p.F_hole_cards)))
+	for k := range p.F_hole_cards {
+		w.WriteString(p.F_hole_cards[k])
+	}
+	w.WriteString(p.F_roomId)
+}
+
+func PKT_player_cards(reader *packet.Packet) (tbl S_player_cards, err error) {
+	{
+		narr, err := reader.ReadU16()
+		checkErr(err)
+		for i := 0; i < int(narr); i++ {
+			v, err := reader.ReadString()
+			tbl.F_player_1 = append(tbl.F_player_1, v)
+			checkErr(err)
+		}
+	}
+	{
+		narr, err := reader.ReadU16()
+		checkErr(err)
+		for i := 0; i < int(narr); i++ {
+			v, err := reader.ReadString()
+			tbl.F_player_2 = append(tbl.F_player_2, v)
+			checkErr(err)
+		}
+	}
+	{
+		narr, err := reader.ReadU16()
+		checkErr(err)
+		for i := 0; i < int(narr); i++ {
+			v, err := reader.ReadString()
+			tbl.F_plyaer_3 = append(tbl.F_plyaer_3, v)
+			checkErr(err)
+		}
+	}
+	{
+		narr, err := reader.ReadU16()
+		checkErr(err)
+		for i := 0; i < int(narr); i++ {
+			v, err := reader.ReadString()
+			tbl.F_hole_cards = append(tbl.F_hole_cards, v)
+			checkErr(err)
+		}
+	}
+	tbl.F_roomId, err = reader.ReadString()
+	checkErr(err)
+	tbl.F_roomId = strings.TrimSpace(tbl.F_roomId)
 
 	return
 }

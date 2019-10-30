@@ -1,8 +1,9 @@
 package manager
 
+import "app/obj"
+
 type UserManager struct {
-	UserId   string
-	UserName string
+	*obj.User
 }
 
 func NewUserManager(userId string) (*UserManager, error) {

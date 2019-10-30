@@ -1,7 +1,8 @@
 package main
 
 import (
-	"app/client_handle"
+	"app/client_handler"
+	"app/helper/stack"
 	"app/misc/packet"
 	"app/session"
 	"bufio"
@@ -59,28 +60,22 @@ func handleRequest(conn net.Conn, sess *session.Session) {
 }
 
 func executeHandler(code int16, sess *session.Session, reader *packet.Packet) [][]byte {
-	//defer helper.PrintPanicStack()
-
-	handle := client_handle.Handlers[code]
+	defer stack.PrintRecoverFromPanic()
+	handle := client_handler.Handlers[code]
 	if handle == nil {
 		return nil
 	}
-	//t := time.Now().UnixNano()
-	// handle request
 	retByte := handle(sess, reader)
-	//testPack := client_handler.HandlersTime[code]
-	//testPack.Num++
-	//testPack.TotalTime = testPack.TotalTime + float64(time.Now().UnixNano()-t)/float64(time.Millisecond)
 	return retByte
 }
 
 func handWriteResp(conn net.Conn, sess *session.Session) {
 	ch := make(chan []byte, 1)
 	sess.EvaluationSendChan(ch)
+	writer := bufio.NewWriter(conn)
 	for {
 		select {
 		case msg := <-ch:
-			writer := bufio.NewWriter(conn)
 			writer.Write(msg)
 			writer.Write([]byte("\n"))
 			writer.Flush()
