@@ -50,6 +50,15 @@ func NewRoomManager(roomId string) *RoomManager {
 	return rm
 }
 
+func (r *RoomManager) ResetRoomManager() {
+	r.holeCards = []string{}
+	r.lastPlayerWasteCards = sync.Map{}
+	r.player.Range(func(key, value interface{}) bool {
+		value.(*UserInfo).resetUserInfo()
+		return true
+	})
+}
+
 func (r *RoomManager) GetUserInfo(uid string) *UserInfo {
 	if u, ok := r.player.Load(uid); ok {
 		return u.(*UserInfo)
@@ -156,4 +165,9 @@ func (u *UserInfo) checkCards(cards []string) bool {
 		}
 	}
 	return true
+}
+
+func (u *UserInfo) resetUserInfo() {
+	u.handCards = sync.Map{}
+	u.ordinal = 0
 }

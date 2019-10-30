@@ -4,6 +4,7 @@ import (
 	"app/client_handler"
 	"app/helper/stack"
 	"app/misc/packet"
+	"app/registry"
 	"app/session"
 	"bufio"
 	"github.com/golang/glog"
@@ -29,6 +30,7 @@ func agentRun() {
 		sess := session.NewSession()
 		go handleRequest(conn, sess)
 		go handWriteResp(conn, sess)
+		registry.Register(sess.Id, sess)
 	}
 }
 
@@ -37,6 +39,7 @@ func handleRequest(conn net.Conn, sess *session.Session) {
 	defer func() {
 		glog.Info("disconnect:" + ip)
 		sess.AddDieChan()
+		registry.UnRegister(sess.Id)
 		conn.Close()
 	}()
 	reader := bufio.NewReader(conn)
