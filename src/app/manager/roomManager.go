@@ -92,12 +92,16 @@ func (r *RoomManager) CheckHandCards(uid string, cards []string) bool {
 
 func (r *RoomManager) checkLastPlayerWasteCards(uid string, cards []string) bool {
 	lastWasteCards, ok := r.lastPlayerWasteCards.Load(uid)
-	if ok {
+	if ok || common.GetSyncMapLen(r.lastPlayerWasteCards) == 0 {
 		r.lastPlayerWasteCards.Store(uid, cards)
+		return true
+	} else if operatecard.ComparisonTwoPlayersCards(lastWasteCards.([]string), cards) {
+		r.lastPlayerWasteCards = sync.Map{}
+		r.lastPlayerWasteCards.Store(uid, cards)
+		return true
 	} else {
-		return operatecard.ComparisonTwoPlayersCards(lastWasteCards.([]string), cards)
+		return false
 	}
-	return true
 }
 
 func (r *RoomManager) updateLastPlayerWasteCards(uid string, cards []string) {

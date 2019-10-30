@@ -24,24 +24,16 @@ func ComparisonTwoPlayersCards(wasteCards, newCards []string) bool {
 	if newType == enmu.ERROR_TYPE {
 		return false
 	}
-	if wasteType == newType {
-		judgeTwoPlayerCardsInSameType(newType, newArrayCards, wasteArrayCards)
-	} else {
-
-	}
-	return true
-}
-
-func judgeTwoPlayerCardsInSameType(Type enmu.CardType, newArrayCards, wasteArrayCards []int) bool {
-	switch Type {
-	case enmu.SINGLE:
-		if newArrayCards[0] <= wasteArrayCards[0] {
-			return false
+	if len(newArrayCards) == len(wasteArrayCards) {
+		if newType == wasteType {
+			return comparisonTwoPalyerCardsSize(newArrayCards, wasteArrayCards)
+		} else if newType == enmu.KING_BOMB || newType == enmu.BOMB {
+			return true
 		}
-	case enmu.DOUBLE:
-	case enmu.THREE:
+	} else if newType == enmu.KING_BOMB || newType == enmu.BOMB {
+		return true
 	}
-	return true
+	return false
 }
 
 func judgeCardsType(arrayCards []int) enmu.CardType {
@@ -51,10 +43,8 @@ func judgeCardsType(arrayCards []int) enmu.CardType {
 	case 2:
 		if judgeArrayIfAllIsSameValue(arrayCards) {
 			return enmu.DOUBLE
-		} else {
-			if judgeArrayIfIsKing_Bomb(arrayCards) {
-				return enmu.KING_BOMB
-			}
+		} else if judgeArrayIfIsKing_Bomb(arrayCards) {
+			return enmu.KING_BOMB
 		}
 	case 3:
 		if judgeArrayIfAllIsSameValue(arrayCards) {
@@ -63,18 +53,20 @@ func judgeCardsType(arrayCards []int) enmu.CardType {
 	case 4:
 		if judgeArrayIfAllIsSameValue(arrayCards) {
 			return enmu.BOMB
-		} else {
-			if judgeArrayIfIsDoubleThree_And_One(arrayCards) {
-				return enmu.THREE_AND_ONE
-			} else {
-				if judgeArrayIfIsDouble_Alone(arrayCards) {
-					return enmu.DOUBLE_ALONE
-				}
-			}
+		} else if judgeArrayIfIsDoubleThree_And_One(arrayCards) {
+			return enmu.THREE_AND_ONE
+		} else if judgeArrayIfIsDouble_Alone(arrayCards) {
+			return enmu.DOUBLE_ALONE
 		}
 	case 5:
 		if judgeArrayIfIsSingle_Alone(arrayCards) {
 			return enmu.SINGLE_ALONE
+		}
+	default:
+		if judgeArrayIfIsSingle_Alone(arrayCards) {
+			return enmu.SINGLE_ALONE
+		} else if judgeArrayIfIsDouble_Alone(arrayCards) {
+			return enmu.DOUBLE_ALONE
 		}
 	}
 	return enmu.ERROR_TYPE
@@ -150,4 +142,16 @@ func judgeArrayIfIsSingle_Alone(array []int) bool {
 		}
 	}
 	return true
+}
+
+func comparisonTwoPalyerCardsSize(newCards, wasteCards []int) bool {
+	nc := 0
+	wc := 0
+	for _, v := range newCards {
+		nc += v
+	}
+	for _, v := range wasteCards {
+		wc += v
+	}
+	return nc > wc
 }
