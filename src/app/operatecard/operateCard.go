@@ -58,10 +58,22 @@ func judgeCardsType(arrayCards []int) enmu.CardType {
 			return enmu.BOMB
 		} else if judgeArrayIfIsDoubleThree_And_One(arrayCards) {
 			return enmu.THREE_AND_ONE
-		} else if judgeArrayIfIsDouble_Alone(arrayCards) {
-			return enmu.DOUBLE_ALONE
 		}
 	case 5:
+		if judgeArrayIfIsSingle_Alone(arrayCards) {
+			return enmu.SINGLE_ALONE
+		} else if judgeThree_And_Two(arrayCards) {
+			return enmu.THREE_AND_TWO
+		}
+	case 6:
+		if judgeArrayIfIsSingle_Alone(arrayCards) {
+			return enmu.SINGLE_ALONE
+		} else if judgeArrayIfIsDouble_Alone(arrayCards) {
+			return enmu.DOUBLE_ALONE
+		} else if judgePlane(arrayCards) {
+			return enmu.PLANE
+		}
+	case 7, 9, 11, 13:
 		if judgeArrayIfIsSingle_Alone(arrayCards) {
 			return enmu.SINGLE_ALONE
 		}
@@ -70,6 +82,12 @@ func judgeCardsType(arrayCards []int) enmu.CardType {
 			return enmu.SINGLE_ALONE
 		} else if judgeArrayIfIsDouble_Alone(arrayCards) {
 			return enmu.DOUBLE_ALONE
+		} else if judgePlane(arrayCards) {
+			return enmu.PLANE
+		} else if judgePlane_Single(arrayCards) {
+			return enmu.PLANE_SINGLE
+		} else if judgePlane_Double(arrayCards) {
+			return enmu.PLANE_DOUBLE
 		}
 	}
 	return enmu.ERROR_TYPE
@@ -114,7 +132,7 @@ func judgeArrayIfIsDoubleThree_And_One(array []int) bool {
 }
 
 func judgeArrayIfIsDouble_Alone(array []int) bool {
-	if len(array)%2 != 0 {
+	if len(array) < 6 || len(array)%2 != 0 {
 		return false
 	}
 	sort.Ints(array)
@@ -143,6 +161,110 @@ func judgeArrayIfIsSingle_Alone(array []int) bool {
 		if array[i]+1 != array[i+1] {
 			return false
 		}
+	}
+	return true
+}
+
+func judgePlane(cards []int) bool {
+	if len(cards) < 6 || len(cards)%3 != 0 {
+		return false
+	}
+	sort.Ints(cards)
+	for i := 0; i < len(cards)-3; {
+		if cards[i] != cards[i+1] || cards[i+1] != cards[i+2] || cards[i] != cards[i+2] {
+			return false
+		}
+		i += 3
+	}
+	return true
+}
+
+func judgePlane_Single(cards []int) bool {
+	if len(cards) < 8 || len(cards)%4 != 0 {
+		return false
+	}
+	a := make(map[int]int)
+	for _, v := range cards {
+		if a[v] != 0 {
+			a[v]++
+		} else {
+			a[v] = 1
+		}
+	}
+	cardNum := 0
+	th := 0
+	on := 0
+	for _, v := range a {
+		if v == 3 {
+			cardNum += 3
+			th++
+		} else if v == 1 {
+			cardNum += 1
+			on++
+		}
+	}
+	if cardNum != len(cards) || on != th {
+		return false
+	}
+	return true
+}
+
+func judgePlane_Double(cards []int) bool {
+	if len(cards) < 10 || len(cards)%5 != 0 {
+		return false
+	}
+	a := make(map[int]int)
+	for _, v := range cards {
+		if a[v] != 0 {
+			a[v]++
+		} else {
+			a[v] = 1
+		}
+	}
+	cardNum := 0
+	th := 0
+	tw := 0
+	for _, v := range a {
+		if v == 3 {
+			cardNum += 3
+			th++
+		} else if v == 2 {
+			cardNum += 2
+			tw++
+		}
+	}
+	if cardNum != len(cards) || th != tw {
+		return false
+	}
+	return true
+}
+
+func judgeThree_And_Two(cards []int) bool {
+	if len(cards) != 5 {
+		return false
+	}
+	a := make(map[int]int)
+	for _, v := range cards {
+		if a[v] != 0 {
+			a[v]++
+		} else {
+			a[v] = 1
+		}
+	}
+	cardNum := 0
+	th := 0
+	tw := 0
+	for _, v := range a {
+		if v == 3 {
+			cardNum += 3
+			th++
+		} else if v == 2 {
+			cardNum += 2
+			tw++
+		}
+	}
+	if cardNum != len(cards) || th != tw {
+		return false
 	}
 	return true
 }

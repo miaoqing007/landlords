@@ -40,4 +40,6 @@ func (s *Session) InitUser() {
 		return
 	}
 	s.UserManager = userManger
+
+	manager.AddPlayer(s.Player.UserManager.Id, s.Player)
 }
