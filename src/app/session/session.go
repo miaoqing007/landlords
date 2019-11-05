@@ -3,6 +3,7 @@ package session
 import (
 	"app/manager"
 	"app/misc/packet"
+	"app/registry"
 	"github.com/golang/glog"
 )
 
@@ -12,14 +13,16 @@ type Session struct {
 	die         chan struct{}
 	recieveChan chan []byte
 	sendChan    chan []byte
+	rSendChan   chan []byte
 	*manager.Player
 }
 
 func NewSession() *Session {
 	s := &Session{}
 	s.die = make(chan struct{}, 1)
-	s.recieveChan = make(chan []byte, 1)
-	s.sendChan = make(chan []byte, 1)
+	s.recieveChan = make(chan []byte, 16)
+	s.sendChan = make(chan []byte, 16)
+	s.rSendChan = make(chan []byte, 16)
 	go s.watch()
 	return s
 }
@@ -29,6 +32,7 @@ func (s *Session) watch() {
 		select {
 		case <-s.die:
 			s.OffLine(s.Id)
+			return
 		case msg := <-s.recieveChan:
 			reader := packet.Reader(msg)
 			c, err := reader.ReadS16()
@@ -40,17 +44,11 @@ func (s *Session) watch() {
 			for _, byt := range bytes {
 				s.sendChan <- byt
 			}
+		case msg := <-s.rSendChan:
+			s.sendChan <- msg
 		default:
 		}
 	}
-}
-
-func (s *Session) AddRecieveChan(byte []byte) {
-	s.recieveChan <- byte
-}
-
-func (s *Session) AddSendChan(byte []byte) {
-	s.sendChan <- byte
 }
 
 func (s *Session) EvaluationReciveChan(ch chan []byte) {
@@ -64,7 +62,7 @@ func (s *Session) AddDieChan() {
 	s.die <- struct{}{}
 }
 
-func (s *Session) InitUser(id string) error {
+func (s *Session) InitPlayer(id string) error {
 	s.Player = &manager.Player{}
 	userManger, err := manager.NewUserManager(id)
 	if err != nil {
@@ -73,9 +71,11 @@ func (s *Session) InitUser(id string) error {
 	s.UserManager = userManger
 
 	manager.AddPlayer(s.Player.UserManager.Id, s.Player)
+	registry.Register(id, s.rSendChan)
 	return nil
 }
 
 func (s *Session) OffLine(id string) {
 	manager.DeletePlayer(id)
+	registry.UnRegister(id)
 }

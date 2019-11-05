@@ -9,8 +9,12 @@ import (
 
 func main() {
 	log.InitLog()
+
 	client_handler.InitHandle()
+
 	initcards.InitNewCards()
+
 	manager.InitRoomManager()
+
 	agentRun()
 }

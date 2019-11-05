@@ -4,7 +4,9 @@ import (
 	"app/client_proto"
 	"app/helper/common"
 	"app/helper/conv"
+	"app/misc/packet"
 	"app/operatecard"
+	"app/registry"
 	"sync"
 )
 
@@ -66,23 +68,28 @@ func (r *RoomManager) GetUserInfo(uid string) *UserInfo {
 	return nil
 }
 
-func (r *RoomManager) CreatePlayerCards(cards1, cards2, cards3, holeCards []string, info *client_proto.S_player_cards) {
+func (r *RoomManager) CreatePlayerCards(cards1, cards2, cards3, holeCards []string, info *client_proto.S_player_card) {
 	num := 0
 	r.player.Range(func(key, value interface{}) bool {
 		if num%3 == 0 {
 			value.(*UserInfo).createCards(cards1)
-			info.F_player_1 = cards1
+			info.F_players = append(info.F_players, client_proto.S_player{value.(*UserInfo).id, cards1})
 		} else if num%3 == 1 {
 			value.(*UserInfo).createCards(cards2)
-			info.F_player_2 = cards2
+			info.F_players = append(info.F_players, client_proto.S_player{value.(*UserInfo).id, cards2})
 		} else if num%3 == 2 {
 			value.(*UserInfo).createCards(cards3)
-			info.F_plyaer_3 = cards3
+			info.F_players = append(info.F_players, client_proto.S_player{value.(*UserInfo).id, cards3})
 		}
 		num++
 		return true
 	})
 	info.F_hole_cards = holeCards
+	info.F_roomId = r.roomId
+	r.player.Range(func(key, value interface{}) bool {
+		registry.Push(value.(*UserInfo).id, packet.Pack(2003, info, nil))
+		return true
+	})
 }
 
 func (r *RoomManager) CheckHandCards(uid string, cards []string) bool {

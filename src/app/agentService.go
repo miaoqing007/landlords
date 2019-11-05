@@ -1,7 +1,6 @@
 package main
 
 import (
-	"app/registry"
 	"app/session"
 	"bufio"
 	"github.com/golang/glog"
@@ -36,12 +35,11 @@ func handleRequest(conn net.Conn, sess *session.Session) {
 	ip := conn.RemoteAddr().String()
 	defer func() {
 		glog.Info("disconnect:" + ip)
-		registry.UnRegister(sess.Id)
 		sess.AddDieChan()
 		closed <- struct{}{}
 		conn.Close()
 	}()
-	in := make(chan []byte, 1)
+	in := make(chan []byte, 16)
 	sess.EvaluationReciveChan(in)
 	reader := bufio.NewReader(conn)
 	for {
@@ -55,7 +53,7 @@ func handleRequest(conn net.Conn, sess *session.Session) {
 }
 
 func handWriteResp(conn net.Conn, sess *session.Session) {
-	ch := make(chan []byte, 1)
+	ch := make(chan []byte, 16)
 	sess.EvaluationSendChan(ch)
 	writer := bufio.NewWriter(conn)
 	for {
