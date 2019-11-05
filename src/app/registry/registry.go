@@ -50,7 +50,7 @@ func (r *Registry) pushMSg(pmsg pushmsg) {
 	if !ok {
 		return
 	}
-	v.(regMsg).sendch <- (pmsg.msg)
+	v.(regMsg).sendch <- pmsg.msg
 }
 
 func (r *Registry) registry(rm regMsg) {

@@ -54,6 +54,7 @@ func (s *Session) watch() {
 func (s *Session) EvaluationReciveChan(ch chan []byte) {
 	s.recieveChan = ch
 }
+
 func (s *Session) EvaluationSendChan(ch chan []byte) {
 	s.sendChan = ch
 }
