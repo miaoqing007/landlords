@@ -183,105 +183,88 @@ func judgePlane_Single(cards []int) bool {
 	if len(cards) < 8 || len(cards)%4 != 0 {
 		return false
 	}
-	a := make(map[int]int)
-	for _, v := range cards {
-		if a[v] != 0 {
-			a[v]++
-		} else {
-			a[v] = 1
-		}
-	}
-	cardNum := 0
-	th := 0
-	on := 0
-	for _, v := range a {
-		if v == 3 {
-			cardNum += 3
-			th++
-		} else if v == 1 {
-			cardNum += 1
-			on++
-		}
-	}
-	if cardNum != len(cards) || on != th {
-		return false
-	}
-	return true
+	m := array2map(cards)
+	return judgeMap(m, len(cards), 1)
 }
 
 func judgePlane_Double(cards []int) bool {
 	if len(cards) < 10 || len(cards)%5 != 0 {
 		return false
 	}
-	a := make(map[int]int)
-	for _, v := range cards {
-		if a[v] != 0 {
-			a[v]++
-		} else {
-			a[v] = 1
-		}
-	}
-	cardNum := 0
-	th := 0
-	tw := 0
-	for _, v := range a {
-		if v == 3 {
-			cardNum += 3
-			th++
-		} else if v == 2 {
-			cardNum += 2
-			tw++
-		}
-	}
-	if cardNum != len(cards) || th != tw {
-		return false
-	}
-	return true
+	m := array2map(cards)
+	return judgeMap(m, len(cards), 2)
 }
 
 func judgeThree_And_Two(cards []int) bool {
 	if len(cards) != 5 {
 		return false
 	}
-	a := make(map[int]int)
-	for _, v := range cards {
-		if a[v] != 0 {
-			a[v]++
-		} else {
-			a[v] = 1
-		}
-	}
-	cardNum := 0
-	th := 0
-	tw := 0
-	for _, v := range a {
-		if v == 3 {
-			cardNum += 3
-			th++
-		} else if v == 2 {
-			cardNum += 2
-			tw++
-		}
-	}
-	if cardNum != len(cards) || th != tw {
-		return false
-	}
-	return true
+	m := array2map(cards)
+	return judgeMap(m, len(cards), 2)
 }
 
 func comparisonTwoPalyerCardsSize(newCards, wasteCards []int, Type enmu.CardType) bool {
-	if Type == enmu.THREE_AND_ONE {
+	switch Type {
+	case enmu.THREE_AND_ONE, enmu.THREE_AND_TWO:
 		sort.Ints(newCards)
 		sort.Ints(wasteCards)
-		return newCards[1] > wasteCards[1]
+		return newCards[2] > wasteCards[2]
+	case enmu.PLANE_SINGLE, enmu.PLANE_DOUBLE:
+		nc := 0
+		wc := 0
+		nm := array2map(newCards)
+		wm := array2map(wasteCards)
+		for k, v := range nm {
+			if v == 3 {
+				nc += k
+			}
+		}
+		for k, v := range wm {
+			if v == 3 {
+				wc += k
+			}
+		}
+		return nc > wc
+	default:
+		nc := 0
+		wc := 0
+		for _, v := range newCards {
+			nc += v
+		}
+		for _, v := range wasteCards {
+			wc += v
+		}
+		return nc > wc
 	}
-	nc := 0
-	wc := 0
-	for _, v := range newCards {
-		nc += v
+}
+
+func array2map(cards []int) map[int]int {
+	m := make(map[int]int)
+	for _, v := range cards {
+		if m[v] != 0 {
+			m[v]++
+		} else {
+			m[v] = 1
+		}
 	}
-	for _, v := range wasteCards {
-		wc += v
+	return m
+}
+
+func judgeMap(m map[int]int, cardsLen, oneOrTwo int) bool {
+	cardNum := 0
+	th := 0
+	tw := 0
+	for _, v := range m {
+		if v == 3 {
+			cardNum += 3
+			th++
+		} else if v == oneOrTwo {
+			cardNum += oneOrTwo
+			tw++
+		}
 	}
-	return nc > wc
+	if cardNum != cardsLen || th != tw {
+		return false
+	}
+	return true
 }
