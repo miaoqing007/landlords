@@ -1,6 +1,9 @@
 package manager
 
-import "sync"
+import (
+	"fmt"
+	"sync"
+)
 
 var _player *Players
 
@@ -20,10 +23,12 @@ func (p *Players) getPlayer(id string) *Player {
 }
 
 func (p *Players) addPlayer(id string, player *Player) {
+	fmt.Println("add  ", id)
 	p.idInMap.Store(id, player)
 }
 
 func (p *Players) deletePlayer(id string) {
+	fmt.Println("delete  ", id)
 	p.idInMap.Delete(id)
 }
 

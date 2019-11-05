@@ -6,6 +6,9 @@ type UserManager struct {
 	*obj.User
 }
 
-func NewUserManager(userId string) (*UserManager, error) {
-	return &UserManager{}, nil
+func NewUserManager(id string) (*UserManager, error) {
+	manager := &UserManager{}
+	manager.User = &obj.User{}
+	manager.Id = id
+	return manager, nil
 }

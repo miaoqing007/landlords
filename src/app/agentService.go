@@ -1,9 +1,6 @@
 package main
 
 import (
-	"app/client_handler"
-	"app/helper/stack"
-	"app/misc/packet"
 	"app/registry"
 	"app/session"
 	"bufio"
@@ -11,6 +8,8 @@ import (
 	"net"
 	"os"
 )
+
+var closed = make(chan struct{}, 1)
 
 func agentRun() {
 	lestener, err := net.Listen("tcp", ServerHost+":"+ServerPort)
@@ -28,7 +27,6 @@ func agentRun() {
 		}
 		glog.Infof("message %s->%s\n", conn.RemoteAddr(), conn.LocalAddr())
 		sess := session.NewSession()
-		registry.Register(sess.Id, sess)
 		go handleRequest(conn, sess)
 		go handWriteResp(conn, sess)
 	}
@@ -40,36 +38,20 @@ func handleRequest(conn net.Conn, sess *session.Session) {
 		glog.Info("disconnect:" + ip)
 		registry.UnRegister(sess.Id)
 		sess.AddDieChan()
+		closed <- struct{}{}
 		conn.Close()
 	}()
+	in := make(chan []byte, 1)
+	sess.EvaluationReciveChan(in)
 	reader := bufio.NewReader(conn)
 	for {
-		b, _, err := reader.ReadLine()
+		bytes, _, err := reader.ReadLine()
 		if err != nil {
-			glog.Info("err=", err)
+			glog.Info(err)
 			return
 		}
-		reader := packet.Reader(b)
-		c, err := reader.ReadS16()
-		if err != nil {
-			glog.Info("err=", err)
-			return
-		}
-		bytes := executeHandler(c, sess, reader)
-		for _, byt := range bytes {
-			sess.AddSendChan(byt)
-		}
+		in <- bytes
 	}
-}
-
-func executeHandler(code int16, sess *session.Session, reader *packet.Packet) [][]byte {
-	defer stack.PrintRecoverFromPanic()
-	handle := client_handler.Handlers[code]
-	if handle == nil {
-		return nil
-	}
-	retByte := handle(sess, reader)
-	return retByte
 }
 
 func handWriteResp(conn net.Conn, sess *session.Session) {
@@ -82,9 +64,10 @@ func handWriteResp(conn net.Conn, sess *session.Session) {
 			writer.Write(msg)
 			writer.Write([]byte("\n"))
 			writer.Flush()
-		case <-sess.Die:
-			glog.Info("disconnect Write")
+		case <-closed:
+			glog.Info("closed resp connect")
 			return
+		default:
 		}
 	}
 }
