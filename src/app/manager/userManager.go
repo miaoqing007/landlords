@@ -1,6 +1,8 @@
 package manager
 
-import "app/obj"
+import (
+	"app/obj"
+)
 
 type UserManager struct {
 	*obj.User
@@ -9,6 +11,5 @@ type UserManager struct {
 func NewUserManager(id string) (*UserManager, error) {
 	manager := &UserManager{}
 	manager.User = &obj.User{}
-	manager.Id = id
 	return manager, nil
 }
