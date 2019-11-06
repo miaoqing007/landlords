@@ -18,3 +18,9 @@ const (
 	THREE_AND_TWO   CardType = 12 //三带二
 	ERROR_TYPE      CardType = 13 //非法类型
 )
+
+const (
+	ServerHost = "127.0.0.1"
+	ServerPort = "8888"
+	RedisPort  = "6379"
+)

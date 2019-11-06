@@ -1,6 +1,7 @@
 package main
 
 import (
+	"app/enmu"
 	"app/session"
 	"bufio"
 	"github.com/golang/glog"
@@ -11,13 +12,13 @@ import (
 var closed = make(chan struct{}, 1)
 
 func agentRun() {
-	lestener, err := net.Listen("tcp", ServerHost+":"+ServerPort)
+	lestener, err := net.Listen("tcp", enmu.ServerHost+":"+enmu.ServerPort)
 	if err != nil {
 		glog.Info("listen error:", err)
 		os.Exit(1)
 	}
 	defer lestener.Close()
-	glog.Info("listening on " + ServerHost + ":" + ServerPort)
+	glog.Info("listening on " + enmu.ServerHost + ":" + enmu.ServerPort)
 	for {
 		conn, err := lestener.Accept()
 		if err != nil {

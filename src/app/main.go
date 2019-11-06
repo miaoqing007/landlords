@@ -5,10 +5,13 @@ import (
 	"app/initcards"
 	"app/log"
 	"app/manager"
+	"app/model"
 )
 
 func main() {
 	log.InitLog()
+
+	model.InitRedis()
 
 	client_handler.InitHandle()
 
