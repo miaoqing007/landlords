@@ -20,7 +20,7 @@ const (
 )
 
 const (
-	ServerHost = "127.0.0.1"
+	ServerHost = "0.0.0.0"
 	ServerPort = "8888"
 	RedisPort  = "6379"
 )

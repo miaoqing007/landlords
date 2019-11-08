@@ -4,10 +4,12 @@ import (
 	"app/helper/stack"
 	"app/misc/packet"
 	"app/session"
+	"github.com/golang/glog"
 )
 
 func InitHandle() {
 	session.ExecuteHandler = executeHandler
+	glog.Info("初始化handle完成")
 }
 
 func executeHandler(code int16, sess *session.Session, reader *packet.Packet) [][]byte {

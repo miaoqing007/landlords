@@ -9,11 +9,16 @@ import (
 var _redisCacher *redisgo.Cacher
 
 func InitRedis() {
-	_redisCacher, _ = redisgo.New(redisgo.Options{
+	var err error
+	_redisCacher, err = redisgo.New(redisgo.Options{
 		Addr:     enmu.ServerHost + ":" + enmu.RedisPort,
 		Db:       0,
 		Password: "",
 	})
+	if err != nil {
+		glog.Info("初始化Redis失败")
+		return
+	}
 	glog.Info("初始化Redis完成")
 }
 

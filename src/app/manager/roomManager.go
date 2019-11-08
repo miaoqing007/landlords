@@ -7,6 +7,7 @@ import (
 	"app/misc/packet"
 	"app/operatecard"
 	"app/registry"
+	"github.com/golang/glog"
 	"sync"
 )
 
@@ -19,6 +20,7 @@ type Rooms struct {
 func InitRoomManager() {
 	room = &Rooms{}
 	room.initCreateRoom()
+	glog.Info("初始化房间完成")
 }
 
 func GetRoomManager(roomId string) *RoomManager {

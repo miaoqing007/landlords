@@ -2,6 +2,7 @@ package log
 
 import (
 	"flag"
+	"fmt"
 	"github.com/golang/glog"
 	"io/ioutil"
 	"os"
@@ -9,12 +10,17 @@ import (
 )
 
 const (
-	logDir         = "serverLog"
 	MaxLogFileSize = 1024 * 1024 * 5
 	FileSaveTime   = 12 * time.Hour
 )
 
+var logDir = "serverLog"
+
 func InitLog() {
+	if logEnv := os.Getenv("LogDir"); logEnv != "" {
+		logDir = logEnv
+	}
+	fmt.Println("**", logDir)
 	if !CreateDir(logDir) {
 		return
 	}
@@ -25,6 +31,7 @@ func InitLog() {
 	glog.MaxSize = MaxLogFileSize
 
 	go findAndRemoveOutTimeLogFile()
+	glog.Info("初始化日志完成")
 }
 
 func findAndRemoveOutTimeLogFile() {

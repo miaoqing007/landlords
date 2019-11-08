@@ -2,6 +2,7 @@ package initcards
 
 import (
 	"app/helper/conv"
+	"github.com/golang/glog"
 	"math/rand"
 	"time"
 )
@@ -23,6 +24,7 @@ func InitNewCards() {
 			start += 4
 		}
 	}
+	glog.Info("初始化牌完成")
 }
 func ShuffCards() []string {
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
