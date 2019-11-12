@@ -45,8 +45,8 @@ func (r *Rooms) initSingleRoom(roomId string) {
 }
 
 type RoomManager struct {
-	roomId               string
-	holeCards            []string
+	roomId               string   //房间id
+	holeCards            []string //底牌
 	lastPlayerWasteCards sync.Map //map[uid][]cards
 	player               sync.Map //map[uid]*UserInfo
 }
@@ -80,13 +80,13 @@ func (r *RoomManager) CreatePlayerCards(cards1, cards2, cards3, holeCards []stri
 	num := 0
 	r.player.Range(func(key, value interface{}) bool {
 		if num%3 == 0 {
-			value.(*UserInfo).createCards(cards1)
+			value.(*UserInfo).addCards(cards1)
 			info.F_players = append(info.F_players, client_proto.S_player{value.(*UserInfo).id, cards1})
 		} else if num%3 == 1 {
-			value.(*UserInfo).createCards(cards2)
+			value.(*UserInfo).addCards(cards2)
 			info.F_players = append(info.F_players, client_proto.S_player{value.(*UserInfo).id, cards2})
 		} else if num%3 == 2 {
-			value.(*UserInfo).createCards(cards3)
+			value.(*UserInfo).addCards(cards3)
 			info.F_players = append(info.F_players, client_proto.S_player{value.(*UserInfo).id, cards3})
 		}
 		num++
@@ -135,14 +135,23 @@ func (r *RoomManager) updateLastPlayerWasteCards(uid string, cards []string) {
 	r.lastPlayerWasteCards.Store(uid, cards)
 }
 
-//更新玩家手牌
-func (r *RoomManager) UpdateCards(uid string, useCards []string) bool {
+//删除玩家已出手牌
+func (r *RoomManager) DeleteCards(uid string, useCards []string) bool {
 	v, ok := r.player.Load(uid)
 	if !ok {
 		return false
 	}
-	v.(*UserInfo).updateCards(useCards)
+	v.(*UserInfo).delCards(useCards)
 	return true
+}
+
+//获取玩家剩余手牌数量
+func (r *RoomManager) GetUserRemainingCardsNum(uid string) int {
+	v, ok := r.player.Load(uid)
+	if !ok {
+		return -1
+	}
+	return v.(*UserInfo).getUserRemainingCardsNum()
 }
 
 //添加玩家到房间
@@ -155,9 +164,9 @@ func (r *RoomManager) AddPlayerToRoom(uid string) bool {
 }
 
 type UserInfo struct {
-	id        string
-	ordinal   int
-	handCards sync.Map //map[card]bool
+	id                string   //玩家id
+	handCards         sync.Map //map[card]bool 手牌
+	remainingCardsNum int      //剩余手牌数量
 }
 
 func NewUserInfo(uid string) *UserInfo {
@@ -166,18 +175,20 @@ func NewUserInfo(uid string) *UserInfo {
 	return u
 }
 
-//更新手牌
-func (u *UserInfo) updateCards(wasteCards []string) {
+//删除已出手牌
+func (u *UserInfo) delCards(wasteCards []string) {
 	for _, card := range wasteCards {
 		u.handCards.Delete(card)
 	}
+	u.remainingCardsNum = common.GetSyncMapLen(u.handCards)
 }
 
-//创建手牌
-func (u *UserInfo) createCards(cards []string) {
+//增加手牌
+func (u *UserInfo) addCards(cards []string) {
 	for _, v := range cards {
 		u.handCards.Store(v, true)
 	}
+	u.remainingCardsNum = common.GetSyncMapLen(u.handCards)
 }
 
 //核对手牌
@@ -190,8 +201,12 @@ func (u *UserInfo) checkCards(cards []string) bool {
 	return true
 }
 
-//重置玩家信息
+//获取剩余手牌数量
+func (u *UserInfo) getUserRemainingCardsNum() int {
+	return u.remainingCardsNum
+}
+
+//重置信息
 func (u *UserInfo) resetUserInfo() {
 	u.handCards = sync.Map{}
-	u.ordinal = 0
 }
