@@ -7,8 +7,7 @@ import (
 	"app/session"
 )
 
-var id int
-
+//进入房间
 func P_join_room_req(sess *session.Session, reader *packet.Packet) [][]byte {
 	tbl, _ := client_proto.PKT_entity_id(reader)
 	room := manager.GetRoomManager("1")

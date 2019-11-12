@@ -23,6 +23,7 @@ func InitRoomManager() {
 	glog.Info("初始化房间完成")
 }
 
+//获取房间信息
 func GetRoomManager(roomId string) *RoomManager {
 	v, ok := room.rooms.Load(roomId)
 	if ok {
@@ -31,12 +32,14 @@ func GetRoomManager(roomId string) *RoomManager {
 	return nil
 }
 
+//创建初始化房间
 func (r *Rooms) initCreateRoom() {
 	for i := 0; i < 10; i++ {
 		r.initSingleRoom(conv.FormatInt(i))
 	}
 }
 
+//初始化单个房间
 func (r *Rooms) initSingleRoom(roomId string) {
 	r.rooms.Store(roomId, NewRoomManager(roomId))
 }
@@ -54,6 +57,7 @@ func NewRoomManager(roomId string) *RoomManager {
 	return rm
 }
 
+//重置房间信息
 func (r *RoomManager) ResetRoomManager() {
 	r.holeCards = []string{}
 	r.lastPlayerWasteCards = sync.Map{}
@@ -63,6 +67,7 @@ func (r *RoomManager) ResetRoomManager() {
 	})
 }
 
+//获取玩家信息
 func (r *RoomManager) GetUserInfo(uid string) *UserInfo {
 	if u, ok := r.player.Load(uid); ok {
 		return u.(*UserInfo)
@@ -70,6 +75,7 @@ func (r *RoomManager) GetUserInfo(uid string) *UserInfo {
 	return nil
 }
 
+//创建玩家手牌
 func (r *RoomManager) CreatePlayerCards(cards1, cards2, cards3, holeCards []string, info *client_proto.S_player_card) {
 	num := 0
 	r.player.Range(func(key, value interface{}) bool {
@@ -94,6 +100,7 @@ func (r *RoomManager) CreatePlayerCards(cards1, cards2, cards3, holeCards []stri
 	})
 }
 
+//判断玩家手牌
 func (r *RoomManager) CheckHandCards(uid string, cards []string) bool {
 	v, ok := r.player.Load(uid)
 	if !ok {
@@ -102,13 +109,14 @@ func (r *RoomManager) CheckHandCards(uid string, cards []string) bool {
 	if !v.(*UserInfo).checkCards(cards) {
 		return false
 	}
-	if !r.checkLastPlayerWasteCards(uid, cards) {
+	if !r.comparisonLastPlayerWasteCards(uid, cards) {
 		return false
 	}
 	return true
 }
 
-func (r *RoomManager) checkLastPlayerWasteCards(uid string, cards []string) bool {
+//比对玩家手牌
+func (r *RoomManager) comparisonLastPlayerWasteCards(uid string, cards []string) bool {
 	lastWasteCards, ok := r.lastPlayerWasteCards.Load(uid)
 	if ok || common.GetSyncMapLen(r.lastPlayerWasteCards) == 0 {
 		r.updateLastPlayerWasteCards(uid, cards)
@@ -122,10 +130,12 @@ func (r *RoomManager) checkLastPlayerWasteCards(uid string, cards []string) bool
 	}
 }
 
+//更新上一家所出的牌
 func (r *RoomManager) updateLastPlayerWasteCards(uid string, cards []string) {
 	r.lastPlayerWasteCards.Store(uid, cards)
 }
 
+//更新玩家手牌
 func (r *RoomManager) UpdateCards(uid string, useCards []string) bool {
 	v, ok := r.player.Load(uid)
 	if !ok {
@@ -135,6 +145,7 @@ func (r *RoomManager) UpdateCards(uid string, useCards []string) bool {
 	return true
 }
 
+//添加玩家到房间
 func (r *RoomManager) AddPlayerToRoom(uid string) bool {
 	if common.GetSyncMapLen(r.player) >= 3 {
 		return false
@@ -155,18 +166,21 @@ func NewUserInfo(uid string) *UserInfo {
 	return u
 }
 
+//更新手牌
 func (u *UserInfo) updateCards(wasteCards []string) {
 	for _, card := range wasteCards {
 		u.handCards.Delete(card)
 	}
 }
 
+//创建手牌
 func (u *UserInfo) createCards(cards []string) {
 	for _, v := range cards {
 		u.handCards.Store(v, true)
 	}
 }
 
+//核对手牌
 func (u *UserInfo) checkCards(cards []string) bool {
 	for _, card := range cards {
 		if _, ok := u.handCards.Load(card); !ok {
@@ -176,6 +190,7 @@ func (u *UserInfo) checkCards(cards []string) bool {
 	return true
 }
 
+//重置玩家信息
 func (u *UserInfo) resetUserInfo() {
 	u.handCards = sync.Map{}
 	u.ordinal = 0

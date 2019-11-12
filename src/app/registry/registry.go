@@ -4,13 +4,13 @@ import (
 	"sync"
 )
 
-var onlineUser *Registry
+var onlineUser *Registry //在线玩家注册信息
 
 type Registry struct {
-	users sync.Map //map[id]regMsg
-	rch   chan regMsg
-	urch  chan string
-	pch   chan pushmsg
+	users sync.Map     //map[id]regMsg
+	rch   chan regMsg  //接收注册信息channel
+	urch  chan string  //接收反注册channel
+	pch   chan pushmsg //接收消息推送channel
 }
 
 type pushmsg struct {
@@ -61,14 +61,17 @@ func (r *Registry) unRegistry(uid string) {
 	r.users.Delete(uid)
 }
 
+//玩家注册
 func Register(uid string, sch chan []byte) {
 	onlineUser.rch <- regMsg{uid, sch}
 }
 
+//消息推送
 func Push(uid string, msg []byte) {
 	onlineUser.pch <- pushmsg{uid, msg}
 }
 
+//玩家反注册
 func UnRegister(uid string) {
 	onlineUser.urch <- uid
 }

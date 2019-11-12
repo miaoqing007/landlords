@@ -7,6 +7,7 @@ import (
 	"sort"
 )
 
+//比对该玩家的牌是否打过上一位玩家
 func ComparisonTwoPlayersCards(wasteCards, newCards []string) bool {
 	wasteArrayCards := getCardsValue(wasteCards)
 	if len(wasteCards) != len(wasteArrayCards) {
@@ -39,6 +40,7 @@ func ComparisonTwoPlayersCards(wasteCards, newCards []string) bool {
 	return false
 }
 
+//判断牌类型
 func judgeCardsType(arrayCards []int) enmu.CardType {
 	switch len(arrayCards) {
 	case 1:
@@ -93,6 +95,7 @@ func judgeCardsType(arrayCards []int) enmu.CardType {
 	return enmu.ERROR_TYPE
 }
 
+//获取牌面值
 func getCardsValue(cards []string) []int {
 	intArrayCards := make([]int, 0)
 	for _, card := range cards {
@@ -101,6 +104,7 @@ func getCardsValue(cards []string) []int {
 	return intArrayCards
 }
 
+//判断是否是对子
 func judgeArrayIfAllIsSameValue(array []int) bool {
 	if len(array) == 0 {
 		return false
@@ -114,6 +118,7 @@ func judgeArrayIfAllIsSameValue(array []int) bool {
 	return true
 }
 
+//判断是否是三带一
 func judgeArrayIfIsDoubleThree_And_One(array []int) bool {
 	num1 := 0
 	num2 := 0
@@ -131,6 +136,7 @@ func judgeArrayIfIsDoubleThree_And_One(array []int) bool {
 	return false
 }
 
+//判断是否是连对
 func judgeArrayIfIsDouble_Alone(array []int) bool {
 	if len(array) < 6 || len(array)%2 != 0 {
 		return false
@@ -145,6 +151,7 @@ func judgeArrayIfIsDouble_Alone(array []int) bool {
 	return true
 }
 
+//判断是否是王炸
 func judgeArrayIfIsKing_Bomb(array []int) bool {
 	if len(array) != 2 {
 		return false
@@ -155,6 +162,7 @@ func judgeArrayIfIsKing_Bomb(array []int) bool {
 	return false
 }
 
+//判断是否是顺子
 func judgeArrayIfIsSingle_Alone(array []int) bool {
 	sort.Ints(array)
 	for i := 0; i < len(array)-1; i++ {
@@ -165,6 +173,7 @@ func judgeArrayIfIsSingle_Alone(array []int) bool {
 	return true
 }
 
+//判断是否飞机
 func judgePlane(cards []int) bool {
 	if len(cards) < 6 || len(cards)%3 != 0 {
 		return false
@@ -179,6 +188,7 @@ func judgePlane(cards []int) bool {
 	return true
 }
 
+//判断是否是飞机带单
 func judgePlane_Single(cards []int) bool {
 	if len(cards) < 8 || len(cards)%4 != 0 {
 		return false
@@ -187,6 +197,7 @@ func judgePlane_Single(cards []int) bool {
 	return judgeMap(m, len(cards), 1)
 }
 
+//判断是否是飞机带双
 func judgePlane_Double(cards []int) bool {
 	if len(cards) < 10 || len(cards)%5 != 0 {
 		return false
@@ -195,6 +206,7 @@ func judgePlane_Double(cards []int) bool {
 	return judgeMap(m, len(cards), 2)
 }
 
+//判断是否是三带二
 func judgeThree_And_Two(cards []int) bool {
 	if len(cards) != 5 {
 		return false
@@ -203,6 +215,7 @@ func judgeThree_And_Two(cards []int) bool {
 	return judgeMap(m, len(cards), 2)
 }
 
+//比对牌大小
 func comparisonTwoPalyerCardsSize(newCards, wasteCards []int, Type enmu.CardType) bool {
 	switch Type {
 	case enmu.THREE_AND_ONE, enmu.THREE_AND_TWO:

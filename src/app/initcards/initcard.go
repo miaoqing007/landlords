@@ -9,6 +9,7 @@ import (
 
 var cards = make([]string, 54)
 
+//初始化一副牌
 func InitNewCards() {
 	start := 0
 	for i := 3; i <= 16; i++ {

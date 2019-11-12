@@ -12,6 +12,7 @@ func InitHandle() {
 	glog.Info("初始化handle完成")
 }
 
+//执行方法
 func executeHandler(code int16, sess *session.Session, reader *packet.Packet) [][]byte {
 	defer stack.PrintRecoverFromPanic()
 	handle := Handlers[code]

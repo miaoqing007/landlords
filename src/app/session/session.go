@@ -51,10 +51,12 @@ func (s *Session) watch() {
 	}
 }
 
+//注册接收信息channel
 func (s *Session) EvaluationReciveChan(ch chan []byte) {
 	s.recieveChan = ch
 }
 
+//注册发送信息channel
 func (s *Session) EvaluationSendChan(ch chan []byte) {
 	s.sendChan = ch
 }
@@ -63,6 +65,7 @@ func (s *Session) AddDieChan() {
 	s.die <- struct{}{}
 }
 
+//初始玩玩家信息
 func (s *Session) InitPlayer(id string) error {
 	s.Player = &manager.Player{}
 	userManger, err := manager.NewUserManager(id)
@@ -76,6 +79,7 @@ func (s *Session) InitPlayer(id string) error {
 	return nil
 }
 
+//玩家离线
 func (s *Session) OffLine(id string) {
 	manager.DeletePlayer(id)
 	registry.UnRegister(id)
