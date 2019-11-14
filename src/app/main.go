@@ -19,5 +19,7 @@ func main() {
 
 	manager.InitRoomManager()
 
+	manager.InitPvpPoolManager()
+
 	agentRun()
 }

@@ -7,19 +7,21 @@ import (
 	"app/misc/packet"
 	"app/operatecard"
 	"app/registry"
+	"fmt"
 	"github.com/golang/glog"
 	"sync"
+	"sync/atomic"
 )
 
 var room *Rooms
 
 type Rooms struct {
-	rooms sync.Map //map[roomId]*RoomManager
+	roomIcreseId int32    //递增房间id
+	rooms        sync.Map //map[roomId]*RoomManager
 }
 
 func InitRoomManager() {
 	room = &Rooms{}
-	room.initCreateRoom()
 	glog.Info("初始化房间完成")
 }
 
@@ -32,28 +34,26 @@ func GetRoomManager(roomId string) *RoomManager {
 	return nil
 }
 
-//创建初始化房间
-func (r *Rooms) initCreateRoom() {
-	for i := 0; i < 10; i++ {
-		r.initSingleRoom(conv.FormatInt(i))
-	}
-}
-
-//初始化单个房间
-func (r *Rooms) initSingleRoom(roomId string) {
-	r.rooms.Store(roomId, NewRoomManager(roomId))
+func Add2Room(piecewise int, ids []string) {
+	rm := NewRoomManager(piecewise, ids)
+	room.rooms.Store(rm.roomId, rm)
 }
 
 type RoomManager struct {
 	roomId               string   //房间id
 	holeCards            []string //底牌
+	piecewise            int      //分段
 	lastPlayerWasteCards sync.Map //map[uid][]cards
 	player               sync.Map //map[uid]*UserInfo
 }
 
-func NewRoomManager(roomId string) *RoomManager {
+func NewRoomManager(piecewise int, ids []string) *RoomManager {
 	rm := &RoomManager{}
-	rm.roomId = roomId
+	rm.piecewise = piecewise
+	rm.roomId = conv.FormatInt32(atomic.AddInt32(&room.roomIcreseId, 1))
+	for _, id := range ids {
+		rm.AddPlayerToRoom(id)
+	}
 	return rm
 }
 
@@ -172,6 +172,7 @@ type UserInfo struct {
 func NewUserInfo(uid string) *UserInfo {
 	u := &UserInfo{}
 	u.id = uid
+	fmt.Println("pppppppppppppp", u.id)
 	return u
 }
 
