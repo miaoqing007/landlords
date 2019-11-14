@@ -7,7 +7,6 @@ import (
 	"app/misc/packet"
 	"app/operatecard"
 	"app/registry"
-	"fmt"
 	"github.com/golang/glog"
 	"sync"
 	"sync/atomic"
@@ -172,7 +171,6 @@ type UserInfo struct {
 func NewUserInfo(uid string) *UserInfo {
 	u := &UserInfo{}
 	u.id = uid
-	fmt.Println("pppppppppppppp", u.id)
 	return u
 }
 

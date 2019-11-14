@@ -1,7 +1,6 @@
 package manager
 
 import (
-	"fmt"
 	"github.com/golang/glog"
 	"sync"
 	"time"
@@ -69,7 +68,6 @@ func (p *PvpPoolManager) addups(acm addChanMsg) {
 	arr := ps.([]string)
 	arr = append(arr, acm.id)
 	p.ups.Store(acm.piecewise, arr)
-	fmt.Println("adddddddddddddd", acm)
 }
 
 func (p *PvpPoolManager) delups(dcm delChanMsg) {
