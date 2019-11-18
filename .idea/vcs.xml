@@ -2,7 +2,9 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/app/vendor/github.com/aiscrm/redisgo" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/src/app/vendor/github.com/golang/glog" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/app/vendor/github.com/gomodule/redigo" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/src/github.com/aiscrm/redisgo" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/src/github.com/gistao/RedisGo-Async" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/src/github.com/go-redis/redis" vcs="Git" />

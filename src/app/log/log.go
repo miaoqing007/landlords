@@ -2,7 +2,6 @@ package log
 
 import (
 	"flag"
-	"fmt"
 	"github.com/golang/glog"
 	"io/ioutil"
 	"os"
@@ -20,7 +19,6 @@ func InitLog() {
 	if logEnv := os.Getenv("LogDir"); logEnv != "" {
 		logDir = logEnv
 	}
-	fmt.Println("**", logDir)
 	if !CreateDir(logDir) {
 		return
 	}

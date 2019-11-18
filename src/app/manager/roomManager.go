@@ -33,6 +33,11 @@ func GetRoomManager(roomId string) *RoomManager {
 	return nil
 }
 
+func RemoveRoom(roomId string) {
+	room.rooms.Delete(roomId)
+}
+
+//添加玩家到房间
 func Add2Room(piecewise int, ids []string) {
 	rm := NewRoomManager(piecewise, ids)
 	room.rooms.Store(rm.roomId, rm)
