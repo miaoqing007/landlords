@@ -75,23 +75,6 @@ func handleRequest(conn net.Conn) {
 	}
 }
 
-//func handWriteResp(conn net.Conn, sess *session.Session) {
-//	ch := make(chan []byte, 16)
-//	sess.EvaluationSendChan(ch)
-//	writer := bufio.NewWriter(conn)
-//	for {
-//		select {
-//		case msg := <-ch:
-//			writer.Write(msg)
-//			writer.Write([]byte("\n"))
-//			writer.Flush()
-//		case <-closed:
-//			glog.Info("closed resp connect")
-//			return
-//		}
-//	}
-//}
-
 //执行方法
 func executeHandler(code int16, sess *session.Session, reader *packet.Packet) [][]byte {
 	defer stack.PrintRecoverFromPanic()
