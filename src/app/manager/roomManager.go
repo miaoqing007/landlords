@@ -34,13 +34,16 @@ func GetRoomManager(roomId string) *RoomManager {
 }
 
 func RemoveRoom(roomId string) {
+	registry.UnRegisterRoom(roomId)
 	room.rooms.Delete(roomId)
 }
 
 //添加玩家到房间
 func Add2Room(piecewise int, ids []string) {
 	rm := NewRoomManager(piecewise, ids)
+	registry.RegisterRoom(rm.roomId, ids)
 	room.rooms.Store(rm.roomId, rm)
+	glog.Infof("roomId = %v ,uids = %v", rm.roomId, ids)
 }
 
 type RoomManager struct {
@@ -98,10 +101,7 @@ func (r *RoomManager) CreatePlayerCards(cards1, cards2, cards3, holeCards []stri
 	})
 	info.F_hole_cards = holeCards
 	info.F_roomId = r.roomId
-	r.player.Range(func(key, value interface{}) bool {
-		registry.Push(value.(*UserInfo).id, packet.Pack(2003, info, nil))
-		return true
-	})
+	registry.PushRoom(info.F_roomId, packet.Pack(2003, info, nil))
 }
 
 //判断玩家手牌

@@ -1,19 +1,16 @@
 package main
 
 import (
-	"app/client_handler"
 	"app/initcards"
 	"app/log"
 	"app/manager"
-	"app/redisgo"
+	"app/redis"
 )
 
 func main() {
 	log.InitLog()
 
-	redisgo.InitRedis()
-
-	client_handler.InitHandle()
+	redis.InitRedis()
 
 	initcards.InitNewCards()
 

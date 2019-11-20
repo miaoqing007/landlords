@@ -44,7 +44,6 @@ func (p *PvpPoolManager) watch() {
 			p.remups(dcm)
 		case <-ticker.C:
 			p.pvpMatchPlayer()
-		default:
 		}
 	}
 }
