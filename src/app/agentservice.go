@@ -8,6 +8,7 @@ import (
 	"app/session"
 	"bufio"
 	"github.com/golang/glog"
+	"github.com/xtaci/kcp-go"
 	"net"
 	"os"
 )
@@ -15,7 +16,7 @@ import (
 var closed = make(chan struct{}, 1)
 
 func agentRun() {
-	lestener, err := net.Listen("tcp", enmu.ServerHost+":"+enmu.ServerPort)
+	lestener, err := kcp.ListenWithOptions(enmu.ServerHost+":"+enmu.ServerPort, nil, 10, 3)
 	if err != nil {
 		glog.Info("listen error:", err)
 		os.Exit(1)
