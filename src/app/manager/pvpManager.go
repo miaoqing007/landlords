@@ -52,6 +52,9 @@ func (p *PvpPoolManager) watch() {
 func (p *PvpPoolManager) pvpMatchPlayer() {
 	p.ups.Range(func(key, value interface{}) bool {
 		arr := value.([]string)
+		if len(arr) < 3 {
+			return false
+		}
 		for len(arr) >= 3 {
 			us := arr[:3]
 			arr = arr[3:]

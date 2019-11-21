@@ -11,5 +11,6 @@ type UserManager struct {
 func NewUserManager(id string) (*UserManager, error) {
 	manager := &UserManager{}
 	manager.User = &obj.User{}
+	manager.User.Id = id
 	return manager, nil
 }

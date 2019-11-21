@@ -31,7 +31,6 @@ func agentRun() {
 		glog.Infof("message %s->%s\n", conn.RemoteAddr(), conn.LocalAddr())
 
 		go handleRequest(conn)
-		//go handWriteResp(conn, sess)
 	}
 }
 
@@ -68,9 +67,7 @@ func handleRequest(conn net.Conn) {
 		}
 		bytes := executeHandler(c, sess, reader)
 		for _, byt := range bytes {
-			writer.Write(byt)
-			writer.Write([]byte("\n"))
-			writer.Flush()
+			in <- byt
 		}
 	}
 }

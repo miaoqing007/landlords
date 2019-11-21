@@ -6,7 +6,6 @@ import (
 )
 
 type Session struct {
-	Id string
 	ch chan []byte
 	*manager.Player
 }
