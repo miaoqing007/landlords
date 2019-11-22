@@ -38,9 +38,8 @@ func agentRun() {
 func handleRequest(conn net.Conn) {
 	in := make(chan []byte, 16)
 	sess := session.NewSession(in)
-	ip := conn.RemoteAddr().String()
 	defer func() {
-		glog.Info("disconnect:" + ip)
+		glog.Info("disconnect:" + conn.RemoteAddr().String())
 		sess.OffLine(sess.Id)
 		closed <- struct{}{}
 		conn.Close()
