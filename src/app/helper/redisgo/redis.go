@@ -163,7 +163,7 @@ func (c *Cacher) Exists(key string) (bool, error) {
 	return Bool(c.Do("EXISTS", c.getKey(key)))
 }
 
-func (c *Cacher) HEXISTS(key string, val interface{}) (bool, error) {
+func (c *Cacher) HExists(key string, val interface{}) (bool, error) {
 	return redis.Bool(c.Do("HEXISTS", key, val))
 }
 

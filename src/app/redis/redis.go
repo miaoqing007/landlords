@@ -51,7 +51,7 @@ func Exists(key string) bool {
 	return ok
 }
 
-func HEXISTS(key string, val interface{}) bool {
-	ok, _ := _redisCacher.HEXISTS(key, val)
+func HExists(key string, val interface{}) bool {
+	ok, _ := _redisCacher.HExists(key, val)
 	return ok
 }
