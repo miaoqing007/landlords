@@ -1,6 +1,7 @@
 package registry
 
 import (
+	"github.com/golang/glog"
 	"sync"
 )
 
@@ -106,6 +107,7 @@ func (r *Registry) unRegistryRoom(roomId string) {
 //玩家注册
 func Register(uid string, sch chan []byte) {
 	onlineUser.rch <- regmsg{uid, sch}
+	glog.Infof("register = %v", uid)
 }
 
 //玩家消息推送
@@ -116,16 +118,19 @@ func Push(uid string, msg []byte) {
 //玩家反注册
 func UnRegister(uid string) {
 	onlineUser.urch <- uid
+	glog.Infof("unregister = %v", uid)
 }
 
 //房间注册
 func RegisterRoom(roomid string, uids []string) {
 	onlineUser.rRch <- roommsg{uids, roomid}
+	glog.Infof("registerroom = %v uids = %v", roomid, uids)
 }
 
 //房间反注册
 func UnRegisterRoom(roomid string) {
 	onlineUser.urRch <- roomid
+	glog.Infof("unregisterroom = %v", roomid)
 }
 
 //房间消息推送

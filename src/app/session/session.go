@@ -25,8 +25,8 @@ func (s *Session) InitPlayer(id string) error {
 	}
 	s.User = userManger
 
-	manager.AddPlayer(s.Player.User.Id, s.Player)
-	registry.Register(id, s.ch)
+	manager.AddPlayer(s.User.Id, s.Player)
+	registry.Register(s.User.Id, s.ch)
 	return nil
 }
 

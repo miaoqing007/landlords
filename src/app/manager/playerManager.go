@@ -40,6 +40,7 @@ func GetPlayer(id string) *Player {
 
 func AddPlayer(id string, player *Player) {
 	_player.addPlayer(id, player)
+	glog.Infof("addPlayer id = %v", id)
 }
 
 func DeletePlayer(id string) {
