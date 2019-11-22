@@ -1,6 +1,7 @@
 package main
 
 import (
+	"app/helper/uuid"
 	"app/initcards"
 	"app/log"
 	"app/manager"
@@ -9,6 +10,8 @@ import (
 
 func main() {
 	log.InitLog()
+
+	uuid.InitUUID()
 
 	redis.InitRedis()
 

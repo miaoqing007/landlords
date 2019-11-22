@@ -45,3 +45,8 @@ func HSet(key, field string, expire int64) (interface{}, error) {
 func HMSet(key string, value interface{}, expire int) error {
 	return _redisCacher.HMSet(key, value, expire)
 }
+
+func Exists(key string) bool {
+	ok, _ := _redisCacher.Exists(key)
+	return ok
+}
