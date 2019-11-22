@@ -8,7 +8,7 @@ import (
 var _player *Players
 
 type Player struct {
-	*UserManager
+	User *UserManager
 }
 
 type Players struct {

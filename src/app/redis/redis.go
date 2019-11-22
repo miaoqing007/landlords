@@ -2,7 +2,7 @@ package redis
 
 import (
 	"app/enmu"
-	"github.com/aiscrm/redisgo"
+	"app/helper/redisgo"
 	"github.com/golang/glog"
 )
 
@@ -38,8 +38,8 @@ func Set(key string, value interface{}, expire int64) error {
 	return _redisCacher.Set(key, value, expire)
 }
 
-func HSet(key, field string, expire int64) (interface{}, error) {
-	return _redisCacher.HSet(key, field, expire)
+func HSet(key, field string, val interface{}) (interface{}, error) {
+	return _redisCacher.HSet(key, field, val)
 }
 
 func HMSet(key string, value interface{}, expire int) error {
@@ -48,5 +48,10 @@ func HMSet(key string, value interface{}, expire int) error {
 
 func Exists(key string) bool {
 	ok, _ := _redisCacher.Exists(key)
+	return ok
+}
+
+func HEXISTS(key string, val interface{}) bool {
+	ok, _ := _redisCacher.HEXISTS(key, val)
 	return ok
 }

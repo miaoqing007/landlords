@@ -23,9 +23,9 @@ func (s *Session) InitPlayer(id string) error {
 	if err != nil {
 		return err
 	}
-	s.UserManager = userManger
+	s.User = userManger
 
-	manager.AddPlayer(s.Player.UserManager.Id, s.Player)
+	manager.AddPlayer(s.Player.User.Id, s.Player)
 	registry.Register(id, s.ch)
 	return nil
 }

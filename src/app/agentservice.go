@@ -8,15 +8,12 @@ import (
 	"app/session"
 	"bufio"
 	"github.com/golang/glog"
-	"github.com/xtaci/kcp-go"
 	"net"
 	"os"
 )
 
-var closed = make(chan struct{}, 1)
-
 func agentRun() {
-	lestener, err := kcp.ListenWithOptions(enmu.ServerHost+":"+enmu.ServerPort, nil, 10, 3)
+	lestener, err := net.Listen("tcp", enmu.ServerHost+":"+enmu.ServerPort)
 	if err != nil {
 		glog.Info("listen error:", err)
 		os.Exit(1)
@@ -30,7 +27,6 @@ func agentRun() {
 			os.Exit(1)
 		}
 		glog.Infof("message %s->%s\n", conn.RemoteAddr(), conn.LocalAddr())
-
 		go handleRequest(conn)
 	}
 }
@@ -40,8 +36,7 @@ func handleRequest(conn net.Conn) {
 	sess := session.NewSession(in)
 	defer func() {
 		glog.Info("disconnect:" + conn.RemoteAddr().String())
-		sess.OffLine(sess.Id)
-		closed <- struct{}{}
+		sess.OffLine(sess.User.Id)
 		conn.Close()
 	}()
 	reader := bufio.NewReader(conn)
