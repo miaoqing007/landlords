@@ -31,8 +31,8 @@ type regmsg struct {
 }
 
 type roommsg struct {
-	uids   []string
 	roomid string
+	uids   []string
 }
 
 type rpushmsg struct {
@@ -123,7 +123,7 @@ func UnRegister(uid string) {
 
 //房间注册
 func RegisterRoom(roomid string, uids []string) {
-	onlineUser.rRch <- roommsg{uids, roomid}
+	onlineUser.rRch <- roommsg{roomid, uids}
 	glog.Infof("registerroom = %v uids = %v", roomid, uids)
 }
 

@@ -16,10 +16,10 @@ func InitRedis() {
 		Password: "",
 	})
 	if err != nil {
-		glog.Info("初始化Redis失败")
+		panic("初始化redis失败")
 		return
 	}
-	glog.Info("初始化Redis完成")
+	glog.Info("初始化redis完成")
 }
 
 func HGetAll(key string, value interface{}) error {

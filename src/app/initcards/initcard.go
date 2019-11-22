@@ -27,6 +27,7 @@ func InitNewCards() {
 	}
 	glog.Info("初始化牌完成")
 }
+
 func ShuffCards() []string {
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
 	n := len(cards)
