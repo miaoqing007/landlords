@@ -33,9 +33,15 @@ func GetRoomManager(roomId string) *RoomManager {
 	return nil
 }
 
+//移除房间
 func RemoveRoom(roomId string) {
-	registry.UnRegisterRoom(roomId)
+	r, ok := room.rooms.Load(roomId)
+	if !ok {
+		return
+	}
+	r.(*RoomManager).RemoveManager()
 	room.rooms.Delete(roomId)
+	glog.Infof("remove roomId = %v", roomId)
 }
 
 //添加玩家到房间
@@ -72,6 +78,15 @@ func (r *RoomManager) ResetRoomManager() {
 		value.(*UserInfo).resetUserInfo()
 		return true
 	})
+}
+
+func (r *RoomManager) RemoveManager() {
+	r.player.Range(func(key, value interface{}) bool {
+		r.player.Delete(key)
+		return true
+	})
+	registry.PushRoom(r.roomId, packet.Pack(2001, client_proto.S_entity_id{"444444"}, nil))
+	registry.UnRegisterRoom(r.roomId)
 }
 
 //获取玩家信息
@@ -162,6 +177,10 @@ func (r *RoomManager) GetUserRemainingCardsNum(uid string) int {
 func (r *RoomManager) AddPlayerToRoom(uid string) bool {
 	if common.GetSyncMapLen(r.player) >= 3 {
 		return false
+	}
+	p := GetPlayer(uid)
+	if p != nil {
+		p.User.SetRoomId(r.roomId)
 	}
 	r.player.Store(uid, NewUserInfo(uid))
 	return true

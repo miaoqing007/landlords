@@ -32,6 +32,7 @@ func (s *Session) InitPlayer(id string) error {
 
 //玩家离线
 func (s *Session) OffLine(id string) {
+	manager.RemoveRoom(s.User.GetRoomId())
 	manager.DeletePlayer(id)
 	registry.UnRegister(id)
 }

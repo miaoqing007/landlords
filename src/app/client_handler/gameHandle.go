@@ -18,6 +18,5 @@ func P_licensing_card_req(sess *session.Session, reader *packet.Packet) [][]byte
 		return nil
 	}
 	room.CreatePlayerCards(cards[:17], cards[17:34], cards[34:51], cards[51:], &info)
-	info.F_roomId = tbl.F_id
 	return nil
 }

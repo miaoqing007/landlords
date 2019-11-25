@@ -9,6 +9,7 @@ import (
 
 type UserManager struct {
 	*obj.User
+	roomId string
 }
 
 func NewUserManager(platformid string) (*UserManager, error) {
@@ -17,9 +18,9 @@ func NewUserManager(platformid string) (*UserManager, error) {
 	if redis.Exists(model.PLATFORMID + platformid) {
 		model.GetUserInfo(platformid, manager.User)
 	} else {
+		pd := &obj.PlatformData{}
 		manager.User.Id = uuid.GetUUID()
 		manager.User.PlatformId = platformid
-		pd := &obj.PlatformData{}
 		pd.Id = platformid
 		pd.UserId = manager.User.Id
 		model.CreateUserInfo(platformid, pd.UserId, pd, manager.User)
@@ -31,4 +32,12 @@ func (u *UserManager) SetNameId(name string) {
 	u.Name = name
 	redis.HSet(model.NAMEIDKEY, name, u.Id)
 	model.UpdateUserInfo(u.Id, u.User)
+}
+
+func (u *UserManager) SetRoomId(roomId string) {
+	u.roomId = roomId
+}
+
+func (u *UserManager) GetRoomId() string {
+	return u.roomId
 }
