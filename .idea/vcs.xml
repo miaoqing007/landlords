@@ -2,23 +2,15 @@
 <project version="4">
   <component name="VcsDirectoryMappings">
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/src/app/github.com/aiscrm/redisgo" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/src/app/github.com/golang/glog" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/src/app/github.com/gomodule/redigo" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/src/app/github.com/klauspost/cpuid" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/src/app/github.com/klauspost/reedsolomon" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/src/app/github.com/templexxx/cpufeat" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/src/app/github.com/templexxx/xor" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/src/app/github.com/tjfoc/gmsm" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/src/app/github.com/xtaci/kcp-go" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/src/app/golang.org/x/crypto" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/src/app/golang.org/x/net" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/src/app/vendor/github.com/aiscrm/redisgo" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/src/app/vendor/github.com/golang/glog" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/src/app/vendor/github.com/gomodule/redigo" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/src/github.com/aiscrm/redisgo" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/src/github.com/gistao/RedisGo-Async" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/src/github.com/go-redis/redis" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/src/github.com/gomodule/redigo" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/app/vendor/github.com/klauspost/cpuid" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/app/vendor/github.com/klauspost/reedsolomon" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/app/vendor/github.com/templexxx/cpufeat" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/app/vendor/github.com/templexxx/xor" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/app/vendor/github.com/tjfoc/gmsm" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/app/vendor/github.com/xtaci/kcp-go" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/app/vendor/golang.org/x/crypto" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/src/app/vendor/golang.org/x/net" vcs="Git" />
   </component>
 </project>

@@ -32,7 +32,7 @@ type IdWorker struct {
 
 func InitUUID() {
 	_idwork = &IdWorker{}
-	if err := _idwork.initIdWorker(10, 1); err != nil {
+	if err := _idwork.initIdWorker(100, 1); err != nil {
 		return
 	}
 	glog.Info("初始化uuid成功")
