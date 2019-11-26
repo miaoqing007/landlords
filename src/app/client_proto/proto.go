@@ -152,6 +152,36 @@ func PKT_player(reader *packet.Packet) (tbl S_player, err error) {
 	return
 }
 
+type S_player_outof_card struct {
+	F_roomId string
+	F_cards  []string
+}
+
+func (p S_player_outof_card) Pack(w *packet.Packet) {
+	w.WriteString(p.F_roomId)
+	w.WriteU16(uint16(len(p.F_cards)))
+	for k := range p.F_cards {
+		w.WriteString(p.F_cards[k])
+	}
+}
+
+func PKT_player_outof_card(reader *packet.Packet) (tbl S_player_outof_card, err error) {
+	tbl.F_roomId, err = reader.ReadString()
+	checkErr(err)
+	tbl.F_roomId = strings.TrimSpace(tbl.F_roomId)
+	{
+		narr, err := reader.ReadU16()
+		checkErr(err)
+		for i := 0; i < int(narr); i++ {
+			v, err := reader.ReadString()
+			tbl.F_cards = append(tbl.F_cards, v)
+			checkErr(err)
+		}
+	}
+
+	return
+}
+
 func checkErr(err error) {
 	if err != nil {
 		panic("error occured in protocol module")

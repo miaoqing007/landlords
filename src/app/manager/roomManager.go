@@ -4,6 +4,7 @@ import (
 	"app/client_proto"
 	"app/helper/common"
 	"app/helper/conv"
+	"app/initcards"
 	"app/misc/packet"
 	"app/operatecard"
 	"app/registry"
@@ -49,7 +50,18 @@ func Add2Room(piecewise int, ids []string) {
 	rm := NewRoomManager(piecewise, ids)
 	registry.RegisterRoom(rm.roomId, ids)
 	room.rooms.Store(rm.roomId, rm)
+	T(rm.roomId)
 	glog.Infof("roomId = %v ,uids = %v", rm.roomId, ids)
+}
+
+func T(roomId string) {
+	info := client_proto.S_player_card{}
+	cards := initcards.ShuffCards()
+	room := GetRoomManager(roomId)
+	if room == nil {
+		return
+	}
+	room.CreatePlayerCards(cards[:17], cards[17:34], cards[34:51], cards[51:], &info)
 }
 
 type RoomManager struct {
@@ -136,16 +148,23 @@ func (r *RoomManager) CheckHandCards(uid string, cards []string) bool {
 
 //比对玩家手牌
 func (r *RoomManager) comparisonLastPlayerWasteCards(uid string, cards []string) bool {
-	lastWasteCards, ok := r.lastPlayerWasteCards.Load(uid)
+	_, ok := r.lastPlayerWasteCards.Load(uid)
 	if ok || common.GetSyncMapLen(r.lastPlayerWasteCards) == 0 {
 		r.updateLastPlayerWasteCards(uid, cards)
 		return true
-	} else if operatecard.ComparisonTwoPlayersCards(lastWasteCards.([]string), cards) {
-		r.lastPlayerWasteCards = sync.Map{}
-		r.updateLastPlayerWasteCards(uid, cards)
-		return true
 	} else {
-		return false
+		lastWasteCards := []string{}
+		r.lastPlayerWasteCards.Range(func(key, value interface{}) bool {
+			lastWasteCards = value.([]string)
+			return true
+		})
+		if operatecard.ComparisonTwoPlayersCards(lastWasteCards, cards) {
+			r.lastPlayerWasteCards = sync.Map{}
+			r.updateLastPlayerWasteCards(uid, cards)
+			return true
+		} else {
+			return false
+		}
 	}
 }
 
@@ -171,6 +190,14 @@ func (r *RoomManager) GetUserRemainingCardsNum(uid string) int {
 		return -1
 	}
 	return v.(*UserInfo).getUserRemainingCardsNum()
+}
+
+func (r *RoomManager) GetUserCard(uid string) sync.Map {
+	v, ok := r.player.Load(uid)
+	if !ok {
+		return sync.Map{}
+	}
+	return v.(*UserInfo).getUserCards()
 }
 
 //添加玩家到房间
@@ -227,6 +254,10 @@ func (u *UserInfo) checkCards(cards []string) bool {
 //获取剩余手牌数量
 func (u *UserInfo) getUserRemainingCardsNum() int {
 	return u.remainingCardsNum
+}
+
+func (u *UserInfo) getUserCards() sync.Map {
+	return u.handCards
 }
 
 //重置信息

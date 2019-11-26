@@ -13,6 +13,7 @@ func P_user_login_req(sess *session.Session, reader *packet.Packet) [][]byte {
 			packet.Pack(Code["error_ack"], nil, nil),
 		}
 	}
+	tbl.F_id = sess.User.Id
 	return [][]byte{
 		packet.Pack(Code["user_login_req"], tbl, nil),
 	}

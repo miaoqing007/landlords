@@ -9,7 +9,8 @@ import (
 
 type UserManager struct {
 	*obj.User
-	roomId string
+	roomId    string
+	piecewise int
 }
 
 func NewUserManager(platformid string) (*UserManager, error) {
@@ -40,4 +41,12 @@ func (u *UserManager) SetRoomId(roomId string) {
 
 func (u *UserManager) GetRoomId() string {
 	return u.roomId
+}
+
+func (u *UserManager) SetPiecewise(piecewise int) {
+	u.piecewise = piecewise
+}
+
+func (u *UserManager) GetPiecewise() int {
+	return u.piecewise
 }

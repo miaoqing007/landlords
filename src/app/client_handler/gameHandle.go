@@ -20,3 +20,19 @@ func P_licensing_card_req(sess *session.Session, reader *packet.Packet) [][]byte
 	room.CreatePlayerCards(cards[:17], cards[17:34], cards[34:51], cards[51:], &info)
 	return nil
 }
+
+func P_out_of_the_card_req(sess *session.Session, reader *packet.Packet) [][]byte {
+	tbl, _ := client_proto.PKT_player_outof_card(reader)
+	if len(tbl.F_cards) == 0 {
+		return nil
+	}
+	room := manager.GetRoomManager(tbl.F_roomId)
+	if room == nil {
+		return nil
+	}
+	if !room.CheckHandCards(sess.User.Id, tbl.F_cards) {
+		return nil
+	}
+	room.DeleteCards(sess.User.Id, tbl.F_cards)
+	return nil
+}

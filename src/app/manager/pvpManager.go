@@ -72,6 +72,15 @@ func (p *PvpPoolManager) addups(acm addChanMsg) {
 		ps = make([]string, 0)
 	}
 	arr := ps.([]string)
+	for _, v := range arr {
+		if v == acm.id {
+			return
+		}
+	}
+	player := GetPlayer(acm.id)
+	if player != nil {
+		player.User.SetPiecewise(acm.piecewise)
+	}
 	arr = append(arr, acm.id)
 	p.ups.Store(acm.piecewise, arr)
 }
@@ -95,9 +104,11 @@ func (p *PvpPoolManager) remups(rcm remChanMsg) {
 //玩家进入匹配池
 func AddPlayer2PvpPool(piecewise int, id string) {
 	_pvpPoolManger.addChan <- addChanMsg{piecewise, id}
+	glog.Infof("addPlayerPvpPool = %v", id)
 }
 
 //移除匹配池的玩家
 func RemovePlayer4PvpPool(piecewise int, id string) {
 	_pvpPoolManger.remChan <- remChanMsg{piecewise, id}
+	glog.Infof("removePlayerPvpPool = %v", id)
 }
