@@ -153,7 +153,7 @@ func (r *RoomManager) comparisonLastPlayerWasteCards(uid string, cards []string)
 		r.updateLastPlayerWasteCards(uid, cards)
 		return true
 	} else {
-		lastWasteCards := []string{}
+		var lastWasteCards []string
 		r.lastPlayerWasteCards.Range(func(key, value interface{}) bool {
 			lastWasteCards = value.([]string)
 			return true

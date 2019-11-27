@@ -43,6 +43,10 @@ type Options struct {
 func New(options Options) (*Cacher, error) {
 	r := &Cacher{}
 	err := r.StartAndGC(options)
+	c, err := r.pool.Dial()
+	if err == nil {
+		c.Close()
+	}
 	return r, err
 }
 

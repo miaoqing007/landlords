@@ -14,6 +14,7 @@ func InitRedis() {
 		Addr:     enmu.ServerHost + ":" + enmu.RedisPort,
 		Db:       0,
 		Password: "",
+		Network:  "tcp",
 	})
 	if err != nil {
 		panic("初始化redis失败")

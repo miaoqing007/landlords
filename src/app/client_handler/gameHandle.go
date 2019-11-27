@@ -21,6 +21,7 @@ func P_licensing_card_req(sess *session.Session, reader *packet.Packet) [][]byte
 	return nil
 }
 
+//出牌
 func P_out_of_the_card_req(sess *session.Session, reader *packet.Packet) [][]byte {
 	tbl, _ := client_proto.PKT_player_outof_card(reader)
 	if len(tbl.F_cards) == 0 {
