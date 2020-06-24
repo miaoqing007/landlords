@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="VcsDirectoryMappings">
-    <mapping directory="$PROJECT_DIR$" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/src/app/vendor/github.com/golang/glog" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/src/app/vendor/github.com/gomodule/redigo" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/src/app/vendor/github.com/klauspost/cpuid" vcs="Git" />
@@ -12,5 +11,6 @@
     <mapping directory="$PROJECT_DIR$/src/app/vendor/github.com/xtaci/kcp-go" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/src/app/vendor/golang.org/x/crypto" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/src/app/vendor/golang.org/x/net" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$" vcs="Git" />
   </component>
 </project>
