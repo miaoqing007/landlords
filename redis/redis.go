@@ -1,8 +1,8 @@
 package redis
 
 import (
-	"landlords/app/enmu"
-	"landlords/app/helper/redisgo"
+	"landlords/enmu"
+	"landlords/helper/redisgo"
 	"github.com/golang/glog"
 )
 

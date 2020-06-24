@@ -1,13 +1,13 @@
 package manager
 
 import (
-	"landlords/app/client_proto"
-	"landlords/app/helper/common"
-	"landlords/app/helper/conv"
-	"landlords/app/initcards"
-	"landlords/app/misc/packet"
-	"landlords/app/operatecard"
-	"landlords/app/registry"
+	"landlords/client_proto"
+	"landlords/helper/common"
+	"landlords/helper/conv"
+	"landlords/initcards"
+	"landlords/misc/packet"
+	"landlords/operatecard"
+	"landlords/registry"
 	"github.com/golang/glog"
 	"sync"
 	"sync/atomic"

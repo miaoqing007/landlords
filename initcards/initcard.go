@@ -1,7 +1,7 @@
 package initcards
 
 import (
-	"landlords/app/helper/conv"
+	"landlords/helper/conv"
 	"github.com/golang/glog"
 	"math/rand"
 	"time"

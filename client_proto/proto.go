@@ -2,7 +2,7 @@
 // DO NOT EDIT!
 package client_proto
 
-import "landlords/app/misc/packet"
+import "landlords/misc/packet"
 import "fmt"
 import "strings"
 

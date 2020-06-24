@@ -1,9 +1,9 @@
 package client_handler
 
 import (
-	"landlords/app/client_proto"
-	"landlords/app/misc/packet"
-	"landlords/app/session"
+	"landlords/client_proto"
+	"landlords/misc/packet"
+	"landlords/session"
 )
 
 //心跳检测

@@ -1,9 +1,9 @@
 package operatecard
 
 import (
-	"landlords/app/enmu"
-	"landlords/app/helper/conv"
-	"landlords/app/helper/util"
+	"landlords/enmu"
+	"landlords/helper/conv"
+	"landlords/helper/util"
 	"sort"
 )
 

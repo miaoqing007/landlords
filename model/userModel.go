@@ -1,8 +1,8 @@
 package model
 
 import (
-	"landlords/app/obj"
-	"landlords/app/redis"
+	"landlords/obj"
+	"landlords/redis"
 )
 
 var (

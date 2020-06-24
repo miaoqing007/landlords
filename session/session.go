@@ -1,8 +1,8 @@
 package session
 
 import (
-	"landlords/app/manager"
-	"landlords/app/registry"
+	"landlords/manager"
+	"landlords/registry"
 )
 
 type Session struct {

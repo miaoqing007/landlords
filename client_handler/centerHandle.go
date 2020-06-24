@@ -1,10 +1,10 @@
 package client_handler
 
 import (
-	"landlords/app/client_proto"
-	"landlords/app/manager"
-	"landlords/app/misc/packet"
-	"landlords/app/session"
+	"landlords/client_proto"
+	"landlords/manager"
+	"landlords/misc/packet"
+	"landlords/session"
 )
 
 //进入房间

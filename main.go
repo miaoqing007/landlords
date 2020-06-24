@@ -1,11 +1,11 @@
-package main
+package landlords
 
 import (
-	"landlords/app/helper/uuid"
-	"landlords/app/initcards"
-	"landlords/app/log"
-	"landlords/app/manager"
-	"landlords/app/redis"
+	"landlords/helper/uuid"
+	"landlords/initcards"
+	"landlords/log"
+	"landlords/manager"
+	"landlords/redis"
 )
 
 func main() {

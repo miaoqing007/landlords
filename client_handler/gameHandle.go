@@ -1,11 +1,11 @@
 package client_handler
 
 import (
-	"landlords/app/client_proto"
-	"landlords/app/initcards"
-	"landlords/app/manager"
-	"landlords/app/misc/packet"
-	"landlords/app/session"
+	"landlords/client_proto"
+	"landlords/initcards"
+	"landlords/manager"
+	"landlords/misc/packet"
+	"landlords/session"
 )
 
 //发牌

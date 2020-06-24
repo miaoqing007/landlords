@@ -1,11 +1,11 @@
-package main
+package landlords
 
 import (
-	"landlords/app/client_handler"
-	"landlords/app/enmu"
-	"landlords/app/helper/stack"
-	"landlords/app/misc/packet"
-	"landlords/app/session"
+	"landlords/client_handler"
+	"landlords/enmu"
+	"landlords/helper/stack"
+	"landlords/misc/packet"
+	"landlords/session"
 	"bufio"
 	"github.com/golang/glog"
 	"net"

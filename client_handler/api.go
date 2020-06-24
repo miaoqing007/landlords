@@ -3,8 +3,8 @@
 package client_handler
 
 import (
-	"landlords/app/misc/packet"
-	. "landlords/app/session"
+	"landlords/misc/packet"
+	. "landlords/session"
 )
 
 var Code = map[string]int16{

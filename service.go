@@ -1,4 +1,4 @@
-package main
+package landlords
 
 type server struct {
 }

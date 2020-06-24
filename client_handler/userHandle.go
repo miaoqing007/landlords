@@ -1,11 +1,11 @@
 package client_handler
 
 import (
-	"landlords/app/client_proto"
-	"landlords/app/misc/packet"
-	"landlords/app/model"
-	"landlords/app/redis"
-	"landlords/app/session"
+	"landlords/client_proto"
+	"landlords/misc/packet"
+	"landlords/model"
+	"landlords/redis"
+	"landlords/session"
 )
 
 func P_user_data_req(sess *session.Session, reader *packet.Packet) [][]byte {

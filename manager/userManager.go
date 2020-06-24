@@ -1,10 +1,10 @@
 package manager
 
 import (
-	"landlords/app/helper/uuid"
-	"landlords/app/model"
-	"landlords/app/obj"
-	"landlords/app/redis"
+	"landlords/helper/uuid"
+	"landlords/model"
+	"landlords/obj"
+	"landlords/redis"
 )
 
 type UserManager struct {
