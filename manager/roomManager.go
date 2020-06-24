@@ -1,6 +1,7 @@
 package manager
 
 import (
+	"github.com/golang/glog"
 	"landlords/client_proto"
 	"landlords/helper/common"
 	"landlords/helper/conv"
@@ -8,7 +9,6 @@ import (
 	"landlords/misc/packet"
 	"landlords/operatecard"
 	"landlords/registry"
-	"github.com/golang/glog"
 	"sync"
 	"sync/atomic"
 )

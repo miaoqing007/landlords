@@ -1,9 +1,9 @@
 package redis
 
 import (
+	"github.com/golang/glog"
 	"landlords/enmu"
 	"landlords/helper/redisgo"
-	"github.com/golang/glog"
 )
 
 var _redisCacher *redisgo.Cacher

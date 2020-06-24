@@ -1,11 +1,11 @@
-package landlords
+package main
 
 import (
+	"landlords/agentservice"
 	"landlords/helper/uuid"
 	"landlords/initcards"
 	"landlords/log"
 	"landlords/manager"
-	"landlords/redis"
 )
 
 func main() {
@@ -13,7 +13,7 @@ func main() {
 
 	uuid.InitUUID()
 
-	redis.InitRedis()
+	//redis.InitRedis()
 
 	initcards.InitNewCards()
 
@@ -21,5 +21,5 @@ func main() {
 
 	manager.InitPvpPoolManager()
 
-	agentRun()
+	agentservice.AgentRun()
 }
