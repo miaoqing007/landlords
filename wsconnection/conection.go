@@ -4,6 +4,7 @@ import (
 	"errors"
 	"github.com/gorilla/websocket"
 	"landlords/manager"
+	. "landlords/obj"
 	"landlords/registry"
 	"log"
 	"sync"
@@ -16,8 +17,8 @@ var WsConnAll map[int64]*WsConnection
 // 客户端连接
 type WsConnection struct {
 	WsSocket *websocket.Conn // 底层websocket
-	InChan   chan []byte     // 读队列
-	OutChan  chan []byte     // 写队列
+	InChan   chan *WsMessage // 读队列
+	OutChan  chan *WsMessage // 写队列
 
 	mutex     sync.Mutex // 避免重复关闭管道,加锁处理
 	isClosed  bool
@@ -29,8 +30,8 @@ type WsConnection struct {
 func NewWsConnection(wsSocket *websocket.Conn, maxConnId int64) *WsConnection {
 	wsConn := &WsConnection{
 		WsSocket:  wsSocket,
-		InChan:    make(chan []byte, 1000),
-		OutChan:   make(chan []byte, 1000),
+		InChan:    make(chan *WsMessage, 1000),
+		OutChan:   make(chan *WsMessage, 1000),
 		CloseChan: make(chan byte),
 		isClosed:  false,
 		id:        maxConnId,
@@ -41,7 +42,7 @@ func NewWsConnection(wsSocket *websocket.Conn, maxConnId int64) *WsConnection {
 }
 
 // 写入消息到队列中
-func (wsConn *WsConnection) WsWrite(data []byte) error {
+func (wsConn *WsConnection) WsWrite(data *WsMessage) error {
 	select {
 	case wsConn.OutChan <- data:
 	case <-wsConn.CloseChan:
@@ -51,7 +52,7 @@ func (wsConn *WsConnection) WsWrite(data []byte) error {
 }
 
 // 读取消息队列中的消息
-func (wsConn *WsConnection) WsRead() ([]byte, error) {
+func (wsConn *WsConnection) WsRead() (*WsMessage, error) {
 	select {
 	case msg := <-wsConn.InChan:
 		// 获取到消息队列中的消息

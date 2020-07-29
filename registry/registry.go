@@ -2,6 +2,7 @@ package registry
 
 import (
 	"github.com/golang/glog"
+	. "landlords/obj"
 	"sync"
 )
 
@@ -22,12 +23,12 @@ type Registry struct {
 
 type pushmsg struct {
 	uid string
-	msg []byte
+	msg *WsMessage
 }
 
 type regmsg struct {
 	uid    string
-	sendch chan []byte
+	sendch chan *WsMessage
 }
 
 type roommsg struct {
@@ -37,7 +38,7 @@ type roommsg struct {
 
 type rpushmsg struct {
 	roomid string
-	msg    []byte
+	msg    *WsMessage
 }
 
 func init() {
@@ -105,13 +106,13 @@ func (r *Registry) unRegistryRoom(roomId string) {
 }
 
 //玩家注册
-func Register(uid string, sch chan []byte) {
+func Register(uid string, sch chan *WsMessage) {
 	onlineUser.rch <- regmsg{uid, sch}
 	glog.Infof("register = %v", uid)
 }
 
 //玩家消息推送
-func Push(uid string, msg []byte) {
+func Push(uid string, msg *WsMessage) {
 	onlineUser.pch <- pushmsg{uid, msg}
 }
 
@@ -134,6 +135,6 @@ func UnRegisterRoom(roomid string) {
 }
 
 //房间消息推送
-func PushRoom(roomid string, msg []byte) {
+func PushRoom(roomid string, msg *WsMessage) {
 	onlineUser.rpch <- rpushmsg{roomid, msg}
 }

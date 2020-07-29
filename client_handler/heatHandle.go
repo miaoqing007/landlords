@@ -7,9 +7,7 @@ import (
 )
 
 //心跳检测
-func P_heart_beat_req(ws *wsconnection.WsConnection, reader *packet.Packet) [][]byte {
+func P_heart_beat_req(ws *wsconnection.WsConnection, reader *packet.Packet) (int16, interface{}) {
 	tbl, _ := client_proto.PKT_auto_id(reader)
-	return [][]byte{
-		packet.Pack(Code["heart_beat_req"], tbl, nil),
-	}
+	return Code["heart_beat_req"], tbl
 }
