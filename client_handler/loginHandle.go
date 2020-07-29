@@ -1,6 +1,7 @@
 package client_handler
 
 import (
+	"github.com/golang/glog"
 	"landlords/client_proto"
 	"landlords/misc/packet"
 	"landlords/session"
@@ -14,6 +15,7 @@ func P_user_login_req(sess *session.Session, reader *packet.Packet) [][]byte {
 		}
 	}
 	tbl.F_id = sess.User.Id
+	glog.Info(tbl.F_id)
 	return [][]byte{
 		packet.Pack(Code["user_login_req"], tbl, nil),
 	}

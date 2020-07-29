@@ -1,11 +1,11 @@
 package main
 
 import (
-	"landlords/agentservice"
 	"landlords/helper/uuid"
 	"landlords/initcards"
 	"landlords/log"
 	"landlords/manager"
+	"landlords/websocket"
 )
 
 func main() {
@@ -21,5 +21,6 @@ func main() {
 
 	manager.InitPvpPoolManager()
 
-	agentservice.AgentRun()
+	//agentservice.AgentRun()
+	websocket.StartWebSocket("")
 }
