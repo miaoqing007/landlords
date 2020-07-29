@@ -5,6 +5,7 @@ package client_handler
 import (
 	"landlords/misc/packet"
 	. "landlords/session"
+	. "landlords/wsconnection"
 )
 
 var Code = map[string]int16{
@@ -29,10 +30,10 @@ var RCode = map[int16]string{
 	2007: "out_of_the_card_req", // 出牌请求
 }
 
-var Handlers map[int16]func(*Session, *packet.Packet) [][]byte
+var Handlers map[int16]func(*WsConnection, *packet.Packet) [][]byte
 
 func init() {
-	Handlers = map[int16]func(*Session, *packet.Packet) [][]byte{
+	Handlers = map[int16]func(*WsConnection, *packet.Packet) [][]byte{
 		2000: P_heart_beat_req,
 		2001: P_user_login_req,
 		2003: P_licensing_card_req,

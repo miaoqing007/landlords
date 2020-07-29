@@ -5,11 +5,11 @@ import (
 	"landlords/initcards"
 	"landlords/manager"
 	"landlords/misc/packet"
-	"landlords/session"
+	"landlords/wsconnection"
 )
 
 //发牌
-func P_licensing_card_req(sess *session.Session, reader *packet.Packet) [][]byte {
+func P_licensing_card_req(ws *wsconnection.WsConnection, reader *packet.Packet) [][]byte {
 	tbl, _ := client_proto.PKT_entity_id(reader)
 	info := client_proto.S_player_card{}
 	cards := initcards.ShuffCards()
@@ -22,7 +22,7 @@ func P_licensing_card_req(sess *session.Session, reader *packet.Packet) [][]byte
 }
 
 //出牌
-func P_out_of_the_card_req(sess *session.Session, reader *packet.Packet) [][]byte {
+func P_out_of_the_card_req(ws *wsconnection.WsConnection, reader *packet.Packet) [][]byte {
 	tbl, _ := client_proto.PKT_player_outof_card(reader)
 	if len(tbl.F_cards) == 0 {
 		return nil
@@ -31,9 +31,9 @@ func P_out_of_the_card_req(sess *session.Session, reader *packet.Packet) [][]byt
 	if room == nil {
 		return nil
 	}
-	if !room.CheckHandCards(sess.User.Id, tbl.F_cards) {
+	if !room.CheckHandCards(ws.User.Id, tbl.F_cards) {
 		return nil
 	}
-	room.DeleteCards(sess.User.Id, tbl.F_cards)
+	room.DeleteCards(ws.User.Id, tbl.F_cards)
 	return nil
 }

@@ -4,17 +4,17 @@ import (
 	"github.com/golang/glog"
 	"landlords/client_proto"
 	"landlords/misc/packet"
-	"landlords/session"
+	"landlords/wsconnection"
 )
 
-func P_user_login_req(sess *session.Session, reader *packet.Packet) [][]byte {
+func P_user_login_req(ws *wsconnection.WsConnection, reader *packet.Packet) [][]byte {
 	tbl, _ := client_proto.PKT_entity_id(reader)
-	if err := sess.InitPlayer(tbl.F_id); err != nil {
+	if err := ws.InitPlayer(tbl.F_id); err != nil {
 		return [][]byte{
 			packet.Pack(Code["error_ack"], nil, nil),
 		}
 	}
-	tbl.F_id = sess.User.Id
+	tbl.F_id = ws.User.Id
 	glog.Info(tbl.F_id)
 	return [][]byte{
 		packet.Pack(Code["user_login_req"], tbl, nil),
