@@ -1,13 +1,15 @@
 package websocket
 
 import (
+	"encoding/json"
+	"fmt"
+	"github.com/golang/glog"
 	"github.com/gorilla/websocket"
 	"landlords/client_handler"
 	"landlords/helper/stack"
 	"landlords/misc/packet"
 	. "landlords/obj"
 	. "landlords/wsconnection"
-	"log"
 	"net/http"
 	"time"
 )
@@ -34,6 +36,9 @@ var upgrader = websocket.Upgrader{
 	WriteBufferSize: 1024,
 	// 允许所有的CORS 跨域请求，正式环境可以关闭
 	CheckOrigin: func(r *http.Request) bool {
+		//if r.Header.Get("Sec-Websocket-Key") != "666666666" {
+		//	return false
+		//}
 		return true
 	},
 }
@@ -42,14 +47,13 @@ func wsHandler(resp http.ResponseWriter, req *http.Request) {
 	// 应答客户端告知升级连接为websocket
 	wsSocket, err := upgrader.Upgrade(resp, req, nil)
 	if err != nil {
-		log.Println("升级为websocket失败", err.Error())
+		glog.Error("升级为websocket失败", err.Error())
 		return
 	}
 	maxConnId++
 	// TODO 如果要控制连接数可以计算，wsConnAll长度
 	// 连接数保持一定数量，超过的部分不提供服务
 	wsConn := NewWsConnection(wsSocket, maxConnId)
-
 	// 处理器,发送定时信息，避免意外关闭
 	go processLoop(wsConn)
 	// 读协程
@@ -65,20 +69,19 @@ func processLoop(wsConn *WsConnection) {
 	for {
 		msg, err := wsConn.WsRead()
 		if err != nil {
-			log.Println("获取消息出现错误", err.Error())
+			glog.Info("连接断开", err.Error())
 			break
 		}
-		log.Println("接收到消息", string(msg))
+		glog.Info("接收到消息", msg.Data)
 
-		reader := packet.Reader(msg)
-		c, _ := reader.ReadS16()
-		byts := executeHandler(int16(c), wsConn, reader)
-		for _, byt := range byts {
-			err = wsConn.WsWrite(byt)
-			if err != nil {
-				log.Println("发送消息给客户端出现错误", err.Error())
-				break
-			}
+		reader := packet.Reader(msg.Data)
+		fmt.Println(reader.Data())
+		c, err := reader.ReadS16()
+		fmt.Println(reader.Data()[2:])
+		byt := executeHandler(int16(c), wsConn, reader.Data()[2:])
+		err = wsConn.WsWrite(&WsMessage{MessageType: websocket.TextMessage, Data: byt})
+		if err != nil {
+			glog.Info("发送消息给客户端出现错误", err.Error())
 		}
 	}
 }
@@ -90,20 +93,20 @@ func wsReadLoop(wsConn *WsConnection) {
 	wsConn.WsSocket.SetReadDeadline(time.Now().Add(pongWait))
 	for {
 		// 读一个message
-		_, data, err := wsConn.WsSocket.ReadMessage()
+		msgType, data, err := wsConn.WsSocket.ReadMessage()
 		if err != nil {
 			websocket.IsUnexpectedCloseError(err, websocket.CloseGoingAway, websocket.CloseAbnormalClosure)
-			log.Println("消息读取出现错误", err.Error())
+			glog.Error("连接关闭", err.Error())
 			wsConn.Close()
 			return
 		}
-		//req := &WsMessage{
-		//	msgType,
-		//	data,
-		//}
+		req := &WsMessage{
+			msgType,
+			data,
+		}
 		// 放入请求队列,消息入栈
 		select {
-		case wsConn.InChan <- data:
+		case wsConn.InChan <- req:
 		case <-wsConn.CloseChan:
 			return
 		}
@@ -121,8 +124,8 @@ func wsWriteLoop(wsConn *WsConnection) {
 		// 取一个应答
 		case msg := <-wsConn.OutChan:
 			// 写给websocket
-			if err := wsConn.WsSocket.WriteMessage(0, msg); err != nil {
-				log.Println("发送消息给客户端发生错误", err.Error())
+			if err := wsConn.WsSocket.WriteMessage(msg.MessageType, msg.Data); err != nil {
+				glog.Error("发送消息给客户端发生错误", err.Error())
 				// 切断服务
 				wsConn.Close()
 				return
@@ -144,15 +147,20 @@ func wsWriteLoop(wsConn *WsConnection) {
 func StartWebSocket(addrPort string) {
 	WsConnAll = make(map[int64]*WsConnection)
 	http.HandleFunc("/ws", wsHandler)
+	glog.Infof("启动http服成功%v", addrPort)
 	http.ListenAndServe(addrPort, nil)
 }
 
-func executeHandler(code int16, ws *WsConnection, reader *packet.Packet) [][]byte {
+func executeHandler(code int16, ws *WsConnection, data []byte) []byte {
 	defer stack.PrintRecoverFromPanic()
 	handle := client_handler.Handlers[code]
 	if handle == nil {
 		return nil
 	}
-	retByte := handle(ws, reader)
-	return retByte
+	byt := make([]byte, 0)
+	tos, ret := handle(ws, data)
+	retByte, _ := json.Marshal(ret)
+	data = append(data, byte(tos>>8), byte(tos))
+	data = append(data, retByte...)
+	return byt
 }

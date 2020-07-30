@@ -9,13 +9,13 @@ const (
 	PACKET_LIMIT = 65535
 )
 
+func (p *Packet) Data() []byte {
+	return p.data
+}
+
 type Packet struct {
 	pos  int
 	data []byte
-}
-
-func (p *Packet) Data() []byte {
-	return p.data
 }
 
 func (p *Packet) Length() int {

@@ -4,7 +4,7 @@ package client_proto
 
 import "landlords/misc/packet"
 import "fmt"
-import "strings"
+import "encoding/json"
 
 type S_null_struct struct {
 }
@@ -12,8 +12,11 @@ type S_null_struct struct {
 func (p S_null_struct) Pack(w *packet.Packet) {
 }
 
-func PKT_null_struct(reader *packet.Packet) (tbl S_null_struct, err error) {
-
+func PKT_null_struct(data []byte) (tbl S_null_struct, err error) {
+	err = json.Unmarshal(data, &tbl)
+	if err != nil {
+		return tbl, err
+	}
 	return
 }
 
@@ -25,10 +28,11 @@ func (p S_byte_id) Pack(w *packet.Packet) {
 	w.WriteByte(p.F_id)
 }
 
-func PKT_byte_id(reader *packet.Packet) (tbl S_byte_id, err error) {
-	tbl.F_id, err = reader.ReadByte()
-	checkErr(err)
-
+func PKT_byte_id(data []byte) (tbl S_byte_id, err error) {
+	err = json.Unmarshal(data, &tbl)
+	if err != nil {
+		return tbl, err
+	}
 	return
 }
 
@@ -40,10 +44,11 @@ func (p S_auto_id) Pack(w *packet.Packet) {
 	w.WriteS32(p.F_id)
 }
 
-func PKT_auto_id(reader *packet.Packet) (tbl S_auto_id, err error) {
-	tbl.F_id, err = reader.ReadS32()
-	checkErr(err)
-
+func PKT_auto_id(data []byte) (tbl S_auto_id, err error) {
+	err = json.Unmarshal(data, &tbl)
+	if err != nil {
+		return tbl, err
+	}
 	return
 }
 
@@ -55,11 +60,11 @@ func (p S_entity_id) Pack(w *packet.Packet) {
 	w.WriteString(p.F_id)
 }
 
-func PKT_entity_id(reader *packet.Packet) (tbl S_entity_id, err error) {
-	tbl.F_id, err = reader.ReadString()
-	checkErr(err)
-	tbl.F_id = strings.TrimSpace(tbl.F_id)
-
+func PKT_entity_id(data []byte) (tbl S_entity_id, err error) {
+	err = json.Unmarshal(data, &tbl)
+	if err != nil {
+		return tbl, err
+	}
 	return
 }
 
@@ -71,10 +76,11 @@ func (p S_item_id) Pack(w *packet.Packet) {
 	w.WriteU32(p.F_id)
 }
 
-func PKT_item_id(reader *packet.Packet) (tbl S_item_id, err error) {
-	tbl.F_id, err = reader.ReadU32()
-	checkErr(err)
-
+func PKT_item_id(data []byte) (tbl S_item_id, err error) {
+	err = json.Unmarshal(data, &tbl)
+	if err != nil {
+		return tbl, err
+	}
 	return
 }
 
@@ -96,29 +102,11 @@ func (p S_player_card) Pack(w *packet.Packet) {
 	}
 }
 
-func PKT_player_card(reader *packet.Packet) (tbl S_player_card, err error) {
-	{
-		narr, err := reader.ReadU16()
-		checkErr(err)
-		for i := 0; i < int(narr); i++ {
-			v, err := reader.ReadString()
-			tbl.F_hole_cards = append(tbl.F_hole_cards, v)
-			checkErr(err)
-		}
+func PKT_player_card(data []byte) (tbl S_player_card, err error) {
+	err = json.Unmarshal(data, &tbl)
+	if err != nil {
+		return tbl, err
 	}
-	tbl.F_roomId, err = reader.ReadString()
-	checkErr(err)
-	tbl.F_roomId = strings.TrimSpace(tbl.F_roomId)
-	{
-		narr, err := reader.ReadU16()
-		checkErr(err)
-		tbl.F_players = make([]S_player, narr)
-		for i := 0; i < int(narr); i++ {
-			tbl.F_players[i], err = PKT_player(reader)
-			checkErr(err)
-		}
-	}
-
 	return
 }
 
@@ -135,20 +123,11 @@ func (p S_player) Pack(w *packet.Packet) {
 	}
 }
 
-func PKT_player(reader *packet.Packet) (tbl S_player, err error) {
-	tbl.F_id, err = reader.ReadString()
-	checkErr(err)
-	tbl.F_id = strings.TrimSpace(tbl.F_id)
-	{
-		narr, err := reader.ReadU16()
-		checkErr(err)
-		for i := 0; i < int(narr); i++ {
-			v, err := reader.ReadString()
-			tbl.F_cards = append(tbl.F_cards, v)
-			checkErr(err)
-		}
+func PKT_player(data []byte) (tbl S_player, err error) {
+	err = json.Unmarshal(data, &tbl)
+	if err != nil {
+		return tbl, err
 	}
-
 	return
 }
 
@@ -165,20 +144,11 @@ func (p S_player_outof_card) Pack(w *packet.Packet) {
 	}
 }
 
-func PKT_player_outof_card(reader *packet.Packet) (tbl S_player_outof_card, err error) {
-	tbl.F_roomId, err = reader.ReadString()
-	checkErr(err)
-	tbl.F_roomId = strings.TrimSpace(tbl.F_roomId)
-	{
-		narr, err := reader.ReadU16()
-		checkErr(err)
-		for i := 0; i < int(narr); i++ {
-			v, err := reader.ReadString()
-			tbl.F_cards = append(tbl.F_cards, v)
-			checkErr(err)
-		}
+func PKT_player_outof_card(data []byte) (tbl S_player_outof_card, err error) {
+	err = json.Unmarshal(data, &tbl)
+	if err != nil {
+		return tbl, err
 	}
-
 	return
 }
 

@@ -2,27 +2,26 @@ package client_handler
 
 import (
 	"landlords/client_proto"
-	"landlords/misc/packet"
 	"landlords/model"
 	"landlords/redis"
 	"landlords/wsconnection"
 )
 
-func P_user_data_req(ws *wsconnection.WsConnection, reader *packet.Packet)(int16, interface{}) {
+func P_user_data_req(ws *wsconnection.WsConnection, data []byte) (int16, interface{}) {
 	if ws.User.Name == "" {
-		return [][]byte{packet.Pack(Code["user_new_notify"], nil, nil)}
+		return Code["error_ack"], nil
 	}
-	return nil
+	return Code["user_data_req"], nil
 }
 
-func P_user_reg_req(ws *wsconnection.WsConnection, reader *packet.Packet) (int16, interface{}) {
-	tbl, _ := client_proto.PKT_entity_id(reader)
+func P_user_reg_req(ws *wsconnection.WsConnection, data []byte) (int16, interface{}) {
+	tbl, _ := client_proto.PKT_entity_id(data)
 	if ws.User.Name != "" || tbl.F_id == "" {
-		return nil
+		return Code["error_ack"], nil
 	}
 	if redis.HExists(model.NAMEIDKEY, tbl.F_id) {
-		return nil
+		return Code["error_ack"], nil
 	}
 	ws.User.SetNameId(tbl.F_id)
-	return nil
+	return Code["user_reg_req"], nil
 }

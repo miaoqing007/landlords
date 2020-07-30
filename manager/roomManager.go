@@ -6,7 +6,6 @@ import (
 	"landlords/helper/common"
 	"landlords/helper/conv"
 	"landlords/initcards"
-	"landlords/misc/packet"
 	"landlords/operatecard"
 	"landlords/registry"
 	"sync"
@@ -97,7 +96,7 @@ func (r *RoomManager) RemoveManager() {
 		r.player.Delete(key)
 		return true
 	})
-	registry.PushRoom(r.roomId, packet.Pack(2001, client_proto.S_entity_id{"444444"}, nil))
+	//registry.PushRoom(r.roomId, 2001, client_proto.S_entity_id{"444444"}, nil))
 	registry.UnRegisterRoom(r.roomId)
 }
 
@@ -128,7 +127,7 @@ func (r *RoomManager) CreatePlayerCards(cards1, cards2, cards3, holeCards []stri
 	})
 	info.F_hole_cards = holeCards
 	info.F_roomId = r.roomId
-	registry.PushRoom(info.F_roomId, packet.Pack(2003, info, nil))
+	//registry.PushRoom(info.F_roomId, packet.Pack(2003, info, nil))
 }
 
 //判断玩家手牌

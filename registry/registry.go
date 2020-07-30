@@ -107,7 +107,7 @@ func (r *Registry) unRegistryRoom(roomId string) {
 
 //玩家注册
 func Register(uid string, sch chan *WsMessage) {
-	onlineUser.rch <- regmsg{uid, sch}
+	onlineUser.rch <- regmsg{uid: uid, sendch: sch}
 	glog.Infof("register = %v", uid)
 }
 

@@ -2,11 +2,11 @@ package wsconnection
 
 import (
 	"errors"
+	"github.com/golang/glog"
 	"github.com/gorilla/websocket"
 	"landlords/manager"
 	. "landlords/obj"
 	"landlords/registry"
-	"log"
 	"sync"
 )
 
@@ -37,7 +37,7 @@ func NewWsConnection(wsSocket *websocket.Conn, maxConnId int64) *WsConnection {
 		id:        maxConnId,
 	}
 	WsConnAll[maxConnId] = wsConn
-	log.Println("当前在线人数", len(WsConnAll))
+	glog.Info("当前在线人数", len(WsConnAll))
 	return wsConn
 }
 
@@ -65,7 +65,7 @@ func (wsConn *WsConnection) WsRead() (*WsMessage, error) {
 
 // 关闭连接
 func (wsConn *WsConnection) Close() {
-	log.Println("关闭连接被调用了")
+	glog.Info("关闭连接被调用了")
 	wsConn.WsSocket.Close()
 	wsConn.mutex.Lock()
 	defer wsConn.mutex.Unlock()
@@ -75,6 +75,7 @@ func (wsConn *WsConnection) Close() {
 		delete(WsConnAll, wsConn.id)
 		close(wsConn.CloseChan)
 	}
+	wsConn.OffLine(wsConn.User.Id)
 }
 
 //初始玩玩家信息
