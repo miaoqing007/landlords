@@ -9,9 +9,9 @@ import (
 var _pvpPoolManger *PvpPoolManager
 
 type PvpPoolManager struct {
-	ups     sync.Map //map[int分段][]string玩家id
-	addChan chan addChanMsg
-	remChan chan remChanMsg
+	ups     sync.Map        //map[int分段][]string玩家id
+	addChan chan addChanMsg //添加匹配池channel
+	remChan chan remChanMsg //移除匹配池channel
 }
 
 type addChanMsg struct {

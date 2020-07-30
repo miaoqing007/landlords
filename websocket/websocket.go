@@ -68,7 +68,7 @@ func processLoop(wsConn *WsConnection) {
 			glog.Info("连接断开", err.Error())
 			break
 		}
-		glog.Info("接收到消息", msg.Data)
+		//glog.Info("接收到消息", msg.Data)
 
 		reader := packet.Reader(msg.Data)
 		c, err := reader.ReadS16()

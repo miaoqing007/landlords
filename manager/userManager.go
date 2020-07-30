@@ -10,7 +10,7 @@ import (
 type UserManager struct {
 	*obj.User
 	roomId    string
-	piecewise int
+	piecewise int //分段
 }
 
 func NewUserManager(platformid string) (*UserManager, error) {
