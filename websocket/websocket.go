@@ -2,7 +2,6 @@ package websocket
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/golang/glog"
 	"github.com/gorilla/websocket"
 	"landlords/client_handler"
@@ -36,9 +35,6 @@ var upgrader = websocket.Upgrader{
 	WriteBufferSize: 1024,
 	// 允许所有的CORS 跨域请求，正式环境可以关闭
 	CheckOrigin: func(r *http.Request) bool {
-		//if r.Header.Get("Sec-Websocket-Key") != "666666666" {
-		//	return false
-		//}
 		return true
 	},
 }
@@ -75,14 +71,10 @@ func processLoop(wsConn *WsConnection) {
 		glog.Info("接收到消息", msg.Data)
 
 		reader := packet.Reader(msg.Data)
-		fmt.Println(reader.Data())
 		c, err := reader.ReadS16()
-		fmt.Println(reader.Data()[2:])
+
 		byt := executeHandler(int16(c), wsConn, reader.Data()[2:])
-		err = wsConn.WsWrite(&WsMessage{MessageType: websocket.TextMessage, Data: byt})
-		if err != nil {
-			glog.Info("发送消息给客户端出现错误", err.Error())
-		}
+		wsConn.WsWrite(&WsMessage{MessageType: websocket.TextMessage, Data: byt})
 	}
 }
 

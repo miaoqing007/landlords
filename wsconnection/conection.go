@@ -74,8 +74,10 @@ func (wsConn *WsConnection) Close() {
 		// 删除这个连接的变量
 		delete(WsConnAll, wsConn.id)
 		close(wsConn.CloseChan)
+		if wsConn.Player != nil && wsConn.User != nil {
+			wsConn.OffLine(wsConn.User.Id)
+		}
 	}
-	wsConn.OffLine(wsConn.User.Id)
 }
 
 //初始玩玩家信息

@@ -12,7 +12,7 @@ type Player struct {
 }
 
 type Players struct {
-	idInMap sync.Map //map[id]player
+	idInMap sync.Map //map[id]*Player
 }
 
 func init() {
