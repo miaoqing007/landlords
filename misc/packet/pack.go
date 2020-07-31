@@ -1,6 +1,7 @@
 package packet
 
 import (
+	"encoding/json"
 	"log"
 	"reflect"
 )
@@ -10,7 +11,7 @@ type FastPack interface {
 }
 
 // export struct fields with packet writer.
-func Pack(tos int16, tbl interface{}, writer *Packet) []byte {
+func _Pack(tos int16, tbl interface{}, writer *Packet) []byte {
 	// create writer if not specified
 	if writer == nil {
 		writer = Writer()
@@ -88,4 +89,18 @@ func _pack(v reflect.Value, writer *Packet) {
 	default:
 		log.Println("cannot pack type:", v)
 	}
+}
+
+func Pack(tos int16, ret interface{}) []byte {
+	byt := make([]byte, 0)
+	retByte, _ := json.Marshal(ret)
+	byt = append(byt, byte(tos>>8), byte(tos))
+	byt = append(byt, retByte...)
+	return byt
+}
+
+func UnPacket(data []byte) (int16, []byte) {
+	reader := Reader(data)
+	c, _ := reader.ReadS16()
+	return c, reader.Data()[2:]
 }

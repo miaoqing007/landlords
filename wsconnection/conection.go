@@ -12,7 +12,10 @@ import (
 
 // ws 的所有连接
 // 用于广播
-var WsConnAll map[int64]*WsConnection
+var (
+	//WsConnAll = make(map[int]*WsConnection)
+	currentConn int
+)
 
 // 客户端连接
 type WsConnection struct {
@@ -23,21 +26,19 @@ type WsConnection struct {
 	mutex     sync.Mutex // 避免重复关闭管道,加锁处理
 	isClosed  bool
 	CloseChan chan byte // 关闭通知
-	id        int64
 	*manager.Player
 }
 
-func NewWsConnection(wsSocket *websocket.Conn, maxConnId int64) *WsConnection {
+func NewWsConnection(wsSocket *websocket.Conn) *WsConnection {
 	wsConn := &WsConnection{
 		WsSocket:  wsSocket,
 		InChan:    make(chan *WsMessage, 1000),
 		OutChan:   make(chan *WsMessage, 1000),
 		CloseChan: make(chan byte),
 		isClosed:  false,
-		id:        maxConnId,
 	}
-	WsConnAll[maxConnId] = wsConn
-	glog.Info("当前在线人数", len(WsConnAll))
+	currentConn++
+	glog.Info("当前连接数", currentConn)
 	return wsConn
 }
 
@@ -72,7 +73,7 @@ func (wsConn *WsConnection) Close() {
 	if wsConn.isClosed == false {
 		wsConn.isClosed = true
 		// 删除这个连接的变量
-		delete(WsConnAll, wsConn.id)
+		currentConn--
 		close(wsConn.CloseChan)
 		if wsConn.Player != nil && wsConn.User != nil {
 			wsConn.OffLine(wsConn.User.Id)

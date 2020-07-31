@@ -1,7 +1,6 @@
 package websocket
 
 import (
-	"encoding/json"
 	"github.com/golang/glog"
 	"github.com/gorilla/websocket"
 	"landlords/client_handler"
@@ -27,9 +26,6 @@ const (
 	maxMessageSize = 512
 )
 
-// 最大的连接ID，每次连接都加1 处理
-var maxConnId int64
-
 var upgrader = websocket.Upgrader{
 	ReadBufferSize:  1024,
 	WriteBufferSize: 1024,
@@ -46,10 +42,9 @@ func wsHandler(resp http.ResponseWriter, req *http.Request) {
 		glog.Error("升级为websocket失败", err.Error())
 		return
 	}
-	maxConnId++
-	// TODO 如果要控制连接数可以计算，wsConnAll长度
+
 	// 连接数保持一定数量，超过的部分不提供服务
-	wsConn := NewWsConnection(wsSocket, maxConnId)
+	wsConn := NewWsConnection(wsSocket)
 	// 处理器,发送定时信息，避免意外关闭
 	go processLoop(wsConn)
 	// 读协程
@@ -69,11 +64,10 @@ func processLoop(wsConn *WsConnection) {
 			break
 		}
 		//glog.Info("接收到消息", msg.Data)
+		c, data := packet.UnPacket(msg.Data)
 
-		reader := packet.Reader(msg.Data)
-		c, err := reader.ReadS16()
+		byt := executeHandler(wsConn, c, data)
 
-		byt := executeHandler(int16(c), wsConn, reader.Data()[2:])
 		wsConn.WsWrite(&WsMessage{MessageType: websocket.TextMessage, Data: byt})
 	}
 }
@@ -137,22 +131,17 @@ func wsWriteLoop(wsConn *WsConnection) {
 
 // 启动程序
 func StartWebSocket(addrPort string) {
-	WsConnAll = make(map[int64]*WsConnection)
+	//WsConnAll = make(map[int64]*WsConnection)
 	http.HandleFunc("/ws", wsHandler)
 	glog.Infof("启动http服成功%v", addrPort)
 	http.ListenAndServe(addrPort, nil)
 }
 
-func executeHandler(code int16, ws *WsConnection, data []byte) []byte {
+func executeHandler(ws *WsConnection, code int16, data []byte) []byte {
 	defer stack.PrintRecoverFromPanic()
 	handle := client_handler.Handlers[code]
 	if handle == nil {
 		return nil
 	}
-	byt := make([]byte, 0)
-	tos, ret := handle(ws, data)
-	retByte, _ := json.Marshal(ret)
-	data = append(data, byte(tos>>8), byte(tos))
-	data = append(data, retByte...)
-	return byt
+	return packet.Pack(handle(ws, data))
 }

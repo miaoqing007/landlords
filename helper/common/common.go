@@ -1,6 +1,8 @@
 package common
 
-import "sync"
+import (
+	"sync"
+)
 
 func GetSyncMapLen(m sync.Map) int {
 	length := 0

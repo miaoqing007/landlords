@@ -96,7 +96,7 @@ func (r *RoomManager) RemoveManager() {
 		r.player.Delete(key)
 		return true
 	})
-	//registry.PushRoom(r.roomId, 2001, client_proto.S_entity_id{"444444"}, nil))
+	registry.PushRoom(r.roomId, 2001, client_proto.S_entity_id{})
 	registry.UnRegisterRoom(r.roomId)
 }
 
@@ -127,7 +127,7 @@ func (r *RoomManager) CreatePlayerCards(cards1, cards2, cards3, holeCards []stri
 	})
 	info.F_hole_cards = holeCards
 	info.F_roomId = r.roomId
-	//registry.PushRoom(info.F_roomId, packet.Pack(2003, info, nil))
+	registry.PushRoom(info.F_roomId, 2003, info)
 }
 
 //判断玩家手牌

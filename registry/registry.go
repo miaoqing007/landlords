@@ -2,6 +2,8 @@ package registry
 
 import (
 	"github.com/golang/glog"
+	"github.com/gorilla/websocket"
+	"landlords/misc/packet"
 	. "landlords/obj"
 	"sync"
 )
@@ -135,6 +137,8 @@ func UnRegisterRoom(roomid string) {
 }
 
 //房间消息推送
-func PushRoom(roomid string, msg *WsMessage) {
-	onlineUser.rpch <- rpushmsg{roomid, msg}
+func PushRoom(roomid string, tos int16, ret interface{}) {
+	onlineUser.rpch <- rpushmsg{roomid: roomid,
+		msg: &WsMessage{MessageType: websocket.TextMessage,
+			Data: packet.Pack(tos, ret)}}
 }

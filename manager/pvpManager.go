@@ -36,6 +36,7 @@ func InitPvpPoolManager() {
 //监听匹配相关信息
 func (p *PvpPoolManager) watch() {
 	ticker := time.NewTicker(1 * time.Second)
+	defer ticker.Stop()
 	for {
 		select {
 		case acm := <-p.addChan:
