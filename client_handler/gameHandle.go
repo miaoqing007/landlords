@@ -16,7 +16,7 @@ func P_licensing_card_req(ws *wsconnection.WsConnection, data []byte) (int16, in
 	if room == nil {
 		return Code["error_ack"], nil
 	}
-	room.CreatePlayerCards(cards[:17], cards[17:34], cards[34:51], cards[51:], &info)
+	room.CreatePlayerCards(cards, &info)
 	return Code["licensing_card_req"], info
 }
 

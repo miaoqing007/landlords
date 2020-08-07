@@ -130,8 +130,7 @@ func wsWriteLoop(wsConn *WsConnection) {
 }
 
 // 启动程序
-func StartWebSocket(addrPort string) {
-	//WsConnAll = make(map[int64]*WsConnection)
+func Run(addrPort string) {
 	http.HandleFunc("/ws", wsHandler)
 	glog.Infof("启动http服成功%v", addrPort)
 	http.ListenAndServe(addrPort, nil)

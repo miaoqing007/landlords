@@ -60,7 +60,7 @@ func T(roomId string) {
 	if room == nil {
 		return
 	}
-	room.CreatePlayerCards(cards[:17], cards[17:34], cards[34:51], cards[51:], &info)
+	room.CreatePlayerCards(cards, &info)
 }
 
 type RoomManager struct {
@@ -109,23 +109,14 @@ func (r *RoomManager) GetUserInfo(uid string) *UserInfo {
 }
 
 //创建玩家手牌
-func (r *RoomManager) CreatePlayerCards(cards1, cards2, cards3, holeCards []string, info *client_proto.S_player_card) {
-	num := 0
+func (r *RoomManager) CreatePlayerCards(cards []string, info *client_proto.S_player_card) {
 	r.player.Range(func(key, value interface{}) bool {
-		if num%3 == 0 {
-			value.(*UserInfo).addCards(cards1)
-			info.F_players = append(info.F_players, client_proto.S_player{value.(*UserInfo).id, cards1})
-		} else if num%3 == 1 {
-			value.(*UserInfo).addCards(cards2)
-			info.F_players = append(info.F_players, client_proto.S_player{value.(*UserInfo).id, cards2})
-		} else if num%3 == 2 {
-			value.(*UserInfo).addCards(cards3)
-			info.F_players = append(info.F_players, client_proto.S_player{value.(*UserInfo).id, cards3})
-		}
-		num++
+		value.(*UserInfo).addCards(cards[:17])
+		info.F_players = append(info.F_players, client_proto.S_player{value.(*UserInfo).id, cards[:17]})
+		cards = cards[17:]
 		return true
 	})
-	info.F_hole_cards = holeCards
+	info.F_hole_cards = cards
 	info.F_roomId = r.roomId
 	registry.PushRoom(info.F_roomId, 2003, info)
 }

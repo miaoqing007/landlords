@@ -22,5 +22,5 @@ func main() {
 	manager.InitPvpPoolManager()
 
 	//agentservice.AgentRun()
-	websocket.StartWebSocket("localhost:3636")
+	websocket.Run("localhost:3636")
 }
