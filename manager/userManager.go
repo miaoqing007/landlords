@@ -1,7 +1,10 @@
 package manager
 
 import (
+	"github.com/pkg/errors"
+	"landlords/helper/encryption"
 	"landlords/helper/uuid"
+	"landlords/log"
 	"landlords/model"
 	"landlords/obj"
 	"landlords/redis"
@@ -13,18 +16,23 @@ type UserManager struct {
 	piecewise int //分段
 }
 
-func NewUserManager(platformid string) (*UserManager, error) {
+func NewUserManager(account, password string) (*UserManager, error) {
 	manager := &UserManager{}
 	manager.User = &obj.User{}
-	if redis.Exists(model.PLATFORMID + platformid) {
-		model.GetUserInfo(platformid, manager.User)
+	if redis.Exists(model.ACCOUNTDATA + account) {
+		ad := model.GetAccountData(account)
+		ps := string(encryption.AesDeCrypt([]byte(ad.PassWord)))
+		if ad.PassWord != ps {
+			return nil, log.ErrLog(errors.New("密码错误"))
+		}
+		model.GetUserInfo(ad.UserId, manager.User)
 	} else {
-		pd := &obj.PlatformData{}
+		ad := &obj.AccountData{}
 		manager.User.Id = uuid.GetUUID()
-		manager.User.PlatformId = platformid
-		pd.Id = platformid
-		pd.UserId = manager.User.Id
-		model.CreateUserInfo(platformid, pd.UserId, pd, manager.User)
+		ad.Account = account
+		ad.UserId = manager.User.Id
+		ad.PassWord = string(encryption.AcesEncrypts([]byte(password)))
+		model.CreateUserInfo(account, ad.UserId, ad, manager.User)
 	}
 	return manager, nil
 }

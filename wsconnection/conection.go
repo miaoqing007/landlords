@@ -82,9 +82,9 @@ func (wsConn *WsConnection) Close() {
 }
 
 //初始玩玩家信息
-func (ws *WsConnection) InitPlayer(id string) error {
+func (ws *WsConnection) InitPlayer(account, password string) error {
 	ws.Player = &manager.Player{}
-	userManger, err := manager.NewUserManager(id)
+	userManger, err := manager.NewUserManager(account, password)
 	if err != nil {
 		return err
 	}

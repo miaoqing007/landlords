@@ -2,7 +2,7 @@ package redis
 
 import (
 	"github.com/golang/glog"
-	"landlords/enmu"
+	"landlords/config"
 	"landlords/helper/redisgo"
 )
 
@@ -11,13 +11,13 @@ var _redisCacher *redisgo.Cacher
 func InitRedis() {
 	var err error
 	_redisCacher, err = redisgo.New(redisgo.Options{
-		Addr:     enmu.ServerHost + ":" + enmu.RedisPort,
+		Addr:     config.RedisIp + ":" + config.RedisPort,
 		Db:       0,
 		Password: "",
 		Network:  "tcp",
 	})
 	if err != nil {
-		panic("初始化redis失败")
+		glog.Info("Init Redis Fail ", err)
 		return
 	}
 	glog.Info("初始化redis完成")

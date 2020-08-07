@@ -1,12 +1,13 @@
 package obj
 
 type User struct {
-	Id         string
-	Name       string
-	PlatformId string
+	Id   string
+	Name string
+	//PlatformId string
 }
 
-type PlatformData struct {
-	Id     string
-	UserId string
+type AccountData struct {
+	Account  string
+	UserId   string
+	PassWord string
 }

@@ -35,7 +35,7 @@ package agentservice
 //	sess := session.NewSession(in)
 //	defer func() {
 //		glog.Info("disconnect:" + conn.RemoteAddr().String())
-//		//sess.OffLine(sess.User.Id)
+//		//sess.OffLine(sess.User.Account)
 //		conn.Close()
 //	}()
 //	reader := bufio.NewReader(conn)

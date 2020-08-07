@@ -24,8 +24,8 @@ func NewSession(ch chan []byte) *Session {
 //	}
 //	s.User = userManger
 //
-//	manager.AddPlayer(s.User.Id, s.Player)
-//	registry.Register(s.User.Id, s.ch)
+//	manager.AddPlayer(s.User.Account, s.Player)
+//	registry.Register(s.User.Account, s.ch)
 //	return nil
 //}
 //

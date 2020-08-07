@@ -6,24 +6,28 @@ import (
 )
 
 var (
-	USERKEY    = "User_Key:"
-	NAMEIDKEY  = "Name_Id_Key"
-	PLATFORMID = "Platform_Id_Key:"
+	USERKEY     = "User_Key:"
+	NAMEIDKEY   = "Name_Id_Key"
+	ACCOUNTDATA = "Account_Data_Key:"
 )
 
-func CreateUserInfo(platformid, id string, val_1, val_2 interface{}) error {
-	if err := redis.HMSet(PLATFORMID+platformid, val_1, 0); err != nil {
+func CreateUserInfo(account, id string, val_1, val_2 interface{}) error {
+	if err := redis.HMSet(ACCOUNTDATA+account, val_1, 0); err != nil {
 		return err
 	}
 	return redis.HMSet(USERKEY+id, val_2, 0)
 }
 
-func GetUserInfo(platformId string, user *obj.User) error {
-	pd := &obj.PlatformData{}
-	if err := redis.HGetAll(PLATFORMID+platformId, pd); err != nil {
-		return err
+func GetUserInfo(useId string, user *obj.User) error {
+	return redis.HGetAll(USERKEY+useId, user)
+}
+
+func GetAccountData(account string) *obj.AccountData {
+	pd := &obj.AccountData{}
+	if err := redis.HGetAll(ACCOUNTDATA+account, pd); err != nil {
+		return nil
 	}
-	return redis.HGetAll(USERKEY+pd.UserId, user)
+	return pd
 }
 
 func UpdateUserInfo(id string, val interface{}) error {

@@ -4,6 +4,7 @@ import (
 	"github.com/golang/glog"
 	"github.com/gorilla/websocket"
 	"landlords/client_handler"
+	"landlords/config"
 	"landlords/helper/stack"
 	"landlords/misc/packet"
 	. "landlords/obj"
@@ -130,10 +131,10 @@ func wsWriteLoop(wsConn *WsConnection) {
 }
 
 // 启动程序
-func Run(addrPort string) {
+func Run() {
 	http.HandleFunc("/ws", wsHandler)
-	glog.Infof("启动http服成功%v", addrPort)
-	http.ListenAndServe(addrPort, nil)
+	glog.Infof("启动http服务成功%v", config.GameIp+":"+config.GamePort)
+	http.ListenAndServe(config.GameIp+":"+config.GamePort, nil)
 }
 
 func executeHandler(ws *WsConnection, code int16, data []byte) []byte {

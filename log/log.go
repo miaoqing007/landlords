@@ -58,3 +58,14 @@ func removeOutTimeLogFile() error {
 	}
 	return nil
 }
+
+// 可以打印error的调用栈
+func ErrLog(err error) error {
+	glog.Errorf("%+v", err)
+	return err
+}
+
+func TErrLog(taskId string, err error) error {
+	glog.Errorf("%v, %+v", taskId, err)
+	return err
+}

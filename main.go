@@ -1,19 +1,23 @@
 package main
 
 import (
-	"landlords/helper/uuid"
+	"landlords/config"
 	"landlords/initcards"
 	"landlords/log"
 	"landlords/manager"
+	"landlords/redis"
+	"landlords/signal"
 	"landlords/websocket"
 )
 
 func main() {
 	log.InitLog()
 
-	uuid.InitUUID()
+	config.InitConfig()
 
-	//redis.InitRedis()
+	redis.InitRedis()
+
+	signal.InitSignal()
 
 	initcards.InitNewCards()
 
@@ -21,6 +25,5 @@ func main() {
 
 	manager.InitPvpPoolManager()
 
-	//agentservice.AgentRun()
-	websocket.Run("localhost:3636")
+	websocket.Run()
 }
