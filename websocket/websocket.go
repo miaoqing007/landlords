@@ -77,7 +77,6 @@ func processLoop(wsConn *WsConnection) {
 func wsReadLoop(wsConn *WsConnection) {
 	// 设置消息的最大长度
 	wsConn.WsSocket.SetReadLimit(maxMessageSize)
-	wsConn.WsSocket.SetReadDeadline(time.Now().Add(pongWait))
 	for {
 		// 读一个message
 		msgType, data, err := wsConn.WsSocket.ReadMessage()
