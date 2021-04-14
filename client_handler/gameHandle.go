@@ -4,11 +4,11 @@ import (
 	"landlords/client_proto"
 	"landlords/initcards"
 	"landlords/manager"
-	"landlords/wsconnection"
+	"landlords/session"
 )
 
 //发牌
-func P_licensing_card_req(ws *wsconnection.WsConnection, data []byte) (int16, interface{}) {
+func P_licensing_card_req(sess *session.Session, data []byte) (int16, interface{}) {
 	tbl, _ := client_proto.PKT_entity_id(data)
 	info := client_proto.S_player_card{}
 	cards := initcards.ShuffCards()
@@ -21,7 +21,7 @@ func P_licensing_card_req(ws *wsconnection.WsConnection, data []byte) (int16, in
 }
 
 //出牌
-func P_out_of_the_card_req(ws *wsconnection.WsConnection, data []byte) (int16, interface{}) {
+func P_out_of_the_card_req(sess *session.Session, data []byte) (int16, interface{}) {
 	tbl, _ := client_proto.PKT_player_outof_card(data)
 	if len(tbl.F_cards) == 0 {
 		return Code["error_ack"], nil
@@ -30,9 +30,9 @@ func P_out_of_the_card_req(ws *wsconnection.WsConnection, data []byte) (int16, i
 	if room == nil {
 		return Code["error_ack"], nil
 	}
-	if !room.CheckHandCards(ws.User.Id, tbl.F_cards) {
+	if !room.CheckHandCards(sess.User.Id, tbl.F_cards) {
 		return Code["error_ack"], nil
 	}
-	room.DeleteCards(ws.User.Id, tbl.F_cards)
+	room.DeleteCards(sess.User.Id, tbl.F_cards)
 	return Code["error_ack"], tbl
 }
