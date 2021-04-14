@@ -1,7 +1,7 @@
 package agentservice
 
 import (
-	"bufio"
+	"fmt"
 	"github.com/golang/glog"
 	"landlords/client_handler"
 	"landlords/enmu"
@@ -39,41 +39,32 @@ func handleRequest(conn net.Conn) {
 		//sess.OffLine(sess.User.Account)
 		conn.Close()
 	}()
-	reader := bufio.NewReader(conn)
-	writer := bufio.NewWriter(conn)
 	go func() {
-		for msg := range in {
-			writer.Write(msg)
-			writer.Write([]byte("\n"))
-			writer.Flush()
+		for {
+			select {
+			case msg := <-in:
+				conn.Write(msg)
+			}
 		}
 	}()
 	for {
-		msg, _, err := reader.ReadLine()
+		buf := make([]byte, 1024)
+		n, err := conn.Read(buf)
 		if err != nil {
 			glog.Info(err)
 			return
 		}
-		reader := packet.Reader(msg)
-		c, err := reader.ReadS16()
-		if err != nil {
-			glog.Info("err=", err)
-			return
-		}
-		bytes := executeHandler(c, sess, reader)
-		for _, byt := range bytes {
-			in <- byt
-		}
+		fmt.Println(string(buf[:n]))
+		in <- executeHandler(2001, sess, buf[:n])
 	}
 }
 
 //////执行方法
-func executeHandler(code int16, sess *session.Session, reader *packet.Packet) [][]byte {
+func executeHandler(code int16, sess *session.Session, data []byte) []byte {
 	defer stack.PrintRecoverFromPanic()
 	handle := client_handler.Handlers[code]
 	if handle == nil {
 		return nil
 	}
-	retByte := handle(sess, reader)
-	return retByte
+	return packet.Pack(handle(sess, data))
 }

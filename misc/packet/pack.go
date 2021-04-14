@@ -93,10 +93,13 @@ func _pack(v reflect.Value, writer *Packet) {
 
 func Pack(tos int16, ret interface{}) []byte {
 	byt := make([]byte, 0)
+	result := []byte{0xeb, 0x90}
 	retByte, _ := json.Marshal(ret)
-	byt = append(byt, byte(tos>>8), byte(tos))
+	byt = append(byt, byte(tos))
 	byt = append(byt, retByte...)
-	return byt
+	result = append(result, byte(len(byt)))
+	result = append(result, byt...)
+	return result
 }
 
 func UnPacket(data []byte) (int16, []byte) {
