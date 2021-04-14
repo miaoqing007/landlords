@@ -28,8 +28,8 @@ const (
 )
 
 var upgrader = websocket.Upgrader{
-	ReadBufferSize:  1024,
-	WriteBufferSize: 1024,
+	ReadBufferSize:  packet.PACKET_LIMIT,
+	WriteBufferSize: packet.PACKET_LIMIT,
 	// 允许所有的CORS 跨域请求，正式环境可以关闭
 	CheckOrigin: func(r *http.Request) bool {
 		return true
@@ -76,7 +76,7 @@ func processLoop(wsConn *WsConnection) {
 // 处理消息队列中的消息
 func wsReadLoop(wsConn *WsConnection) {
 	// 设置消息的最大长度
-	wsConn.WsSocket.SetReadLimit(maxMessageSize)
+	wsConn.WsSocket.SetReadLimit(packet.PACKET_LIMIT)
 	for {
 		// 读一个message
 		msgType, data, err := wsConn.WsSocket.ReadMessage()

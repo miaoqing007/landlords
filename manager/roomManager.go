@@ -67,8 +67,9 @@ type RoomManager struct {
 	roomId               string   //房间id
 	holeCards            []string //底牌
 	piecewise            int      //分段
+	landowner            string   //地主id
 	lastPlayerWasteCards sync.Map //map[uid][]cards
-	player               sync.Map //map[uid]*UserInfo
+	players              sync.Map //map[uid]*UserInfo
 }
 
 func NewRoomManager(piecewise int, ids []string) *RoomManager {
@@ -85,15 +86,15 @@ func NewRoomManager(piecewise int, ids []string) *RoomManager {
 func (r *RoomManager) ResetRoomManager() {
 	r.holeCards = []string{}
 	r.lastPlayerWasteCards = sync.Map{}
-	r.player.Range(func(key, value interface{}) bool {
+	r.players.Range(func(key, value interface{}) bool {
 		value.(*UserInfo).resetUserInfo()
 		return true
 	})
 }
 
 func (r *RoomManager) RemoveManager() {
-	r.player.Range(func(key, value interface{}) bool {
-		r.player.Delete(key)
+	r.players.Range(func(key, value interface{}) bool {
+		r.players.Delete(key)
 		return true
 	})
 	registry.PushRoom(r.roomId, 2001, client_proto.S_entity_id{})
@@ -102,7 +103,7 @@ func (r *RoomManager) RemoveManager() {
 
 //获取玩家信息
 func (r *RoomManager) GetUserInfo(uid string) *UserInfo {
-	if u, ok := r.player.Load(uid); ok {
+	if u, ok := r.players.Load(uid); ok {
 		return u.(*UserInfo)
 	}
 	return nil
@@ -110,7 +111,7 @@ func (r *RoomManager) GetUserInfo(uid string) *UserInfo {
 
 //创建玩家手牌
 func (r *RoomManager) CreatePlayerCards(cards []string, info *client_proto.S_player_card) {
-	r.player.Range(func(key, value interface{}) bool {
+	r.players.Range(func(key, value interface{}) bool {
 		value.(*UserInfo).addCards(cards[:17])
 		info.F_players = append(info.F_players, client_proto.S_player{value.(*UserInfo).id, cards[:17]})
 		cards = cards[17:]
@@ -123,7 +124,7 @@ func (r *RoomManager) CreatePlayerCards(cards []string, info *client_proto.S_pla
 
 //判断玩家手牌
 func (r *RoomManager) CheckHandCards(uid string, cards []string) bool {
-	v, ok := r.player.Load(uid)
+	v, ok := r.players.Load(uid)
 	if !ok {
 		return false
 	}
@@ -165,7 +166,7 @@ func (r *RoomManager) updateLastPlayerWasteCards(uid string, cards []string) {
 
 //删除玩家已出手牌
 func (r *RoomManager) DeleteCards(uid string, useCards []string) bool {
-	v, ok := r.player.Load(uid)
+	v, ok := r.players.Load(uid)
 	if !ok {
 		return false
 	}
@@ -175,7 +176,7 @@ func (r *RoomManager) DeleteCards(uid string, useCards []string) bool {
 
 //获取玩家剩余手牌数量
 func (r *RoomManager) GetUserRemainingCardsNum(uid string) int {
-	v, ok := r.player.Load(uid)
+	v, ok := r.players.Load(uid)
 	if !ok {
 		return -1
 	}
@@ -183,7 +184,7 @@ func (r *RoomManager) GetUserRemainingCardsNum(uid string) int {
 }
 
 func (r *RoomManager) GetUserCard(uid string) sync.Map {
-	v, ok := r.player.Load(uid)
+	v, ok := r.players.Load(uid)
 	if !ok {
 		return sync.Map{}
 	}
@@ -192,14 +193,14 @@ func (r *RoomManager) GetUserCard(uid string) sync.Map {
 
 //添加玩家到房间
 func (r *RoomManager) AddPlayerToRoom(uid string) bool {
-	if common.GetSyncMapLen(r.player) >= 3 {
+	if common.GetSyncMapLen(r.players) >= 3 {
 		return false
 	}
 	p := GetPlayer(uid)
 	if p != nil {
 		p.User.SetRoomId(r.roomId)
 	}
-	r.player.Store(uid, NewUserInfo(uid))
+	r.players.Store(uid, NewUserInfo(uid))
 	return true
 }
 
