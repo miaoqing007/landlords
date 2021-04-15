@@ -153,8 +153,8 @@ func PKT_player_outof_card(data []byte) (tbl S_player_outof_card, err error) {
 }
 
 type S_login_info struct {
-	F_account  string
-	F_password string
+	F_account  string //`json:"account"`
+	F_password string //`json:"password"`
 }
 
 func (p S_login_info) Pack(w *packet.Packet) {
@@ -171,7 +171,7 @@ func PKT_login_info(data []byte) (tbl S_login_info, err error) {
 }
 
 type S_error_ack struct {
-	F_msg string
+	F_msg string `json:"f_msg"`
 }
 
 func (p S_error_ack) Pack(w *packet.Packet) {

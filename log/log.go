@@ -28,7 +28,7 @@ func InitLog() {
 	flag.Parse()
 	glog.MaxSize = MaxLogFileSize
 
-	go findAndRemoveOutTimeLogFile()
+	//go findAndRemoveOutTimeLogFile()
 	glog.Info("初始化日志完成")
 }
 

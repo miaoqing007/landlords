@@ -1,6 +1,7 @@
 package packet
 
 import (
+	"encoding/binary"
 	"encoding/json"
 	"log"
 	"reflect"
@@ -93,17 +94,23 @@ func _pack(v reflect.Value, writer *Packet) {
 
 func Pack(tos int16, ret interface{}) []byte {
 	byt := make([]byte, 0)
+	b := make([]byte, 4)
+	c := make([]byte, 2)
 	result := []byte{0xeb, 0x90}
 	retByte, _ := json.Marshal(ret)
-	byt = append(byt, byte(tos))
+	binary.LittleEndian.PutUint16(c, uint16(tos))
+	byt = append(byt, c...)
 	byt = append(byt, retByte...)
-	result = append(result, byte(len(byt)))
+	binary.LittleEndian.PutUint32(b, uint32(len(byt)))
+	result = append(result, b...)
 	result = append(result, byt...)
 	return result
 }
 
 func UnPacket(data []byte) (int16, []byte) {
-	reader := Reader(data)
-	c, _ := reader.ReadS16()
-	return c, reader.Data()[2:]
+	c := binary.LittleEndian.Uint16(data)
+	//reader := Reader(data)
+	//c, _ := reader.ReadS16()
+	//return c, reader.Data()[2:]
+	return int16(c), data[2:]
 }

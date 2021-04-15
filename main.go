@@ -6,6 +6,7 @@ import (
 	"landlords/initcards"
 	"landlords/log"
 	"landlords/manager"
+	"landlords/redis"
 	"landlords/signal"
 )
 
@@ -14,7 +15,7 @@ func main() {
 
 	config.InitConfig()
 
-	//redis.InitRedis()
+	redis.InitRedis()
 
 	signal.InitSignal()
 

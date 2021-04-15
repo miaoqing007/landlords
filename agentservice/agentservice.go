@@ -43,6 +43,7 @@ func handleRequest(conn net.Conn) {
 		for {
 			select {
 			case msg := <-in:
+				fmt.Println(msg)
 				conn.Write(msg)
 			}
 		}
@@ -54,8 +55,8 @@ func handleRequest(conn net.Conn) {
 			glog.Info(err)
 			return
 		}
-		fmt.Println(string(buf[:n]))
-		in <- executeHandler(2001, sess, buf[:n])
+		c, data := packet.UnPacket(buf[:n])
+		in <- executeHandler(c, sess, data)
 	}
 }
 

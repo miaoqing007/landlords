@@ -10,5 +10,5 @@ import (
 func P_join_room_req(sess *session.Session, data []byte) (int16, interface{}) {
 	tbl, _ := client_proto.PKT_auto_id(data)
 	manager.AddPlayer2PvpPool(int(tbl.F_id), sess.User.Id)
-	return 0, tbl
+	return Code["join_room_req"], tbl
 }
