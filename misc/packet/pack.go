@@ -109,8 +109,5 @@ func Pack(tos int16, ret interface{}) []byte {
 
 func UnPacket(data []byte) (int16, []byte) {
 	c := binary.LittleEndian.Uint16(data)
-	//reader := Reader(data)
-	//c, _ := reader.ReadS16()
-	//return c, reader.Data()[2:]
 	return int16(c), data[2:]
 }

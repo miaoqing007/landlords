@@ -1,7 +1,6 @@
 package agentservice
 
 import (
-	"fmt"
 	"github.com/golang/glog"
 	"landlords/client_handler"
 	"landlords/enmu"
@@ -36,14 +35,13 @@ func handleRequest(conn net.Conn) {
 	sess := session.NewSession(in)
 	defer func() {
 		glog.Info("disconnect:" + conn.RemoteAddr().String())
-		//sess.OffLine(sess.User.Account)
+		sess.OffLine(sess.User.Account)
 		conn.Close()
 	}()
 	go func() {
 		for {
 			select {
 			case msg := <-in:
-				fmt.Println(msg)
 				conn.Write(msg)
 			}
 		}

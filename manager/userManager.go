@@ -22,7 +22,7 @@ func NewUserManager(account, password string) (*UserManager, error) {
 	if redis.Exists(model.ACCOUNTDATA + account) {
 		ad := model.GetAccountData(account)
 		ps := string(encryption.AesDeCrypt([]byte(ad.PassWord)))
-		if ad.PassWord != ps {
+		if password != ps {
 			return nil, log.ErrLog(errors.New("密码错误"))
 		}
 		model.GetUserInfo(ad.UserId, manager.User)

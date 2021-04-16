@@ -21,7 +21,7 @@ func PKT_null_struct(data []byte) (tbl S_null_struct, err error) {
 }
 
 type S_byte_id struct {
-	F_id uint8
+	F_id uint8 `json:"id"`
 }
 
 func (p S_byte_id) Pack(w *packet.Packet) {
@@ -37,7 +37,7 @@ func PKT_byte_id(data []byte) (tbl S_byte_id, err error) {
 }
 
 type S_auto_id struct {
-	F_id int32
+	F_id int32 `json:"id"`
 }
 
 func (p S_auto_id) Pack(w *packet.Packet) {
@@ -53,7 +53,7 @@ func PKT_auto_id(data []byte) (tbl S_auto_id, err error) {
 }
 
 type S_entity_id struct {
-	F_id string
+	F_id string `json:"id"`
 }
 
 func (p S_entity_id) Pack(w *packet.Packet) {
@@ -69,7 +69,7 @@ func PKT_entity_id(data []byte) (tbl S_entity_id, err error) {
 }
 
 type S_item_id struct {
-	F_id uint32
+	F_id uint32 `json:"id"`
 }
 
 func (p S_item_id) Pack(w *packet.Packet) {
@@ -85,9 +85,9 @@ func PKT_item_id(data []byte) (tbl S_item_id, err error) {
 }
 
 type S_player_card struct {
-	F_hole_cards []string
-	F_roomId     string
-	F_players    []S_player
+	F_hole_cards []string   `json:"hole_cards"`
+	F_roomId     string     `json:"roomId"`
+	F_players    []S_player `json:"players"`
 }
 
 func (p S_player_card) Pack(w *packet.Packet) {
@@ -111,8 +111,8 @@ func PKT_player_card(data []byte) (tbl S_player_card, err error) {
 }
 
 type S_player struct {
-	F_id    string
-	F_cards []string
+	F_id    string   `json:"id"`
+	F_cards []string `json:"cards"`
 }
 
 func (p S_player) Pack(w *packet.Packet) {
@@ -132,8 +132,8 @@ func PKT_player(data []byte) (tbl S_player, err error) {
 }
 
 type S_player_outof_card struct {
-	F_roomId string
-	F_cards  []string
+	F_roomId string   `json:"roomId"`
+	F_cards  []string `json:"cards"`
 }
 
 func (p S_player_outof_card) Pack(w *packet.Packet) {
@@ -153,8 +153,8 @@ func PKT_player_outof_card(data []byte) (tbl S_player_outof_card, err error) {
 }
 
 type S_login_info struct {
-	F_account  string //`json:"account"`
-	F_password string //`json:"password"`
+	F_account  string `json:"account"`
+	F_password string `json:"password"`
 }
 
 func (p S_login_info) Pack(w *packet.Packet) {
@@ -171,7 +171,7 @@ func PKT_login_info(data []byte) (tbl S_login_info, err error) {
 }
 
 type S_error_ack struct {
-	F_msg string `json:"f_msg"`
+	F_msg string `json:"msg"`
 }
 
 func (p S_error_ack) Pack(w *packet.Packet) {
