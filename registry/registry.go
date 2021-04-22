@@ -2,7 +2,7 @@ package registry
 
 import (
 	"github.com/golang/glog"
-	. "landlords/obj"
+	"landlords/misc/packet"
 	"sync"
 )
 
@@ -23,12 +23,12 @@ type Registry struct {
 
 type pushmsg struct {
 	uid string
-	//msg *WsMessage
+	msg []byte
 }
 
 type regmsg struct {
-	uid string
-	//sendch chan *WsMessage
+	uid    string
+	sendch chan []byte
 }
 
 type roommsg struct {
@@ -38,7 +38,7 @@ type roommsg struct {
 
 type rpushmsg struct {
 	roomid string
-	//msg    *WsMessage
+	msg    []byte
 }
 
 func init() {
@@ -60,7 +60,7 @@ func (r *Registry) watch() {
 		case id := <-r.urch:
 			r.unRegistry(id)
 		case pmsg := <-r.pch:
-			r.pushMSg(pmsg)
+			r.pushMsg(pmsg)
 		case rRmsg := <-r.rRch:
 			r.registryRoom(rRmsg)
 		case rid := <-r.urRch:
@@ -71,22 +71,22 @@ func (r *Registry) watch() {
 	}
 }
 
-func (r *Registry) pushMSg(pmsg pushmsg) {
-	//v, ok := r.users.Load(pmsg.uid)
-	//if !ok {
-	//	return
-	//}
-	//v.(regmsg).sendch <- pmsg.msg
+func (r *Registry) pushMsg(pmsg pushmsg) {
+	v, ok := r.users.Load(pmsg.uid)
+	if !ok {
+		return
+	}
+	v.(regmsg).sendch <- pmsg.msg
 }
 
 func (r *Registry) rpushMsg(rpmsg rpushmsg) {
-	//v, ok := r.rooms.Load(rpmsg.roomid)
-	//if !ok {
-	//	return
-	//}
-	//for _, id := range v.([]string) {
-	//	Push(id, rpmsg.msg)
-	//}
+	v, ok := r.rooms.Load(rpmsg.roomid)
+	if !ok {
+		return
+	}
+	for _, id := range v.([]string) {
+		Push(id, rpmsg.msg)
+	}
 }
 
 func (r *Registry) registry(rm regmsg) {
@@ -106,14 +106,14 @@ func (r *Registry) unRegistryRoom(roomId string) {
 }
 
 //玩家注册
-func Register(uid string, sch chan *WsMessage) {
-	//onlineUser.rch <- regmsg{uid: uid, sendch: sch}
-	//glog.Infof("register = %v", uid)
+func Register(uid string, sch chan []byte) {
+	onlineUser.rch <- regmsg{uid: uid, sendch: sch}
+	glog.Infof("register = %v", uid)
 }
 
-//玩家消息推送
-func Push(uid string, msg *WsMessage) {
-	//onlineUser.pch <- pushmsg{uid, msg}
+//房间玩家消息推送
+func Push(uid string, msg []byte) {
+	onlineUser.pch <- pushmsg{uid, msg}
 }
 
 //玩家反注册
@@ -136,7 +136,5 @@ func UnRegisterRoom(roomid string) {
 
 //房间消息推送
 func PushRoom(roomid string, tos int16, ret interface{}) {
-	//onlineUser.rpch <- rpushmsg{roomid: roomid,
-	//	msg: &WsMessage{MessageType: websocket.TextMessage,
-	//		Data: packet.Pack(tos, ret)}}
+	onlineUser.rpch <- rpushmsg{roomid: roomid, msg: packet.Pack(tos, ret)}
 }

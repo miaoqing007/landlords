@@ -3,8 +3,10 @@ package manager
 import (
 	"github.com/golang/glog"
 	"landlords/client_proto"
+	"landlords/enmu"
 	"landlords/helper/common"
 	"landlords/helper/conv"
+	"landlords/helper/util"
 	"landlords/initcards"
 	"landlords/operatecard"
 	"landlords/registry"
@@ -49,11 +51,11 @@ func Add2Room(piecewise int, ids []string) {
 	rm := NewRoomManager(piecewise, ids)
 	registry.RegisterRoom(rm.roomId, ids)
 	room.rooms.Store(rm.roomId, rm)
-	T(rm.roomId)
+	push2Client(rm.roomId)
 	glog.Infof("roomId = %v ,uids = %v", rm.roomId, ids)
 }
 
-func T(roomId string) {
+func push2Client(roomId string) {
 	info := client_proto.S_player_card{}
 	cards := initcards.ShuffCards()
 	room := GetRoomManager(roomId)
@@ -113,13 +115,15 @@ func (r *RoomManager) GetUserInfo(uid string) *UserInfo {
 func (r *RoomManager) CreatePlayerCards(cards []string, info *client_proto.S_player_card) {
 	r.players.Range(func(key, value interface{}) bool {
 		value.(*UserInfo).addCards(cards[:17])
-		info.F_players = append(info.F_players, client_proto.S_player{value.(*UserInfo).id, cards[:17]})
+		info.F_players = append(info.F_players, client_proto.S_player{value.(*UserInfo).id, util.SortArrayString(cards[:17])})
+		//info.F_players = append(info.F_players, client_proto.S_player{value.(*UserInfo).id,cards[:10]})
+		//info.F_players = append(info.F_players, client_proto.S_player{value.(*UserInfo).id,[]string{"A3","B3","C3","D3"}})
 		cards = cards[17:]
 		return true
 	})
 	info.F_hole_cards = cards
 	info.F_roomId = r.roomId
-	registry.PushRoom(info.F_roomId, 2003, info)
+	registry.PushRoom(info.F_roomId, 3000, info)
 }
 
 //判断玩家手牌
@@ -139,6 +143,10 @@ func (r *RoomManager) CheckHandCards(uid string, cards []string) bool {
 
 //比对玩家手牌
 func (r *RoomManager) comparisonLastPlayerWasteCards(uid string, cards []string) bool {
+	cardType := operatecard.JudgeCardsType(operatecard.GetCardsValue(cards))
+	if cardType == enmu.ERROR_TYPE {
+		return false
+	}
 	_, ok := r.lastPlayerWasteCards.Load(uid)
 	if ok || common.GetSyncMapLen(r.lastPlayerWasteCards) == 0 {
 		r.updateLastPlayerWasteCards(uid, cards)
@@ -189,6 +197,16 @@ func (r *RoomManager) GetUserCard(uid string) sync.Map {
 		return sync.Map{}
 	}
 	return v.(*UserInfo).getUserCards()
+}
+
+func (r *RoomManager) GetUserCard4Array(uid string) []string {
+	cards := make([]string, 0)
+	cm := r.GetUserCard(uid)
+	cm.Range(func(key, value interface{}) bool {
+		cards = append(cards, key.(string))
+		return true
+	})
+	return cards
 }
 
 //添加玩家到房间

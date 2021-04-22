@@ -7,11 +7,8 @@ import (
 	"landlords/session"
 )
 
-func P_user_data_req(ws *session.Session, data []byte) (int16, interface{}) {
-	if ws.User.Name == "" {
-		return Code["error_ack"], nil
-	}
-	return Code["user_data_req"], nil
+func P_user_data_req(sess *session.Session, data []byte) (int16, interface{}) {
+	return Code["user_data_req"], client_proto.S_user_info{sess.User.Name, sess.User.Id}
 }
 
 func P_user_reg_req(sess *session.Session, data []byte) (int16, interface{}) {

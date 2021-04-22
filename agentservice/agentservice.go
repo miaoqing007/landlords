@@ -33,9 +33,10 @@ func AgentRun() {
 func handleRequest(conn net.Conn) {
 	in := make(chan []byte, 16)
 	sess := session.NewSession(in)
+	//registry.Register()
 	defer func() {
 		glog.Info("disconnect:" + conn.RemoteAddr().String())
-		sess.OffLine(sess.User.Account)
+		sess.OffLine()
 		conn.Close()
 	}()
 	go func() {
@@ -50,7 +51,6 @@ func handleRequest(conn net.Conn) {
 		buf := make([]byte, 1024)
 		n, err := conn.Read(buf)
 		if err != nil {
-			glog.Info(err)
 			return
 		}
 		c, data := packet.UnPacket(buf[:n])

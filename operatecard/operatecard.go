@@ -9,22 +9,22 @@ import (
 
 //比对该玩家的牌是否打过上一位玩家
 func ComparisonTwoPlayersCards(wasteCards, newCards []string) bool {
-	wasteArrayCards := getCardsValue(wasteCards)
+	wasteArrayCards := GetCardsValue(wasteCards)
 	if len(wasteCards) != len(wasteArrayCards) {
 		return false
 	}
-	newArrayCards := getCardsValue(newCards)
+	newArrayCards := GetCardsValue(newCards)
 	if len(newCards) != len(newArrayCards) {
 		return false
 	}
-	wasteType := judgeCardsType(wasteArrayCards)
+	wasteType := JudgeCardsType(wasteArrayCards)
 	if wasteType == enmu.ERROR_TYPE {
 		return false
 	}
 	if wasteType == enmu.KING_BOMB {
 		return false
 	}
-	newType := judgeCardsType(newArrayCards)
+	newType := JudgeCardsType(newArrayCards)
 	if newType == enmu.ERROR_TYPE {
 		return false
 	}
@@ -41,7 +41,7 @@ func ComparisonTwoPlayersCards(wasteCards, newCards []string) bool {
 }
 
 //判断牌类型
-func judgeCardsType(arrayCards []int) enmu.CardType {
+func JudgeCardsType(arrayCards []int) enmu.CardType {
 	switch len(arrayCards) {
 	case 1:
 		return enmu.SINGLE
@@ -96,7 +96,7 @@ func judgeCardsType(arrayCards []int) enmu.CardType {
 }
 
 //获取牌面值
-func getCardsValue(cards []string) []int {
+func GetCardsValue(cards []string) []int {
 	intArrayCards := make([]int, 0)
 	for _, card := range cards {
 		intArrayCards = append(intArrayCards, conv.ParseInt(util.SubString(card, 1, len(card))))

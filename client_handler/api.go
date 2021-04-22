@@ -2,42 +2,49 @@
 // DO NOT EDIT!
 package client_handler
 
-import (
-	"landlords/session"
-)
+import . "landlords/session"
 
 var Code = map[string]int16{
-	"heart_beat_req":      2000, // 心跳包
-	"user_login_req":      2001, // 登陆
-	"error_ack":           2002, // 错误返回
-	"licensing_card_req":  2003, // 发牌请求
-	"join_room_req":       2004, // 进入房间
-	"user_reg_req":        2005, // 新用户注册
-	"user_data_req":       2006, // 拉取用户信息
-	"out_of_the_card_req": 2007, // 出牌请求
+	"heart_beat_req":              2000, // 心跳包
+	"user_login_req":              2001, // 登陆
+	"error_ack":                   2002, // 错误返回
+	"start_game_req":              2003, // 开始游戏
+	"join_room_req":               2004, // 进入房间
+	"user_reg_req":                2005, // 新用户注册
+	"user_data_req":               2006, // 拉取用户信息
+	"out_of_the_card_req":         2007, // 出牌请求
+	"cancel_match_req":            2008, // 取消匹配
+	"cancel_match_success_ack":    2009, // 取消匹配成功
+	"out_of_the_card_failed_ack":  2010, // 出牌失败
+	"out_of_the_card_success_ack": 2011, // 出牌成功
 }
 
 var RCode = map[int16]string{
-	2000: "heart_beat_req",      // 心跳包
-	2001: "user_login_req",      // 登陆
-	2002: "error_ack",           // 错误返回
-	2003: "licensing_card_req",  // 发牌请求
-	2004: "join_room_req",       // 进入房间
-	2005: "user_reg_req",        // 新用户注册
-	2006: "user_data_req",       // 拉取用户信息
-	2007: "out_of_the_card_req", // 出牌请求
+	2000: "heart_beat_req",              // 心跳包
+	2001: "user_login_req",              // 登陆
+	2002: "error_ack",                   // 错误返回
+	2003: "start_game_req",              // 开始游戏
+	2004: "join_room_req",               // 进入房间
+	2005: "user_reg_req",                // 新用户注册
+	2006: "user_data_req",               // 拉取用户信息
+	2007: "out_of_the_card_req",         // 出牌请求
+	2008: "cancel_match_req",            // 取消匹配
+	2009: "cancel_match_success_ack",    // 取消匹配成功
+	2010: "out_of_the_card_failed_ack",  // 出牌失败
+	2011: "out_of_the_card_success_ack", // 出牌成功
 }
 
-var Handlers map[int16]func(*session.Session, []byte) (int16, interface{})
+var Handlers map[int16]func(*Session, []byte) (int16, interface{})
 
 func init() {
-	Handlers = map[int16]func(*session.Session, []byte) (int16, interface{}){
+	Handlers = map[int16]func(*Session, []byte) (int16, interface{}){
 		2000: P_heart_beat_req,
 		2001: P_user_login_req,
-		2003: P_licensing_card_req,
+		2003: P_start_game_req,
 		2004: P_join_room_req,
 		2005: P_user_reg_req,
 		2006: P_user_data_req,
 		2007: P_out_of_the_card_req,
+		2008: P_cancel_match_req,
 	}
 }

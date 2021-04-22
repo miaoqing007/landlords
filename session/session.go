@@ -26,14 +26,17 @@ func (s *Session) InitPlayer(account, password string) error {
 	s.User = userManger
 
 	manager.AddPlayer(s.User.Id, s.Player)
-	//registry.Register(s.User.Account, s.ch)
+	registry.Register(s.User.Id, s.ch)
 	return nil
 }
 
 //玩家离线
-func (s *Session) OffLine(id string) {
+func (s *Session) OffLine() {
+	if s == nil || s.Player == nil {
+		return
+	}
 	manager.RemoveRoom(s.User.GetRoomId())
-	manager.RemovePlayer4PvpPool(s.User.GetPiecewise(), id)
-	manager.DeletePlayer(id)
-	registry.UnRegister(id)
+	manager.RemovePlayer4PvpPool(s.User.GetPiecewise(), s.User.Id)
+	manager.DeletePlayer(s.User.Id)
+	registry.UnRegister(s.User.Id)
 }

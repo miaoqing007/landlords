@@ -25,7 +25,7 @@ func InitNewCards() {
 			start += 4
 		}
 	}
-	glog.Info("初始化牌完成")
+	glog.Info("初始化牌完成",cards)
 }
 
 func ShuffCards() []string {
