@@ -31,5 +31,8 @@ func GetAccountData(account string) *obj.AccountData {
 }
 
 func UpdateUserInfo(id string, val interface{}) error {
-	return redis.HMSet(USERKEY+id, val, 0)
+	if err := redis.HMSet(USERKEY+id, val, 0); err != nil {
+		return err
+	}
+	return nil
 }

@@ -8,6 +8,7 @@ import (
 	"landlords/helper/conv"
 	"landlords/helper/util"
 	"landlords/initcards"
+	. "landlords/obj"
 	"landlords/operatecard"
 	"landlords/registry"
 	"sync"
@@ -47,22 +48,26 @@ func RemoveRoom(roomId string) {
 }
 
 //添加玩家到房间
-func Add2Room(piecewise int, ids []string) {
-	rm := NewRoomManager(piecewise, ids)
-	registry.RegisterRoom(rm.roomId, ids)
+func Add2Room(piecewise int, pms []AddChanMsg) {
+	uids := make([]string, 0)
+	for _, pm := range pms {
+		uids = append(uids,pm.Id )
+	}
+	rm := NewRoomManager(piecewise, pms)
+	registry.RegisterRoom(rm.roomId, uids)
 	room.rooms.Store(rm.roomId, rm)
-	push2Client(rm.roomId)
-	glog.Infof("roomId = %v ,uids = %v", rm.roomId, ids)
+	push2Client(rm.roomId, uids)
+	glog.Infof("roomId = %v ,uids = %v", rm.roomId, pms)
 }
 
-func push2Client(roomId string) {
+func push2Client(roomId string, ids []string) {
 	info := client_proto.S_player_card{}
 	cards := initcards.ShuffCards()
 	room := GetRoomManager(roomId)
 	if room == nil {
 		return
 	}
-	room.CreatePlayerCards(cards, &info)
+	room.CreatePlayerCards(cards, &info, ids)
 }
 
 type RoomManager struct {
@@ -74,12 +79,12 @@ type RoomManager struct {
 	players              sync.Map //map[uid]*UserInfo
 }
 
-func NewRoomManager(piecewise int, ids []string) *RoomManager {
+func NewRoomManager(piecewise int, pms []AddChanMsg) *RoomManager {
 	rm := &RoomManager{}
 	rm.piecewise = piecewise
 	rm.roomId = conv.FormatInt32(atomic.AddInt32(&room.roomIcreseId, 1))
-	for _, id := range ids {
-		rm.AddPlayerToRoom(id)
+	for _, pm := range pms {
+		rm.AddPlayerToRoom(pm.Id, pm.Name)
 	}
 	return rm
 }
@@ -112,16 +117,16 @@ func (r *RoomManager) GetUserInfo(uid string) *UserInfo {
 }
 
 //创建玩家手牌
-func (r *RoomManager) CreatePlayerCards(cards []string, info *client_proto.S_player_card) {
+func (r *RoomManager) CreatePlayerCards(cards []string, info *client_proto.S_player_card, ids []string) {
 	r.players.Range(func(key, value interface{}) bool {
 		value.(*UserInfo).addCards(cards[:17])
-		info.F_players = append(info.F_players, client_proto.S_player{value.(*UserInfo).id, util.SortArrayString(cards[:17])})
-		//info.F_players = append(info.F_players, client_proto.S_player{value.(*UserInfo).id,cards[:10]})
-		//info.F_players = append(info.F_players, client_proto.S_player{value.(*UserInfo).id,[]string{"A3","B3","C3","D3"}})
+		info.F_players = append(info.F_players, client_proto.S_player{value.(*UserInfo).id,
+			value.(*UserInfo).name, util.SortArrayString(cards[:17])})
 		cards = cards[17:]
 		return true
 	})
-	info.F_hole_cards = cards
+	info.F_hole_cards = util.SortArrayString(cards)
+	info.F_playerIds = ids
 	info.F_roomId = r.roomId
 	registry.PushRoom(info.F_roomId, 3000, info)
 }
@@ -210,7 +215,7 @@ func (r *RoomManager) GetUserCard4Array(uid string) []string {
 }
 
 //添加玩家到房间
-func (r *RoomManager) AddPlayerToRoom(uid string) bool {
+func (r *RoomManager) AddPlayerToRoom(uid, name string) bool {
 	if common.GetSyncMapLen(r.players) >= 3 {
 		return false
 	}
@@ -218,19 +223,21 @@ func (r *RoomManager) AddPlayerToRoom(uid string) bool {
 	if p != nil {
 		p.User.SetRoomId(r.roomId)
 	}
-	r.players.Store(uid, NewUserInfo(uid))
+	r.players.Store(uid, NewUserInfo(uid, name))
 	return true
 }
 
 type UserInfo struct {
-	id                string   //玩家id
+	id                string //玩家id
+	name              string
 	handCards         sync.Map //map[card]bool 手牌
 	remainingCardsNum int      //剩余手牌数量
 }
 
-func NewUserInfo(uid string) *UserInfo {
+func NewUserInfo(uid, name string) *UserInfo {
 	u := &UserInfo{}
 	u.id = uid
+	u.name = name
 	return u
 }
 

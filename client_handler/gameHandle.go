@@ -11,16 +11,7 @@ import (
 //开始游戏
 func P_start_game_req(sess *session.Session, data []byte) (int16, interface{}) {
 	tbl, _ := client_proto.PKT_auto_id(data)
-	//info := client_proto.S_player_card{}
-
-	manager.AddPlayer2PvpPool(int(tbl.F_id), sess.User.Id)
-
-	//cards := initcards.ShuffCards()
-	//room := manager.GetRoomManager(tbl.F_id)
-	//if room == nil {
-	//	return Code["error_ack"], nil
-	//}
-	//room.CreatePlayerCards(cards, &info)
+	manager.AddPlayer2PvpPool(int(tbl.F_id), sess.User.Id, sess.User.Name)
 	return Code["start_game_req"], nil
 }
 

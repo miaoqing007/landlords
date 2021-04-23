@@ -84,6 +84,7 @@ func (r *Registry) rpushMsg(rpmsg rpushmsg) {
 	if !ok {
 		return
 	}
+
 	for _, id := range v.([]string) {
 		Push(id, rpmsg.msg)
 	}

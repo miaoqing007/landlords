@@ -87,6 +87,7 @@ func PKT_item_id(data []byte) (tbl S_item_id, err error) {
 type S_player_card struct {
 	F_hole_cards []string   `json:"hole_cards"`
 	F_roomId     string     `json:"roomId"`
+	F_playerIds  []string   `json:"playerIds"`
 	F_players    []S_player `json:"players"`
 }
 
@@ -96,6 +97,10 @@ func (p S_player_card) Pack(w *packet.Packet) {
 		w.WriteString(p.F_hole_cards[k])
 	}
 	w.WriteString(p.F_roomId)
+	w.WriteU16(uint16(len(p.F_playerIds)))
+	for k := range p.F_playerIds {
+		w.WriteString(p.F_playerIds[k])
+	}
 	w.WriteU16(uint16(len(p.F_players)))
 	for k := range p.F_players {
 		p.F_players[k].Pack(w)
@@ -112,11 +117,13 @@ func PKT_player_card(data []byte) (tbl S_player_card, err error) {
 
 type S_player struct {
 	F_id    string   `json:"id"`
+	F_name  string   `json:"name"`
 	F_cards []string `json:"cards"`
 }
 
 func (p S_player) Pack(w *packet.Packet) {
 	w.WriteString(p.F_id)
+	w.WriteString(p.F_name)
 	w.WriteU16(uint16(len(p.F_cards)))
 	for k := range p.F_cards {
 		w.WriteString(p.F_cards[k])
@@ -223,6 +230,22 @@ func (p S_out_of_cards) Pack(w *packet.Packet) {
 }
 
 func PKT_out_of_cards(data []byte) (tbl S_out_of_cards, err error) {
+	err = json.Unmarshal(data, &tbl)
+	if err != nil {
+		return tbl, err
+	}
+	return
+}
+
+type S_msg_string struct {
+	F_msg string `json:"msg"`
+}
+
+func (p S_msg_string) Pack(w *packet.Packet) {
+	w.WriteString(p.F_msg)
+}
+
+func PKT_msg_string(data []byte) (tbl S_msg_string, err error) {
 	err = json.Unmarshal(data, &tbl)
 	if err != nil {
 		return tbl, err

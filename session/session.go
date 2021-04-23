@@ -32,7 +32,7 @@ func (s *Session) InitPlayer(account, password string) error {
 
 //玩家离线
 func (s *Session) OffLine() {
-	if s == nil || s.Player == nil {
+	if s == nil || s.Player == nil || s.Player.User == nil {
 		return
 	}
 	manager.RemoveRoom(s.User.GetRoomId())

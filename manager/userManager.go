@@ -4,7 +4,6 @@ import (
 	"github.com/pkg/errors"
 	"landlords/helper/encryption"
 	"landlords/helper/uuid"
-	"landlords/log"
 	"landlords/model"
 	"landlords/obj"
 	"landlords/redis"
@@ -23,7 +22,7 @@ func NewUserManager(account, password string) (*UserManager, error) {
 		ad := model.GetAccountData(account)
 		ps := string(encryption.AesDeCrypt([]byte(ad.PassWord)))
 		if password != ps {
-			return nil, log.ErrLog(errors.New("密码错误"))
+			return nil, errors.New("密码错误")
 		}
 		model.GetUserInfo(ad.UserId, manager.User)
 	} else {
@@ -37,8 +36,8 @@ func NewUserManager(account, password string) (*UserManager, error) {
 	return manager, nil
 }
 
-func (u *UserManager) SetNameId(name string) {
-	u.Name = name
+func (u *UserManager) SetName(name string) {
+	u.User.Name = name
 	redis.HSet(model.NAMEIDKEY, name, u.Id)
 	model.UpdateUserInfo(u.Id, u.User)
 }

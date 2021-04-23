@@ -17,6 +17,10 @@ var Code = map[string]int16{
 	"cancel_match_success_ack":    2009, // 取消匹配成功
 	"out_of_the_card_failed_ack":  2010, // 出牌失败
 	"out_of_the_card_success_ack": 2011, // 出牌成功
+	"login_failed_ack":            2012, // 登陆失败
+	"register_name_req":           2013, // 注册名字请求
+	"register_name_ack":           2014, // 注册名字回复
+	"register_name_success_ack":   2015, // 注册名字成功
 }
 
 var RCode = map[int16]string{
@@ -32,6 +36,10 @@ var RCode = map[int16]string{
 	2009: "cancel_match_success_ack",    // 取消匹配成功
 	2010: "out_of_the_card_failed_ack",  // 出牌失败
 	2011: "out_of_the_card_success_ack", // 出牌成功
+	2012: "login_failed_ack",            // 登陆失败
+	2013: "register_name_req",           // 注册名字请求
+	2014: "register_name_ack",           // 注册名字回复
+	2015: "register_name_success_ack",   // 注册名字成功
 }
 
 var Handlers map[int16]func(*Session, []byte) (int16, interface{})
@@ -46,5 +54,6 @@ func init() {
 		2006: P_user_data_req,
 		2007: P_out_of_the_card_req,
 		2008: P_cancel_match_req,
+		2013: P_register_name_req,
 	}
 }
