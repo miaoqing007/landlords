@@ -121,11 +121,11 @@ func (r *RoomManager) CreatePlayerCards(cards []string, info *client_proto.S_pla
 	r.players.Range(func(key, value interface{}) bool {
 		value.(*UserInfo).addCards(cards[:17])
 		info.F_players = append(info.F_players, client_proto.S_player{value.(*UserInfo).id,
-			value.(*UserInfo).name, util.SortArrayString(cards[:17])})
+			value.(*UserInfo).name, util.SortArrayStringBig2Small(cards[:17])})
 		cards = cards[17:]
 		return true
 	})
-	info.F_hole_cards = util.SortArrayString(cards)
+	info.F_hole_cards = util.SortArrayStringBig2Small(cards)
 	info.F_playerIds = ids
 	info.F_roomId = r.roomId
 	registry.PushRoom(info.F_roomId, 3000, info)

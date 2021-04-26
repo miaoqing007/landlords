@@ -35,7 +35,24 @@ func P_out_of_the_card_req(sess *session.Session, data []byte) (int16, interface
 		return Code["out_of_the_card_failed_ack"], client_proto.S_error_ack{"出牌不符合规则"}
 	}
 	room.DeleteCards(sess.User.Id, tbl.F_cards)
+
 	registry.PushRoom(sess.User.GetRoomId(), 2011, client_proto.S_out_of_cards{sess.User.Id,
-		util.SortArrayString(room.GetUserCard4Array(sess.User.Id)), util.SortArrayString(tbl.F_cards)})
+		util.SortArrayStringBig2Small(room.GetUserCard4Array(sess.User.Id)), util.SortArrayStringSmall2Big(tbl.F_cards)})
+
+	if len(room.GetUserCard4Array(sess.User.Id)) == 0 {
+		registry.PushRoom(sess.User.GetRoomId(), 2017, client_proto.S_game_over{sess.User.Id})
+		return 0, nil
+	}
+	return 0, nil
+}
+
+func P_give_up_card_req(sess *session.Session, data []byte) (int16, interface{}) {
+	tbl, _ := client_proto.PKT_player_outof_card(data)
+	room := manager.GetRoomManager(tbl.F_roomId)
+	if room == nil {
+		return Code["out_of_the_card_failed_ack"], client_proto.S_error_ack{"房间错误"}
+	}
+	registry.PushRoom(sess.User.GetRoomId(), 2011, client_proto.S_out_of_cards{sess.User.Id,
+		util.SortArrayStringBig2Small(room.GetUserCard4Array(sess.User.Id)), util.SortArrayStringSmall2Big([]string{})})
 	return 0, nil
 }
