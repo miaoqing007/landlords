@@ -40,7 +40,7 @@ func P_out_of_the_card_req(sess *session.Session, data []byte) (int16, interface
 		util.SortArrayStringBig2Small(room.GetUserCard4Array(sess.User.Id)), util.SortArrayStringSmall2Big(tbl.F_cards)})
 
 	if len(room.GetUserCard4Array(sess.User.Id)) == 0 {
-		registry.PushRoom(sess.User.GetRoomId(), 2017, client_proto.S_game_over{sess.User.Id})
+		registry.PushRoom(sess.User.GetRoomId(), 2017, client_proto.S_game_over{room.GetWinnerId(sess.User.Id)})
 		return 0, nil
 	}
 	return 0, nil
@@ -54,5 +54,33 @@ func P_give_up_card_req(sess *session.Session, data []byte) (int16, interface{})
 	}
 	registry.PushRoom(sess.User.GetRoomId(), 2011, client_proto.S_out_of_cards{sess.User.Id,
 		util.SortArrayStringBig2Small(room.GetUserCard4Array(sess.User.Id)), util.SortArrayStringSmall2Big([]string{})})
+	return 0, nil
+}
+
+func P_Grab_The_Landlord_req(sess *session.Session, data []byte) (int16, interface{}) {
+	tbl, _ := client_proto.PKT_grab_landowner(data)
+	room := manager.GetRoomManager(tbl.F_roomId)
+	if room == nil {
+		return Code["error_ack"], client_proto.S_error_ack{"房间错误"}
+	}
+	if !room.SetLandownerId(sess.User.Id, tbl.F_ifGrab) {
+		return 0, nil
+	}
+	landowner, grabCount := room.GetLandownerIdAndGrabCount()
+	if grabCount == 3 && landowner == "" {
+		manager.ResetCards(tbl.F_roomId)
+		return 0, nil
+	}
+
+	tbl.F_uid = sess.User.Id
+	tbl.F_ifhavelandowner = room.IfHaveLandowner()
+	registry.PushRoom(sess.User.GetRoomId(), 2021, tbl)
+
+	if grabCount == 3 {
+		room.AddHoleCards2PlayerHandCards(landowner)
+		registry.PushRoom(sess.User.GetRoomId(), 2019, client_proto.S_player{F_id: landowner,
+			F_cards: util.SortArrayStringBig2Small(room.GetUserCard4Array(landowner))})
+		return 0, nil
+	}
 	return 0, nil
 }

@@ -254,14 +254,41 @@ func PKT_msg_string(data []byte) (tbl S_msg_string, err error) {
 }
 
 type S_game_over struct {
-	F_winId string `json:"winId"`
+	F_winId []string `json:"winId"`
 }
 
 func (p S_game_over) Pack(w *packet.Packet) {
-	w.WriteString(p.F_winId)
+	w.WriteU16(uint16(len(p.F_winId)))
+	for k := range p.F_winId {
+		w.WriteString(p.F_winId[k])
+	}
 }
 
 func PKT_game_over(data []byte) (tbl S_game_over, err error) {
+	err = json.Unmarshal(data, &tbl)
+	if err != nil {
+		return tbl, err
+	}
+	return
+}
+
+type S_grab_landowner struct {
+	F_roomId          string `json:"roomId"`
+	F_ifGrab          bool   `json:"ifGrab"`
+	F_uid             string `json:"uid"`
+	F_ifhavelandowner bool   `json:"ifhavelandowner"`
+	F_ifcall          bool   `json:"ifcall"`
+}
+
+func (p S_grab_landowner) Pack(w *packet.Packet) {
+	w.WriteString(p.F_roomId)
+	w.WriteBool(p.F_ifGrab)
+	w.WriteString(p.F_uid)
+	w.WriteBool(p.F_ifhavelandowner)
+	w.WriteBool(p.F_ifcall)
+}
+
+func PKT_grab_landowner(data []byte) (tbl S_grab_landowner, err error) {
 	err = json.Unmarshal(data, &tbl)
 	if err != nil {
 		return tbl, err

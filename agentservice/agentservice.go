@@ -12,7 +12,7 @@ import (
 )
 
 func AgentRun() {
-	lestener, err := net.Listen("tcp", enmu.ServerHost+":"+enmu.ServerPort)
+	lestener, err := net.Listen("tcp", ":"+enmu.ServerPort)
 	if err != nil {
 		glog.Info("listen error:", err)
 		os.Exit(1)

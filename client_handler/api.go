@@ -23,6 +23,8 @@ var Code = map[string]int16{
 	"register_name_success_ack":   2015, // 注册名字成功
 	"give_up_card_req":            2016, // 放弃出牌
 	"game_over_ack":               2017, // 游戏结束
+	"Grab_The_Landlord_req":       2018, // 抢地主
+	"Grab_The_Landlord_ack":       2019, // 抢地主结果
 }
 
 var RCode = map[int16]string{
@@ -44,6 +46,8 @@ var RCode = map[int16]string{
 	2015: "register_name_success_ack",   // 注册名字成功
 	2016: "give_up_card_req",            // 放弃出牌
 	2017: "game_over_ack",               // 游戏结束
+	2018: "Grab_The_Landlord_req",       // 抢地主
+	2019: "Grab_The_Landlord_ack",       // 抢地主结果
 }
 
 var Handlers map[int16]func(*Session, []byte) (int16, interface{})
@@ -60,5 +64,6 @@ func init() {
 		2008: P_cancel_match_req,
 		2013: P_register_name_req,
 		2016: P_give_up_card_req,
+		2018: P_Grab_The_Landlord_req,
 	}
 }

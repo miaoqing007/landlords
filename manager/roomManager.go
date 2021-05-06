@@ -51,23 +51,37 @@ func RemoveRoom(roomId string) {
 func Add2Room(piecewise int, pms []AddChanMsg) {
 	uids := make([]string, 0)
 	for _, pm := range pms {
-		uids = append(uids,pm.Id )
+		uids = append(uids, pm.Id)
 	}
 	rm := NewRoomManager(piecewise, pms)
 	registry.RegisterRoom(rm.roomId, uids)
 	room.rooms.Store(rm.roomId, rm)
-	push2Client(rm.roomId, uids)
+	push2Client(rm.roomId, uids, 3000)
 	glog.Infof("roomId = %v ,uids = %v", rm.roomId, pms)
 }
 
-func push2Client(roomId string, ids []string) {
+func ResetCards(roomId string) {
+	r, ok := room.rooms.Load(roomId)
+	if !ok {
+		return
+	}
+	ids := make([]string, 0)
+	r.(*RoomManager).players.Range(func(key, value interface{}) bool {
+		value.(*UserInfo).handCards = sync.Map{}
+		ids = append(ids, value.(*UserInfo).id)
+		return true
+	})
+	push2Client(roomId, ids, 2020)
+}
+
+func push2Client(roomId string, ids []string, tos int16) {
 	info := client_proto.S_player_card{}
 	cards := initcards.ShuffCards()
 	room := GetRoomManager(roomId)
 	if room == nil {
 		return
 	}
-	room.CreatePlayerCards(cards, &info, ids)
+	room.CreatePlayerCards(cards, &info, ids, tos)
 }
 
 type RoomManager struct {
@@ -75,6 +89,7 @@ type RoomManager struct {
 	holeCards            []string //底牌
 	piecewise            int      //分段
 	landowner            string   //地主id
+	grabCount            int      //抢夺次数
 	lastPlayerWasteCards sync.Map //map[uid][]cards
 	players              sync.Map //map[uid]*UserInfo
 }
@@ -87,6 +102,21 @@ func NewRoomManager(piecewise int, pms []AddChanMsg) *RoomManager {
 		rm.AddPlayerToRoom(pm.Id, pm.Name)
 	}
 	return rm
+}
+
+func (r *RoomManager) SetLandownerId(id string, ifGrab bool) bool {
+	if _, ok := r.players.Load(id); !ok {
+		return false
+	}
+	if ifGrab {
+		r.landowner = id
+	}
+	r.grabCount++
+	return true
+}
+
+func (r *RoomManager) GetLandownerIdAndGrabCount() (string, int) {
+	return r.landowner, r.grabCount
 }
 
 //重置房间信息
@@ -116,8 +146,36 @@ func (r *RoomManager) GetUserInfo(uid string) *UserInfo {
 	return nil
 }
 
+func (r *RoomManager) GetHoleCards() []string {
+	return r.holeCards
+}
+
+func (r *RoomManager) initLandownerIdAndGrabCount() {
+	r.landowner = ""
+	r.grabCount = 0
+}
+
+func (r *RoomManager) setHoleCards(cards []string) {
+	r.holeCards = cards
+}
+
+func (r *RoomManager) GetWinnerId(uid string) []string {
+	winnerIds := make([]string, 0)
+	if r.landowner == uid {
+		winnerIds = append(winnerIds, uid)
+	} else {
+		r.players.Range(func(key, value interface{}) bool {
+			if key.(string) != r.landowner {
+				winnerIds = append(winnerIds, key.(string))
+			}
+			return true
+		})
+	}
+	return winnerIds
+}
+
 //创建玩家手牌
-func (r *RoomManager) CreatePlayerCards(cards []string, info *client_proto.S_player_card, ids []string) {
+func (r *RoomManager) CreatePlayerCards(cards []string, info *client_proto.S_player_card, ids []string, tos int16) {
 	r.players.Range(func(key, value interface{}) bool {
 		value.(*UserInfo).addCards(cards[:17])
 		info.F_players = append(info.F_players, client_proto.S_player{value.(*UserInfo).id,
@@ -128,7 +186,9 @@ func (r *RoomManager) CreatePlayerCards(cards []string, info *client_proto.S_pla
 	info.F_hole_cards = util.SortArrayStringBig2Small(cards)
 	info.F_playerIds = ids
 	info.F_roomId = r.roomId
-	registry.PushRoom(info.F_roomId, 3000, info)
+	r.setHoleCards(info.F_hole_cards)
+	r.initLandownerIdAndGrabCount()
+	registry.PushRoom(info.F_roomId, tos, info)
 }
 
 //判断玩家手牌
@@ -212,6 +272,18 @@ func (r *RoomManager) GetUserCard4Array(uid string) []string {
 		return true
 	})
 	return cards
+}
+
+func (r *RoomManager) AddHoleCards2PlayerHandCards(uid string) {
+	u, ok := r.players.Load(uid)
+	if !ok {
+		return
+	}
+	u.(*UserInfo).addCards(r.holeCards)
+}
+
+func (r *RoomManager) IfHaveLandowner() bool {
+	return r.landowner != ""
 }
 
 //添加玩家到房间
