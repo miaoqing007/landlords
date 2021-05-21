@@ -4,8 +4,11 @@ import (
 	"landlords/client_proto"
 	"landlords/helper/util"
 	"landlords/manager"
+	"landlords/operatecard"
 	"landlords/registry"
 	"landlords/session"
+	"math/rand"
+	"strconv"
 )
 
 //开始游戏
@@ -36,8 +39,11 @@ func P_out_of_the_card_req(sess *session.Session, data []byte) (int16, interface
 	}
 	room.DeleteCards(sess.User.Id, tbl.F_cards)
 
-	registry.PushRoom(sess.User.GetRoomId(), 2011, client_proto.S_out_of_cards{sess.User.Id,
-		util.SortArrayStringBig2Small(room.GetUserCard4Array(sess.User.Id)), util.SortArrayStringSmall2Big(tbl.F_cards)})
+	registry.PushRoom(sess.User.GetRoomId(), 2011, client_proto.S_out_of_cards{
+		F_id:         sess.User.Id,
+		F_cards:      util.SortArrayStringBig2Small(room.GetUserCard4Array(sess.User.Id)),
+		F_ty:         int32(operatecard.JudgeCardsType(operatecard.GetCardsValue(tbl.F_cards))),
+		F_outOfCards: util.SortArrayStringSmall2Big(tbl.F_cards)})
 
 	if len(room.GetUserCard4Array(sess.User.Id)) == 0 {
 		registry.PushRoom(sess.User.GetRoomId(), 2017, client_proto.S_game_over{room.GetWinnerId(sess.User.Id)})
@@ -52,8 +58,9 @@ func P_give_up_card_req(sess *session.Session, data []byte) (int16, interface{})
 	if room == nil {
 		return Code["out_of_the_card_failed_ack"], client_proto.S_error_ack{"房间错误"}
 	}
-	registry.PushRoom(sess.User.GetRoomId(), 2011, client_proto.S_out_of_cards{sess.User.Id,
-		util.SortArrayStringBig2Small(room.GetUserCard4Array(sess.User.Id)), util.SortArrayStringSmall2Big([]string{})})
+	registry.PushRoom(sess.User.GetRoomId(), 2011, client_proto.S_out_of_cards{F_id: sess.User.Id,
+		F_cards:      util.SortArrayStringBig2Small(room.GetUserCard4Array(sess.User.Id)),
+		F_outOfCards: util.SortArrayStringSmall2Big([]string{}), F_randomNum: strconv.Itoa(rand.Intn(4))})
 	return 0, nil
 }
 

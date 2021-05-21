@@ -215,6 +215,8 @@ type S_out_of_cards struct {
 	F_id         string   `json:"id"`
 	F_cards      []string `json:"cards"`
 	F_outOfCards []string `json:"outOfCards"`
+	F_randomNum  string   `json:"randomNum"`
+	F_ty         int32    `json:"ty"`
 }
 
 func (p S_out_of_cards) Pack(w *packet.Packet) {
@@ -227,6 +229,8 @@ func (p S_out_of_cards) Pack(w *packet.Packet) {
 	for k := range p.F_outOfCards {
 		w.WriteString(p.F_outOfCards[k])
 	}
+	w.WriteString(p.F_randomNum)
+	w.WriteS32(p.F_ty)
 }
 
 func PKT_out_of_cards(data []byte) (tbl S_out_of_cards, err error) {

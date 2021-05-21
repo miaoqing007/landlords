@@ -16,7 +16,8 @@ const (
 	PLANE_SINGLE    CardType = 10 //飞机带单
 	PLANE_DOUBLE    CardType = 11 //飞机带双
 	THREE_AND_TWO   CardType = 12 //三带二
-	ERROR_TYPE      CardType = 13 //非法类型
+	Four_and_Two    CardType = 13 //四带二
+	ERROR_TYPE      CardType = 14 //非法类型
 )
 
 const (

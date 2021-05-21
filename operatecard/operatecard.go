@@ -74,6 +74,8 @@ func JudgeCardsType(arrayCards []int) enmu.CardType {
 			return enmu.DOUBLE_ALONE
 		} else if judgePlane(arrayCards) {
 			return enmu.PLANE
+		} else if judgeArrayIfFour_And_Two(arrayCards) {
+			return enmu.Four_and_Two
 		}
 	case 7, 9, 11, 13:
 		if judgeArrayIfIsSingle_Alone(arrayCards) {
@@ -141,12 +143,20 @@ func judgeArrayIfIsDouble_Alone(array []int) bool {
 	if len(array) < 6 || len(array)%2 != 0 {
 		return false
 	}
-	sort.Ints(array)
-	for i := 0; i < len(array); i++ {
-		if array[i] != array[i+1] {
+	m := make(map[int]int)
+	for _, v := range array {
+		if v == 15 { //不能有2
 			return false
 		}
-		i++
+		m[v]++
+	}
+	if len(m) != 3 {
+		return false
+	}
+	for _, v := range m {
+		if v != 2 {
+			return false
+		}
 	}
 	return true
 }
@@ -166,17 +176,40 @@ func judgeArrayIfIsKing_Bomb(array []int) bool {
 func judgeArrayIfIsSingle_Alone(array []int) bool {
 	sort.Ints(array)
 	for i := 0; i < len(array)-1; i++ {
-		if array[i]+1 != array[i+1] {
+		if array[i]+1 != array[i+1] || array[i] == 15 || array[i+1] == 15 {
 			return false
 		}
 	}
 	return true
 }
 
+func judgeArrayIfFour_And_Two(array []int) bool {
+	m := make(map[int]int)
+	for _, v := range array {
+		m[v]++
+	}
+	if len(m) != 2 {
+		return false
+	}
+	a := make([]int, 0)
+	for _, v := range m {
+		a = append(a, v)
+	}
+	if (a[0] == 4 && a[1] == 2) || (a[0] == 2 && a[1] == 4) {
+		return true
+	}
+	return false
+}
+
 //判断是否飞机
 func judgePlane(cards []int) bool {
 	if len(cards) < 6 || len(cards)%3 != 0 {
 		return false
+	}
+	for _, v := range cards {
+		if v == 15 {
+			return false
+		}
 	}
 	sort.Ints(cards)
 	for i := 0; i < len(cards)-3; {
@@ -267,7 +300,10 @@ func judgeMap(m map[int]int, cardsLen, oneOrTwo int) bool {
 	cardNum := 0
 	th := 0
 	tw := 0
-	for _, v := range m {
+	for card, v := range m {
+		if card == 15 {
+			return false
+		}
 		if v == 3 {
 			cardNum += 3
 			th++

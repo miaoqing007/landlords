@@ -14,9 +14,8 @@ func InitNewCards() {
 	start := 0
 	for i := 3; i <= 16; i++ {
 		if i == 16 {
-			//大小王
-			cards[start] = "Q88"
-			cards[start+1] = "K99"
+			cards[start] = "Q88"//xiaowang
+			cards[start+1] = "K99"//dawang
 		} else {
 			cards[start] = "A" + conv.FormatInt(i)
 			cards[start+1] = "B" + conv.FormatInt(i)
@@ -25,7 +24,7 @@ func InitNewCards() {
 			start += 4
 		}
 	}
-	glog.Info("初始化牌完成",cards)
+	glog.Info("初始化牌完成", cards)
 }
 
 func ShuffCards() []string {
