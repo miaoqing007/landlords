@@ -2,6 +2,7 @@ package agentservice
 
 import (
 	"github.com/golang/glog"
+	"io"
 	"landlords/client_handler"
 	"landlords/enmu"
 	"landlords/helper/stack"
@@ -49,7 +50,7 @@ func handleRequest(conn net.Conn) {
 	}()
 	for {
 		buf := make([]byte, 1024)
-		n, err := conn.Read(buf)
+		n, err := io.ReadFull(conn, buf)
 		if err != nil {
 			return
 		}

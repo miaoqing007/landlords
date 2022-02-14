@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package command;
+
+// 开垦土地
+message CSReclamationLand {
+    uint64 landid = 1;
+    uint32 toolid = 2;
+}

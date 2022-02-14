@@ -25,3 +25,7 @@ const (
 	ServerPort = "51000"
 	RedisPort  = "6379"
 )
+
+const (
+	READ_LEN = 2
+)
