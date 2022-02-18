@@ -1,0 +1,9 @@
+syntax = "proto3";
+
+package command;
+
+import "online.proto";
+
+service RpcFuction {
+    rpc JoinRoom(stream OPJionRoom)returns(Empty){}
+}
