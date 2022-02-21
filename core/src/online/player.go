@@ -8,6 +8,7 @@ import (
 type Player struct {
 	router *router.Router
 	User   *UserManager
+	innerChan chan interface{}
 }
 
 func (player *Player) InitBase(account, password string) error {

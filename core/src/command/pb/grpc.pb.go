@@ -4,8 +4,10 @@
 package command
 
 import (
+	context "context"
 	fmt "fmt"
 	proto "github.com/golang/protobuf/proto"
+	grpc "google.golang.org/grpc"
 	math "math"
 )
 
@@ -20,15 +22,386 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 
+//
+type Online2PvpInfo struct {
+	Msg                  string   `protobuf:"bytes,1,opt,name=msg,proto3" json:"msg,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *Online2PvpInfo) Reset()         { *m = Online2PvpInfo{} }
+func (m *Online2PvpInfo) String() string { return proto.CompactTextString(m) }
+func (*Online2PvpInfo) ProtoMessage()    {}
+func (*Online2PvpInfo) Descriptor() ([]byte, []int) {
+	return fileDescriptor_bedfbfc9b54e5600, []int{0}
+}
+
+func (m *Online2PvpInfo) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_Online2PvpInfo.Unmarshal(m, b)
+}
+func (m *Online2PvpInfo) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_Online2PvpInfo.Marshal(b, m, deterministic)
+}
+func (m *Online2PvpInfo) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Online2PvpInfo.Merge(m, src)
+}
+func (m *Online2PvpInfo) XXX_Size() int {
+	return xxx_messageInfo_Online2PvpInfo.Size(m)
+}
+func (m *Online2PvpInfo) XXX_DiscardUnknown() {
+	xxx_messageInfo_Online2PvpInfo.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Online2PvpInfo proto.InternalMessageInfo
+
+func (m *Online2PvpInfo) GetMsg() string {
+	if m != nil {
+		return m.Msg
+	}
+	return ""
+}
+
+//
+type Pvp2OnlineInfo struct {
+	Msg                  string   `protobuf:"bytes,1,opt,name=msg,proto3" json:"msg,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *Pvp2OnlineInfo) Reset()         { *m = Pvp2OnlineInfo{} }
+func (m *Pvp2OnlineInfo) String() string { return proto.CompactTextString(m) }
+func (*Pvp2OnlineInfo) ProtoMessage()    {}
+func (*Pvp2OnlineInfo) Descriptor() ([]byte, []int) {
+	return fileDescriptor_bedfbfc9b54e5600, []int{1}
+}
+
+func (m *Pvp2OnlineInfo) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_Pvp2OnlineInfo.Unmarshal(m, b)
+}
+func (m *Pvp2OnlineInfo) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_Pvp2OnlineInfo.Marshal(b, m, deterministic)
+}
+func (m *Pvp2OnlineInfo) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Pvp2OnlineInfo.Merge(m, src)
+}
+func (m *Pvp2OnlineInfo) XXX_Size() int {
+	return xxx_messageInfo_Pvp2OnlineInfo.Size(m)
+}
+func (m *Pvp2OnlineInfo) XXX_DiscardUnknown() {
+	xxx_messageInfo_Pvp2OnlineInfo.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Pvp2OnlineInfo proto.InternalMessageInfo
+
+func (m *Pvp2OnlineInfo) GetMsg() string {
+	if m != nil {
+		return m.Msg
+	}
+	return ""
+}
+
+type Gateway2OnlineInfo struct {
+	Msg                  string   `protobuf:"bytes,1,opt,name=msg,proto3" json:"msg,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *Gateway2OnlineInfo) Reset()         { *m = Gateway2OnlineInfo{} }
+func (m *Gateway2OnlineInfo) String() string { return proto.CompactTextString(m) }
+func (*Gateway2OnlineInfo) ProtoMessage()    {}
+func (*Gateway2OnlineInfo) Descriptor() ([]byte, []int) {
+	return fileDescriptor_bedfbfc9b54e5600, []int{2}
+}
+
+func (m *Gateway2OnlineInfo) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_Gateway2OnlineInfo.Unmarshal(m, b)
+}
+func (m *Gateway2OnlineInfo) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_Gateway2OnlineInfo.Marshal(b, m, deterministic)
+}
+func (m *Gateway2OnlineInfo) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Gateway2OnlineInfo.Merge(m, src)
+}
+func (m *Gateway2OnlineInfo) XXX_Size() int {
+	return xxx_messageInfo_Gateway2OnlineInfo.Size(m)
+}
+func (m *Gateway2OnlineInfo) XXX_DiscardUnknown() {
+	xxx_messageInfo_Gateway2OnlineInfo.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Gateway2OnlineInfo proto.InternalMessageInfo
+
+func (m *Gateway2OnlineInfo) GetMsg() string {
+	if m != nil {
+		return m.Msg
+	}
+	return ""
+}
+
+//
+type Online2GatewayInfo struct {
+	Msg                  string   `protobuf:"bytes,1,opt,name=msg,proto3" json:"msg,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *Online2GatewayInfo) Reset()         { *m = Online2GatewayInfo{} }
+func (m *Online2GatewayInfo) String() string { return proto.CompactTextString(m) }
+func (*Online2GatewayInfo) ProtoMessage()    {}
+func (*Online2GatewayInfo) Descriptor() ([]byte, []int) {
+	return fileDescriptor_bedfbfc9b54e5600, []int{3}
+}
+
+func (m *Online2GatewayInfo) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_Online2GatewayInfo.Unmarshal(m, b)
+}
+func (m *Online2GatewayInfo) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_Online2GatewayInfo.Marshal(b, m, deterministic)
+}
+func (m *Online2GatewayInfo) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Online2GatewayInfo.Merge(m, src)
+}
+func (m *Online2GatewayInfo) XXX_Size() int {
+	return xxx_messageInfo_Online2GatewayInfo.Size(m)
+}
+func (m *Online2GatewayInfo) XXX_DiscardUnknown() {
+	xxx_messageInfo_Online2GatewayInfo.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Online2GatewayInfo proto.InternalMessageInfo
+
+func (m *Online2GatewayInfo) GetMsg() string {
+	if m != nil {
+		return m.Msg
+	}
+	return ""
+}
+
+func init() {
+	proto.RegisterType((*Online2PvpInfo)(nil), "command.Online2PvpInfo")
+	proto.RegisterType((*Pvp2OnlineInfo)(nil), "command.Pvp2OnlineInfo")
+	proto.RegisterType((*Gateway2OnlineInfo)(nil), "command.Gateway2OnlineInfo")
+	proto.RegisterType((*Online2GatewayInfo)(nil), "command.Online2GatewayInfo")
+}
+
 func init() { proto.RegisterFile("grpc.proto", fileDescriptor_bedfbfc9b54e5600) }
 
 var fileDescriptor_bedfbfc9b54e5600 = []byte{
-	// 112 bytes of a gzipped FileDescriptorProto
+	// 184 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0xe2, 0x4a, 0x2f, 0x2a, 0x48,
-	0xd6, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0x62, 0x4f, 0xce, 0xcf, 0xcd, 0x4d, 0xcc, 0x4b, 0x91,
-	0xe2, 0xc9, 0xcf, 0xcb, 0xc9, 0xcc, 0x4b, 0x85, 0x08, 0x1b, 0x39, 0x72, 0x71, 0x05, 0x15, 0x24,
-	0xbb, 0x95, 0x26, 0x97, 0x64, 0xe6, 0xe7, 0x09, 0x19, 0x73, 0x71, 0x78, 0xe5, 0x67, 0xe6, 0x05,
-	0xe5, 0xe7, 0xe7, 0x0a, 0x09, 0xeb, 0x41, 0x75, 0xe8, 0xf9, 0x07, 0x78, 0x65, 0xe6, 0x83, 0x05,
-	0xa5, 0xf8, 0xe0, 0x82, 0xae, 0xb9, 0x05, 0x25, 0x95, 0x4a, 0x0c, 0x1a, 0x8c, 0x49, 0x6c, 0x60,
-	0x93, 0x8c, 0x01, 0x01, 0x00, 0x00, 0xff, 0xff, 0xfa, 0x12, 0x31, 0x12, 0x6e, 0x00, 0x00, 0x00,
+	0xd6, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0x62, 0x4f, 0xce, 0xcf, 0xcd, 0x4d, 0xcc, 0x4b, 0x51,
+	0x52, 0xe2, 0xe2, 0xf3, 0xcf, 0xcb, 0xc9, 0xcc, 0x4b, 0x35, 0x0a, 0x28, 0x2b, 0xf0, 0xcc, 0x4b,
+	0xcb, 0x17, 0x12, 0xe0, 0x62, 0xce, 0x2d, 0x4e, 0x97, 0x60, 0x54, 0x60, 0xd4, 0xe0, 0x0c, 0x02,
+	0x31, 0x41, 0x6a, 0x02, 0xca, 0x0a, 0x8c, 0x20, 0xea, 0x70, 0xa8, 0x51, 0xe3, 0x12, 0x72, 0x4f,
+	0x2c, 0x49, 0x2d, 0x4f, 0xac, 0x24, 0xa8, 0x0e, 0x6a, 0x1f, 0x54, 0x39, 0x76, 0x75, 0x46, 0x61,
+	0x5c, 0x9c, 0x10, 0x75, 0x01, 0x65, 0x05, 0x42, 0x9e, 0x5c, 0xfc, 0x70, 0x4e, 0x70, 0x49, 0x51,
+	0x6a, 0x62, 0xae, 0x90, 0xb8, 0x1e, 0xd4, 0x07, 0x7a, 0xa8, 0xce, 0x97, 0x42, 0x48, 0xa0, 0xba,
+	0x59, 0x89, 0x41, 0x83, 0xd1, 0x80, 0xd1, 0x28, 0x8d, 0x8b, 0x17, 0x6a, 0x31, 0x44, 0x4a, 0x28,
+	0x94, 0x4b, 0x18, 0x45, 0x00, 0x6a, 0xbe, 0x34, 0xdc, 0x18, 0x4c, 0x6f, 0x49, 0x49, 0xa3, 0x5b,
+	0x8e, 0xe4, 0x17, 0x88, 0x3d, 0x49, 0x6c, 0xe0, 0x70, 0x36, 0x06, 0x04, 0x00, 0x00, 0xff, 0xff,
+	0xb6, 0x27, 0xaa, 0xac, 0x75, 0x01, 0x00, 0x00,
+}
+
+// Reference imports to suppress errors if they are not otherwise used.
+var _ context.Context
+var _ grpc.ClientConn
+
+// This is a compile-time assertion to ensure that this generated file
+// is compatible with the grpc package it is being compiled against.
+const _ = grpc.SupportPackageIsVersion4
+
+// OnlinePvpClient is the client API for OnlinePvp service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
+type OnlinePvpClient interface {
+	OnlinePvpStream(ctx context.Context, opts ...grpc.CallOption) (OnlinePvp_OnlinePvpStreamClient, error)
+}
+
+type onlinePvpClient struct {
+	cc *grpc.ClientConn
+}
+
+func NewOnlinePvpClient(cc *grpc.ClientConn) OnlinePvpClient {
+	return &onlinePvpClient{cc}
+}
+
+func (c *onlinePvpClient) OnlinePvpStream(ctx context.Context, opts ...grpc.CallOption) (OnlinePvp_OnlinePvpStreamClient, error) {
+	stream, err := c.cc.NewStream(ctx, &_OnlinePvp_serviceDesc.Streams[0], "/command.OnlinePvp/OnlinePvpStream", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &onlinePvpOnlinePvpStreamClient{stream}
+	return x, nil
+}
+
+type OnlinePvp_OnlinePvpStreamClient interface {
+	Send(*Online2PvpInfo) error
+	Recv() (*Pvp2OnlineInfo, error)
+	grpc.ClientStream
+}
+
+type onlinePvpOnlinePvpStreamClient struct {
+	grpc.ClientStream
+}
+
+func (x *onlinePvpOnlinePvpStreamClient) Send(m *Online2PvpInfo) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *onlinePvpOnlinePvpStreamClient) Recv() (*Pvp2OnlineInfo, error) {
+	m := new(Pvp2OnlineInfo)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+// OnlinePvpServer is the server API for OnlinePvp service.
+type OnlinePvpServer interface {
+	OnlinePvpStream(OnlinePvp_OnlinePvpStreamServer) error
+}
+
+func RegisterOnlinePvpServer(s *grpc.Server, srv OnlinePvpServer) {
+	s.RegisterService(&_OnlinePvp_serviceDesc, srv)
+}
+
+func _OnlinePvp_OnlinePvpStream_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(OnlinePvpServer).OnlinePvpStream(&onlinePvpOnlinePvpStreamServer{stream})
+}
+
+type OnlinePvp_OnlinePvpStreamServer interface {
+	Send(*Pvp2OnlineInfo) error
+	Recv() (*Online2PvpInfo, error)
+	grpc.ServerStream
+}
+
+type onlinePvpOnlinePvpStreamServer struct {
+	grpc.ServerStream
+}
+
+func (x *onlinePvpOnlinePvpStreamServer) Send(m *Pvp2OnlineInfo) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *onlinePvpOnlinePvpStreamServer) Recv() (*Online2PvpInfo, error) {
+	m := new(Online2PvpInfo)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+var _OnlinePvp_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "command.OnlinePvp",
+	HandlerType: (*OnlinePvpServer)(nil),
+	Methods:     []grpc.MethodDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "OnlinePvpStream",
+			Handler:       _OnlinePvp_OnlinePvpStream_Handler,
+			ServerStreams: true,
+			ClientStreams: true,
+		},
+	},
+	Metadata: "grpc.proto",
+}
+
+// GatewayOnlineClient is the client API for GatewayOnline service.
+//
+// For semantics around ctx use and closing/ending streaming RPCs, please refer to https://godoc.org/google.golang.org/grpc#ClientConn.NewStream.
+type GatewayOnlineClient interface {
+	GatewayOnlineStream(ctx context.Context, opts ...grpc.CallOption) (GatewayOnline_GatewayOnlineStreamClient, error)
+}
+
+type gatewayOnlineClient struct {
+	cc *grpc.ClientConn
+}
+
+func NewGatewayOnlineClient(cc *grpc.ClientConn) GatewayOnlineClient {
+	return &gatewayOnlineClient{cc}
+}
+
+func (c *gatewayOnlineClient) GatewayOnlineStream(ctx context.Context, opts ...grpc.CallOption) (GatewayOnline_GatewayOnlineStreamClient, error) {
+	stream, err := c.cc.NewStream(ctx, &_GatewayOnline_serviceDesc.Streams[0], "/command.GatewayOnline/GatewayOnlineStream", opts...)
+	if err != nil {
+		return nil, err
+	}
+	x := &gatewayOnlineGatewayOnlineStreamClient{stream}
+	return x, nil
+}
+
+type GatewayOnline_GatewayOnlineStreamClient interface {
+	Send(*Gateway2OnlineInfo) error
+	Recv() (*Online2GatewayInfo, error)
+	grpc.ClientStream
+}
+
+type gatewayOnlineGatewayOnlineStreamClient struct {
+	grpc.ClientStream
+}
+
+func (x *gatewayOnlineGatewayOnlineStreamClient) Send(m *Gateway2OnlineInfo) error {
+	return x.ClientStream.SendMsg(m)
+}
+
+func (x *gatewayOnlineGatewayOnlineStreamClient) Recv() (*Online2GatewayInfo, error) {
+	m := new(Online2GatewayInfo)
+	if err := x.ClientStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+// GatewayOnlineServer is the server API for GatewayOnline service.
+type GatewayOnlineServer interface {
+	GatewayOnlineStream(GatewayOnline_GatewayOnlineStreamServer) error
+}
+
+func RegisterGatewayOnlineServer(s *grpc.Server, srv GatewayOnlineServer) {
+	s.RegisterService(&_GatewayOnline_serviceDesc, srv)
+}
+
+func _GatewayOnline_GatewayOnlineStream_Handler(srv interface{}, stream grpc.ServerStream) error {
+	return srv.(GatewayOnlineServer).GatewayOnlineStream(&gatewayOnlineGatewayOnlineStreamServer{stream})
+}
+
+type GatewayOnline_GatewayOnlineStreamServer interface {
+	Send(*Online2GatewayInfo) error
+	Recv() (*Gateway2OnlineInfo, error)
+	grpc.ServerStream
+}
+
+type gatewayOnlineGatewayOnlineStreamServer struct {
+	grpc.ServerStream
+}
+
+func (x *gatewayOnlineGatewayOnlineStreamServer) Send(m *Online2GatewayInfo) error {
+	return x.ServerStream.SendMsg(m)
+}
+
+func (x *gatewayOnlineGatewayOnlineStreamServer) Recv() (*Gateway2OnlineInfo, error) {
+	m := new(Gateway2OnlineInfo)
+	if err := x.ServerStream.RecvMsg(m); err != nil {
+		return nil, err
+	}
+	return m, nil
+}
+
+var _GatewayOnline_serviceDesc = grpc.ServiceDesc{
+	ServiceName: "command.GatewayOnline",
+	HandlerType: (*GatewayOnlineServer)(nil),
+	Methods:     []grpc.MethodDesc{},
+	Streams: []grpc.StreamDesc{
+		{
+			StreamName:    "GatewayOnlineStream",
+			Handler:       _GatewayOnline_GatewayOnlineStream_Handler,
+			ServerStreams: true,
+			ClientStreams: true,
+		},
+	},
+	Metadata: "grpc.proto",
 }

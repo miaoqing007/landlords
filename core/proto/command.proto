@@ -6,5 +6,5 @@ enum Command{
     dummy=0;// The first enum value must be zero in proto3
 
     //
-    CSStartGame =1;//开始游戏
+    //CSStartGame =1;//开始游戏
 }

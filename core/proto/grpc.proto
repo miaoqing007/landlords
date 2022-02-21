@@ -2,8 +2,29 @@ syntax = "proto3";
 
 package command;
 
-import "online.proto";
+service OnlinePvp {
+    rpc OnlinePvpStream(stream Online2PvpInfo) returns (stream Pvp2OnlineInfo){};
+}
 
-service RpcFuction {
-    rpc JoinRoom(stream OPJionRoom)returns(Empty){}
+service GatewayOnline{
+    rpc GatewayOnlineStream(stream Gateway2OnlineInfo) returns (stream Online2GatewayInfo){};
+}
+
+//
+message Online2PvpInfo{
+    string msg =1;
+}
+
+//
+message Pvp2OnlineInfo{
+    string msg =1;
+}
+
+message Gateway2OnlineInfo{
+    string msg =1;
+}
+
+//
+message Online2GatewayInfo{
+    string msg =1;
 }

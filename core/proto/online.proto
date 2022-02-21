@@ -2,17 +2,4 @@ syntax = "proto3";
 
 package command;
 
-// 开始游戏
-message CSStartGame {
-    uint32 roomId =1;//房间id
-}
 
-//进入房间
-message OPJionRoom{
-    uint64 playerId=1;
-}
-
-//
-message Empty{
-
-}

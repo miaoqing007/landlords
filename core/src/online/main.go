@@ -1,4 +1,16 @@
 package main
+
+import (
+	"core/online/log"
+	"core/online/redis"
+)
+
+func main() {
+	log.InitLog()
+	redis.InitRedis()
+	runGatewayOnlineGRPC()
+}
+
 //
 //import (
 //	"agentservice"
