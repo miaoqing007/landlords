@@ -11,15 +11,19 @@ import (
 
 type MsgHandler func(msgId uint16, data []byte)
 
+type GatewayOnlineHandler func(msgId uint16, data []byte)
+
 type Router struct {
-	littleEndian bool
-	msgHandlers  map[uint16]MsgHandler
+	littleEndian         bool
+	msgHandlers          map[uint16]MsgHandler //玩家消息
+	gatewayOnlineHandler map[uint16]GatewayOnlineHandler
 }
 
 func NewRouter() *Router {
 	r := &Router{
-		littleEndian: true,
-		msgHandlers:  make(map[uint16]MsgHandler),
+		littleEndian:         true,
+		msgHandlers:          make(map[uint16]MsgHandler),
+		gatewayOnlineHandler: make(map[uint16]GatewayOnlineHandler),
 	}
 	return r
 }
@@ -42,15 +46,42 @@ func (r *Router) Route(data []byte) (uint16, error) {
 	return msgId, nil
 }
 
+func (r *Router) RouterInnerMsg(data []byte) (uint16, error) {
+	if len(data) < 2 {
+		return 0, errors.New("protobuf data too short")
+	}
+	var msgId uint16
+	if r.littleEndian {
+		msgId = binary.LittleEndian.Uint16(data[2:])
+	} else {
+		msgId = binary.BigEndian.Uint16(data[2:])
+	}
+	handler, ok := r.gatewayOnlineHandler[msgId]
+	if !ok {
+		return msgId, errors.New("")
+	}
+	handler(msgId, data)
+	return msgId, nil
+}
+
 func (r *Router) Register(msgId uint16, msgHandler MsgHandler) bool {
 	if msgId > math.MaxUint16 {
 		return false
 	}
-	if handler, ok := r.msgHandlers[msgId]; !ok {
+	if handler, ok := r.msgHandlers[msgId]; ok {
 		glog.Errorf("error", handler)
 		return false
 	}
 	r.msgHandlers[msgId] = msgHandler
+	return true
+}
+
+func (r *Router) RegisterGatewayOnline(msgId uint16, msgHandler GatewayOnlineHandler) bool {
+	if handler, ok := r.gatewayOnlineHandler[msgId]; ok {
+		glog.Errorf("error", handler)
+		return false
+	}
+	r.gatewayOnlineHandler[msgId] = msgHandler
 	return true
 }
 

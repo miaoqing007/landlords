@@ -2,29 +2,31 @@ syntax = "proto3";
 
 package command;
 
+import "gateway.proto";
+
 service OnlinePvp {
     rpc OnlinePvpStream(stream Online2PvpInfo) returns (stream Pvp2OnlineInfo){};
 }
 
 service GatewayOnline{
-    rpc GatewayOnlineStream(stream Gateway2OnlineInfo) returns (stream Online2GatewayInfo){};
+    rpc GatewayOnlineStream(stream ClientPlayerMsgData) returns (stream ClientPlayerMsgData){};
 }
 
 //
 message Online2PvpInfo{
-    string msg =1;
+    bytes msg =1;
 }
 
 //
 message Pvp2OnlineInfo{
-    string msg =1;
+    bytes msg =1;
 }
 
-message Gateway2OnlineInfo{
-    string msg =1;
-}
+//message Gateway2OnlineInfo{
+//   bytes msg =1;
+//}
 
 //
-message Online2GatewayInfo{
-    string msg =1;
-}
+//message Online2GatewayInfo{
+//    bytes msg =1;
+//}

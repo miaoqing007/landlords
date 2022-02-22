@@ -2,4 +2,6 @@ syntax = "proto3";
 
 package command;
 
-
+message CSStartGameOnline{
+   uint32 roomId =1;
+}

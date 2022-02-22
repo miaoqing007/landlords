@@ -1,14 +1,7 @@
 package main
 
-import (
-	"core/online/log"
-	"core/online/redis"
-)
-
 func main() {
-	log.InitLog()
-	redis.InitRedis()
-	runGatewayOnlineGRPC()
+	runGRPCDial("127.0.0.1:9999")
 }
 
 //

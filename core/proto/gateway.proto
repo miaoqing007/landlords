@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package command;
+
+message ClientPlayerMsgData{
+    uint64 playerId=1;
+    bytes Data=2;
+}
+
+message GatewayMsgToOnline{
+    string remoteAddr =1;//
+    bytes data =2;//
+}
+
+message OnlineMsgToGateway {
+    string remoteAddr =1;
+    bytes data =2;
+}

@@ -1,6 +1,6 @@
 package main
 
-import command "landlords/command/pb"
+import command "core/command/pb"
 
 type OnlinePvpStream struct {
 	streams map[string]command.OnlinePvp_OnlinePvpStreamServer

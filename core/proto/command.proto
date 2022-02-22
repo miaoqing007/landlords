@@ -2,9 +2,14 @@ syntax = "proto3";
 
 package command;
 
-enum Command{
-    dummy=0;// The first enum value must be zero in proto3
+enum Command {
 
-    //
-    //CSStartGame =1;//开始游戏
+    dummy=0;// The first enum value must be zero in proto3
+    //online
+    CSStartGame =1;//开始游戏
+
+
+    //gateway 10000-20000
+    MsgToOnline =10001 ; //消息到online
+    MsgTOGateway=10002; //消息到gateway
 }

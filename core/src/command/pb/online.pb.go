@@ -20,12 +20,57 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 
+type CSStartGameOnline struct {
+	RoomId               uint32   `protobuf:"varint,1,opt,name=roomId,proto3" json:"roomId,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *CSStartGameOnline) Reset()         { *m = CSStartGameOnline{} }
+func (m *CSStartGameOnline) String() string { return proto.CompactTextString(m) }
+func (*CSStartGameOnline) ProtoMessage()    {}
+func (*CSStartGameOnline) Descriptor() ([]byte, []int) {
+	return fileDescriptor_2aeeec9a52ed8e15, []int{0}
+}
+
+func (m *CSStartGameOnline) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_CSStartGameOnline.Unmarshal(m, b)
+}
+func (m *CSStartGameOnline) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_CSStartGameOnline.Marshal(b, m, deterministic)
+}
+func (m *CSStartGameOnline) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CSStartGameOnline.Merge(m, src)
+}
+func (m *CSStartGameOnline) XXX_Size() int {
+	return xxx_messageInfo_CSStartGameOnline.Size(m)
+}
+func (m *CSStartGameOnline) XXX_DiscardUnknown() {
+	xxx_messageInfo_CSStartGameOnline.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CSStartGameOnline proto.InternalMessageInfo
+
+func (m *CSStartGameOnline) GetRoomId() uint32 {
+	if m != nil {
+		return m.RoomId
+	}
+	return 0
+}
+
+func init() {
+	proto.RegisterType((*CSStartGameOnline)(nil), "command.CSStartGameOnline")
+}
+
 func init() { proto.RegisterFile("online.proto", fileDescriptor_2aeeec9a52ed8e15) }
 
 var fileDescriptor_2aeeec9a52ed8e15 = []byte{
-	// 52 bytes of a gzipped FileDescriptorProto
+	// 89 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0xe2, 0xc9, 0xcf, 0xcb, 0xc9,
 	0xcc, 0x4b, 0xd5, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0x62, 0x4f, 0xce, 0xcf, 0xcd, 0x4d, 0xcc,
-	0x4b, 0x49, 0x62, 0x03, 0xf3, 0x8d, 0x01, 0x01, 0x00, 0x00, 0xff, 0xff, 0x37, 0xf3, 0x2d, 0x45,
-	0x1f, 0x00, 0x00, 0x00,
+	0x4b, 0x51, 0xd2, 0xe6, 0x12, 0x74, 0x0e, 0x0e, 0x2e, 0x49, 0x2c, 0x2a, 0x71, 0x4f, 0xcc, 0x4d,
+	0xf5, 0x07, 0xab, 0x11, 0x12, 0xe3, 0x62, 0x2b, 0xca, 0xcf, 0xcf, 0xf5, 0x4c, 0x91, 0x60, 0x54,
+	0x60, 0xd4, 0xe0, 0x0d, 0x82, 0xf2, 0x92, 0xd8, 0xc0, 0x9a, 0x8d, 0x01, 0x01, 0x00, 0x00, 0xff,
+	0xff, 0xc3, 0xaf, 0xe6, 0x6e, 0x4c, 0x00, 0x00, 0x00,
 }

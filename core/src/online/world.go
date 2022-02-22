@@ -1,46 +1,51 @@
 package main
 
 import (
-	"github.com/golang/glog"
+	command "core/command/pb"
 	"sync"
 )
 
-var _player *Players
+var (
+	world     *World
+	worldOnce sync.Once
+)
 
-
-type Players struct {
-	idInMap sync.Map //map[id]*Player
+type World struct {
+	players            sync.Map
+	fromGatewayMsgChan chan *command.ClientPlayerMsgData
 }
 
-func init() {
-	_player = &Players{}
+func WorldGetMe() *World {
+	worldOnce.Do(func() {
+		world = &World{
+			players:            sync.Map{},
+			fromGatewayMsgChan: make(chan *command.ClientPlayerMsgData, 64),
+		}
+		world.loop()
+	})
+	return world
 }
 
-func (p *Players) getPlayer(id string) *Player {
-	if v, ok := p.idInMap.Load(id); ok {
-		return v.(*Player)
+func (w *World) sendFromGatewayMsgChan(msg *command.ClientPlayerMsgData) {
+	w.fromGatewayMsgChan <- msg
+}
+
+func (w *World) loop() {
+	for {
+		select {
+		case msg := <-w.fromGatewayMsgChan:
+			player := WorldGetMe().getPlayer(msg.PlayerId)
+			if player != nil {
+				player.addPlayerChanMsg(msg.Data)
+			}
+		}
 	}
-	return nil
 }
 
-func (p *Players) addPlayer(id string, player *Player) {
-	p.idInMap.Store(id, player)
-}
-
-func (p *Players) deletePlayer(id string) {
-	p.idInMap.Delete(id)
-}
-
-func GetPlayer(id string) *Player {
-	return _player.getPlayer(id)
-}
-
-func (player *Player)AddPlayer(id string, player *Player) {
-	_player.addPlayer(id, player)
-	glog.Infof("addPlayer id = %v", id)
-}
-
-func DeletePlayer(id string) {
-	_player.deletePlayer(id)
-	glog.Infof("deletePlayer id = %v", id)
+func (w *World) getPlayer(playerId uint64) *Player {
+	player, ok := w.players.Load(playerId)
+	if !ok {
+		return nil
+	}
+	return player.(*Player)
 }
