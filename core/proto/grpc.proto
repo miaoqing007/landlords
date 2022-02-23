@@ -10,7 +10,7 @@ service OnlinePvp {
 }
 
 service GatewayOnline{
-    rpc GatewayOnlineStream(stream ServerPlayerMsgData) returns (stream ClientPlayerMsgData){};
+    rpc GatewayOnlineStream(stream ClientPlayerMsgData) returns (stream  ServerPlayerMsgData){};
 }
 
 //

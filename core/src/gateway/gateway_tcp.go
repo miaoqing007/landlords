@@ -5,22 +5,17 @@ import (
 )
 
 type TcpConn struct {
-	conn             *net.TCPConn
-	onlineStreamAddr string
-	msgChannel       chan []byte //发送给玩家消息队列
-	clientAddr       string      //client地址
-	//router           *router.Router
+	conn       *net.TCPConn
+	msgChannel chan []byte //发送给玩家消息队列
+	clientAddr string      //client地址
 }
 
-func newTcpConn(conn *net.TCPConn, onlineStreamAddr string) *TcpConn {
+func newTcpConn(conn *net.TCPConn) *TcpConn {
 	tcpConn := &TcpConn{
-		conn:             conn,
-		msgChannel:       make(chan []byte, 64),
-		clientAddr:       conn.RemoteAddr().String(),
-		onlineStreamAddr: onlineStreamAddr,
-		//router:           router.NewRouter(),
+		conn:       conn,
+		msgChannel: make(chan []byte, 64),
+		clientAddr: conn.RemoteAddr().String(),
 	}
-	//tcpConn.registerTcpHandler()
 	return tcpConn
 }
 
@@ -29,9 +24,9 @@ func (tcpConn *TcpConn) addMsgChannel(data []byte) {
 }
 
 func (tcpConn *TcpConn) onMessage(data []byte) {
-	onlineStream := tcpServer().getOnlineStream(tcpConn.onlineStreamAddr)
+	onlineStream := tcpServer().dialStream
 	if onlineStream == nil {
 		return
 	}
-	onlineStream.addToOnlineMsg(data)
+	onlineStream.addMsgChannel(data, tcpConn.clientAddr)
 }

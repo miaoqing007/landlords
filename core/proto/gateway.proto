@@ -3,8 +3,9 @@ syntax = "proto3";
 package command;
 
 message ClientPlayerMsgData{
-    uint64 playerId=1;
-    bytes Data=2;
+     uint64 playerId=1;
+     bytes data=2;
+     string clientAddr=3;
 }
 
 message GatewayMsgToOnline{

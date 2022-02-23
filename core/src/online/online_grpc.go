@@ -1,87 +1,97 @@
 package main
 
 import (
-	"context"
 	command "core/command/pb"
-	"core/component/router"
-	"fmt"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/peer"
 	"io"
+	"net"
 )
 
-type GRPCStream struct {
-	client       command.GatewayOnlineClient
-	msgChannel   chan *command.ServerPlayerMsgData
-	recvChannel  chan *command.ClientPlayerMsgData
-	closeChannel chan bool
-	router       *router.Router
+type server struct {
+	tcpSrv *TcpServer
 }
 
-func newGRPCStream(client command.GatewayOnlineClient) *GRPCStream {
-	gs := &GRPCStream{
-		client:       client,
-		msgChannel:   make(chan *command.ServerPlayerMsgData, 1024),
-		recvChannel:  make(chan *command.ClientPlayerMsgData, 1024),
-		closeChannel: make(chan bool, 0),
-		router:       router.NewRouter(),
-	}
-	go gs.loop()
-	return gs
-}
-
-func (gs *GRPCStream) close() {
-	gs.closeChannel <- true
-}
-
-func (gs *GRPCStream) loop() {
-	for {
-		select {
-		case msg := <-gs.recvChannel:
-			WorldGetMe().sendFromGatewayMsgChan(msg)
-		case <-gs.closeChannel:
-			return
-		}
+func newServer() *server {
+	return &server{
+		tcpSrv: newTcpServer(),
 	}
 }
 
-func (gs *GRPCStream) addRecvChannel(msg *command.ClientPlayerMsgData) {
-	gs.recvChannel <- msg
+type OnlineStreamInfo struct {
+	onlineStream command.GatewayOnline_GatewayOnlineStreamServer
+	toGatewayMsgChan chan *command.ServerPlayerMsgData //online-->gateway-->client
+	addr             string                            //
 }
 
-func (gs *GRPCStream) openStream() {
-	stream, err := gs.client.GatewayOnlineStream(context.Background())
+func newGatewayInfo(streamServer command.GatewayOnline_GatewayOnlineStreamServer) *OnlineStreamInfo {
+	gateway := &OnlineStreamInfo{
+		toGatewayMsgChan: make(chan *command.ServerPlayerMsgData, 1024),
+		onlineStream:     streamServer,
+	}
+	return gateway
+}
+
+func (g *OnlineStreamInfo) addToGatewayMsg(data []byte, clientAddr string) {
+	g.toGatewayMsgChan <- &command.ServerPlayerMsgData{Data: data, ClientAddr: clientAddr}
+}
+
+
+func (g *OnlineStreamInfo) getRemoteAddr() string {
+	pr, ok := peer.FromContext(g.onlineStream.Context())
+	if !ok {
+		return ""
+	}
+	if pr.Addr == net.Addr(nil) {
+		return ""
+	}
+	return pr.Addr.String()
+}
+
+func runGatewayOnlineGRPC() {
+	tcpAddr, err := net.ResolveTCPAddr("tcp", "127.0.0.1:9999")
 	if err != nil {
 		return
 	}
-	defer func() {
-		gs.close()
-	}()
-	go func() {
-		for {
-			select {
-			case msg := <-gs.msgChannel:
-				stream.Send(msg)
-			}
+	listener, err := net.ListenTCP("tcp", tcpAddr)
+	if err != nil {
+		return
+	}
+	defer listener.Close()
+	s := grpc.NewServer()
+	ins := newServer()
+	command.RegisterGatewayOnlineServer(s, ins)
+	s.Serve(listener)
+}
+
+func (s *server) GatewayOnlineStream(streamServer command.GatewayOnline_GatewayOnlineStreamServer) error {
+	gatewayInfo := newGatewayInfo(streamServer)
+	s.tcpSrv.addOnlineStream(gatewayInfo)
+	go s.send(gatewayInfo)
+	s.recv(gatewayInfo)
+	return nil
+}
+
+func (s *server) send(onlineStream *OnlineStreamInfo) {
+	for {
+		out, ok := <-onlineStream.toGatewayMsgChan
+		if !ok {
+			return
 		}
+		onlineStream.onlineStream.Send(out)
+	}
+}
+
+func (s *server) recv(onlineStreamInfo *OnlineStreamInfo) {
+	defer func() {
+		s.tcpSrv.delOnlineStream(onlineStreamInfo)
 	}()
 	for {
-		msg, err := stream.Recv()
+		out, err := onlineStreamInfo.onlineStream.Recv()
 		if err == io.EOF || err != nil {
 			return
 		}
-		gs.addRecvChannel(msg)
+		WorldGetMe().addPlayer(out.PlayerId, out.ClientAddr, onlineStreamInfo.getRemoteAddr())
+		WorldGetMe().sendFromGatewayMsgChan(out)
 	}
-}
-
-func runGRPCDial(addr string) {
-	conn, err := grpc.Dial(addr, grpc.WithInsecure())
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-	client := command.NewGatewayOnlineClient(conn)
-
-	gs := newGRPCStream(client)
-
-	gs.openStream()
 }

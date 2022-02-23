@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	command "core/command/pb"
 	"fmt"
 	"github.com/golang/glog"
 	"log"
@@ -12,15 +13,14 @@ import (
 var tServer *TcpServer
 
 type TcpServer struct {
-	tcpConnects        map[string]*TcpConn          //tcp连接
-	onlineGatewayInfos map[string]*OnlineStreamInfo //grpc流
+	tcpConnects map[string]*TcpConn //tcp连接
+	dialStream  *GRPCStream
 	sync.RWMutex
 }
 
 func newTcpServer() *TcpServer {
 	tcpServer := &TcpServer{
-		tcpConnects:        make(map[string]*TcpConn),
-		onlineGatewayInfos: make(map[string]*OnlineStreamInfo),
+		tcpConnects: make(map[string]*TcpConn),
 	}
 	tServer = tcpServer
 	return tcpServer
@@ -30,42 +30,17 @@ func tcpServer() *TcpServer {
 	return tServer
 }
 
-func (tcpSrv *TcpServer) getOnlineStream(addr string) *OnlineStreamInfo {
-	if gatewayInfo, ok := tcpSrv.onlineGatewayInfos[addr]; ok {
-		return gatewayInfo
-	}
-	return nil
-}
-
 func (tcpSrv *TcpServer) addConnMsg(addr string, data []byte) {
 	if conn, ok := tcpSrv.tcpConnects[addr]; ok {
 		conn.msgChannel <- data
 	}
 }
 
-//添加online grpc stream
-func (tcpSrv *TcpServer) addOnlineStream(info *OnlineStreamInfo) {
-	if _, ok := tcpSrv.onlineGatewayInfos[info.getRemoteAddr()]; ok {
-		return
-	}
-	tcpSrv.onlineGatewayInfos[info.getRemoteAddr()] = info
-	log.Printf("添加grpc连接online--gateway %v", info.getRemoteAddr())
-}
-
-//删除online grpc stream
-func (tcpSrv *TcpServer) delOnlineStream(info *OnlineStreamInfo) {
-	if _, ok := tcpSrv.onlineGatewayInfos[info.getRemoteAddr()]; !ok {
-		return
-	}
-	delete(tcpSrv.onlineGatewayInfos, info.getRemoteAddr())
-	log.Printf("删除grpc连接online--gateway %v", info.getRemoteAddr())
-}
-
 func (tcpSrv *TcpServer) addTcpConn(conn *net.TCPConn) *TcpConn {
 	if tconn, ok := tcpSrv.tcpConnects[conn.RemoteAddr().String()]; ok {
 		return tconn
 	}
-	tconn := newTcpConn(conn, tcpSrv.randAnOnlineStreamAddr())
+	tconn := newTcpConn(conn)
 	tcpSrv.RLock()
 	tcpSrv.tcpConnects[tconn.clientAddr] = tconn
 	tcpSrv.RUnlock()
@@ -80,11 +55,8 @@ func (tcpSrv *TcpServer) delTcpConn(addr string) {
 	log.Printf("移除tcp连接 %v", addr)
 }
 
-func (tcpSrv *TcpServer) randAnOnlineStreamAddr() string {
-	for _, onlineStream := range tcpSrv.onlineGatewayInfos {
-		return onlineStream.getRemoteAddr()
-	}
-	return ""
+func (tcpSrv *TcpServer) addRecvChannel(msg *command.ServerPlayerMsgData) {
+	tcpSrv.dialStream.recvChannel <- msg
 }
 
 func (tcpSrv *TcpServer) getTcpConn(connAddr string) *TcpConn {
@@ -108,7 +80,7 @@ func run(addr string) {
 	tcpSrv := newTcpServer()
 
 	//grpc
-	go runGatewayOnlineGRPC(tcpSrv)
+	go runGRPCDial("127.0.0.1:9999", tcpSrv)
 
 	for {
 		conn, err := listener.AcceptTCP()
