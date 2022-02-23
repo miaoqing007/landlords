@@ -2,30 +2,80 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ca9b2a2f-39cd-4201-b7fe-3e407942b000" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/make_proto.bat" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/proto/game.proto" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/agentservice/agentservice.go" beforeDir="false" afterPath="$PROJECT_DIR$/agentservice/agentservice.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/enmu/enmu.go" beforeDir="false" afterPath="$PROJECT_DIR$/enmu/enmu.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LICENSE" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/agentservice/agentservice.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/agentservice/service.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client_handler/api.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client_handler/centerHandle.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client_handler/gameHandle.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client_handler/heatHandle.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client_handler/loginHandle.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client_handler/userHandle.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/client_proto/proto.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/command/pb/game.pb.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/command/router/router.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/config/config.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/proto/grpc.proto" beforeDir="false" afterPath="$PROJECT_DIR$/core/proto/grpc.proto" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/proto/online.proto" beforeDir="false" afterPath="$PROJECT_DIR$/core/proto/online.proto" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/command/pb/grpc.pb.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/command/pb/grpc.pb.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/command/pb/online.pb.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/command/pb/online.pb.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/component/router/router.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/component/router/router.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/gateway/gateway.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/gateway/gateway_server.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/gateway/gateway_grpc.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/gateway/gateway_grpc.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/gateway/gateway_processor.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/gateway/gateway_processor.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/gateway/gateway_tcp.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/gateway/gateway_tcp.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/gateway/msg_register.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/gateway/msg_register.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/online/online_grpc.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/online/online_grpc.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/online/player.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/online/player.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/online/world.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/online/world.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/enmu/enmu.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/gameconfig.ini" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/helper/common/common.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/helper/conv/convHelper.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/helper/encryption/encryption.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/helper/redisgo/helper.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/helper/redisgo/redis.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/helper/stack/stackHelper.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/helper/util/util.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/helper/uuid/uuid.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/initcards/initcard.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/landlords" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/log/log.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/log/log_dir.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/main.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/make_proto.bat" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/manager/loginManager.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/manager/msg_register.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/manager/player.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/manager/playerManager.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/manager/player_processor.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/manager/pvpManager.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/manager/roomManager.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/manager/userManager.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/misc/packet/pack.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/misc/packet/packet.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/model/userModel.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/pm.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/user.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/obj/wsMessage.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/operatecard/operatecard.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/proto/command.proto" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/proto/game.proto" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/redis/redis.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/registry/registry.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/session/session.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/signal/signal.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/tempFile/tempfile.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/websocket/websocket.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/wsconnection/conection.go" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
-  </component>
-  <component name="DatabaseView">
-    <option name="SHOW_INTERMEDIATE" value="true" />
-    <option name="GROUP_DATA_SOURCES" value="true" />
-    <option name="GROUP_SCHEMA" value="true" />
-    <option name="GROUP_CONTENTS" value="false" />
-    <option name="SORT_POSITIONED" value="false" />
-    <option name="SHOW_EMPTY_GROUPS" value="false" />
-    <option name="AUTO_SCROLL_FROM_SOURCE" value="false" />
-    <option name="HIDDEN_KINDS">
-      <set />
-    </option>
-    <expand />
-    <select />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -35,18 +85,7 @@
       </list>
     </option>
   </component>
-  <component name="FindInProjectRecents">
-    <findStrings>
-      <find>'upgrade' token not found in 'Connection' header</find>
-      <find>获取消息出现错误 连接已经关闭</find>
-      <find>Push</find>
-      <find>ai</find>
-      <find>O</find>
-      <find>ile</find>
-      <find>o</find>
-    </findStrings>
-  </component>
-  <component name="GOROOT" path="C:\Go" />
+  <component name="GOROOT" path="C:/Program Files/Go" />
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
     <option name="RECENT_BRANCH_BY_REPOSITORY">
@@ -76,23 +115,26 @@
     <property name="go.import.settings.migrated" value="true" />
     <property name="go.sdk.automatically.set" value="true" />
     <property name="go.vendoring.notification.had.been.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/proto" />
-    <property name="settings.editor.selected.configurable" value="go.vgo" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/core/src/gateway" />
+    <property name="settings.editor.selected.configurable" value="go.sdk" />
   </component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
-      <recent name="D:\workspace\Go\src\landlords\wsconnection" />
-      <recent name="D:\workspace\Go\src\landlords\websocket" />
-      <recent name="D:\workspace\Go\src\landlords\agentservice" />
-      <recent name="D:\workspace\Go\src\landlords" />
+      <recent name="E:\workspace\Go\src\landlords\core\src\network" />
+      <recent name="E:\workspace\Go\src\landlords\core\src\gateway" />
+      <recent name="E:\workspace\Go\src\landlords\core\src\component" />
+      <recent name="E:\workspace\Go\src\landlords\core\src" />
+      <recent name="E:\workspace\Go\src\landlords\core" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\workspace\Go\src\landlords\core\src\gateway" />
+      <recent name="E:\workspace\Go\src\landlords\core\src\network" />
+      <recent name="E:\workspace\Go\src\landlords\core\src\pvp" />
       <recent name="E:\workspace\Go\src\landlords\proto" />
       <recent name="D:\workspace\Go\src\landlords\client_proto" />
-      <recent name="D:\workspace\Go\src\landlords\client_handler" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="Go Build.go build core/online">
     <configuration default="true" type="GoApplicationRunConfiguration" factoryName="Go Application">
       <module name="Landlords" />
       <working_directory value="$PROJECT_DIR$/" />
@@ -103,12 +145,39 @@
       <directory value="$PROJECT_DIR$/" />
       <method v="2" />
     </configuration>
-    <configuration name="go build main.go" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
+    <configuration name="go build core/gateway" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
       <module name="Landlords" />
-      <working_directory value="$PROJECT_DIR$/" />
-      <kind value="FILE" />
-      <filePath value="$PROJECT_DIR$/main.go" />
-      <package value="Landlords" />
+      <working_directory value="$PROJECT_DIR$/core/src" />
+      <kind value="PACKAGE" />
+      <filePath value="$PROJECT_DIR$/core/src/gateway/main.go" />
+      <package value="core/gateway" />
+      <directory value="$PROJECT_DIR$/" />
+      <method v="2" />
+    </configuration>
+    <configuration name="go build core/online" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
+      <module name="Landlords" />
+      <working_directory value="$PROJECT_DIR$/core/src" />
+      <kind value="PACKAGE" />
+      <filePath value="$PROJECT_DIR$/core/src/online/main.go" />
+      <package value="core/online" />
+      <directory value="$PROJECT_DIR$/" />
+      <method v="2" />
+    </configuration>
+    <configuration name="go build pvp" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true">
+      <module name="Landlords" />
+      <working_directory value="$PROJECT_DIR$/core" />
+      <kind value="PACKAGE" />
+      <filePath value="$PROJECT_DIR$/core/src/pvp/main.go" />
+      <package value="landlords/src/pvp" />
+      <directory value="$PROJECT_DIR$/" />
+      <method v="2" />
+    </configuration>
+    <configuration name="go build pvp" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true">
+      <module name="Landlords" />
+      <working_directory value="$PROJECT_DIR$/core/src" />
+      <kind value="PACKAGE" />
+      <filePath value="$PROJECT_DIR$/core/src/pvp/main.go" />
+      <package value="core/pvp" />
       <directory value="$PROJECT_DIR$/" />
       <method v="2" />
     </configuration>
@@ -123,9 +192,17 @@
       <filePath value="$PROJECT_DIR$/" />
       <method v="2" />
     </configuration>
+    <list>
+      <item itemvalue="Go Build.go build pvp" />
+      <item itemvalue="Go Build.go build core/gateway" />
+      <item itemvalue="Go Build.go build core/online" />
+    </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Go Build.go build main.go" />
+        <item itemvalue="Go Build.go build core/online" />
+        <item itemvalue="Go Build.go build core/gateway" />
+        <item itemvalue="Go Build.go build pvp" />
+        <item itemvalue="Go Build.go build pvp" />
       </list>
     </recent_temporary>
   </component>
@@ -166,6 +243,7 @@
       <path value="$PROJECT_DIR$/src/app/vendor/github.com/xtaci/kcp-go" />
       <path value="$PROJECT_DIR$/src/app/vendor/golang.org/x/crypto" />
       <path value="$PROJECT_DIR$/src/app/vendor/golang.org/x/net" />
+      <path value="$PROJECT_DIR$/core" />
     </ignored-roots>
     <MESSAGE value="create" />
     <MESSAGE value="landlors_tcp" />
@@ -182,41 +260,100 @@
     <proxy>https://goproxy.cn,direct</proxy>
   </component>
   <component name="WindowStateProjectService">
+    <state x="2672" y="450" key="#GOROOT" timestamp="1645433384325">
+      <screen x="1920" y="0" width="1920" height="1040" />
+    </state>
+    <state x="2672" y="450" key="#GOROOT/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1645433384325" />
+    <state x="414" y="174" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1645532466558">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="414" y="174" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1645532466558" />
+    <state x="2334" y="174" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1645495990994" />
     <state x="2609" y="320" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1644828525948">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="2609" y="320" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1644828525948" />
-    <state width="1877" height="348" key="GridCell.Tab.0.bottom" timestamp="1644821083630">
+    <state width="596" height="466" key="DebuggerActiveHint" timestamp="1645514154838">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="348" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1644821083630" />
-    <state width="1877" height="348" key="GridCell.Tab.0.center" timestamp="1644821083630">
+    <state width="596" height="466" key="DebuggerActiveHint/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1645514154838" />
+    <state x="2660" y="274" key="FileChooserDialogImpl" timestamp="1645434264538">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="348" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1644821083630" />
-    <state width="1877" height="348" key="GridCell.Tab.0.left" timestamp="1644821083630">
+    <state x="2660" y="274" key="FileChooserDialogImpl/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1645434264538" />
+    <state width="1877" height="258" key="GridCell.Tab.0.bottom" timestamp="1645533979245">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="258" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1645533979245" />
+    <state width="1877" height="211" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1645525191245" />
+    <state width="1877" height="258" key="GridCell.Tab.0.center" timestamp="1645533979245">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="258" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1645533979245" />
+    <state width="1877" height="211" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1645525191245" />
+    <state width="1877" height="258" key="GridCell.Tab.0.left" timestamp="1645533979245">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="258" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1645533979245" />
+    <state width="1877" height="211" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1645525191245" />
+    <state width="1877" height="258" key="GridCell.Tab.0.right" timestamp="1645533979245">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="258" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1645533979245" />
+    <state width="1877" height="211" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1645525191245" />
+    <state width="1877" height="258" key="GridCell.Tab.1.bottom" timestamp="1645533979245">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="258" key="GridCell.Tab.1.bottom/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1645533979245" />
+    <state width="1877" height="220" key="GridCell.Tab.1.bottom/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1645524741512" />
+    <state width="1877" height="258" key="GridCell.Tab.1.center" timestamp="1645533979245">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="258" key="GridCell.Tab.1.center/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1645533979245" />
+    <state width="1877" height="220" key="GridCell.Tab.1.center/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1645524741512" />
+    <state width="1877" height="258" key="GridCell.Tab.1.left" timestamp="1645533979245">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="258" key="GridCell.Tab.1.left/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1645533979245" />
+    <state width="1877" height="220" key="GridCell.Tab.1.left/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1645524741512" />
+    <state width="1877" height="258" key="GridCell.Tab.1.right" timestamp="1645533979245">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state width="1877" height="258" key="GridCell.Tab.1.right/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1645533979245" />
+    <state width="1877" height="220" key="GridCell.Tab.1.right/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1645524741512" />
+    <state x="2381" y="164" key="SettingsEditor" timestamp="1645439615330">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="348" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1644821083630" />
-    <state width="1877" height="348" key="GridCell.Tab.0.right" timestamp="1644821083630">
+    <state x="2381" y="164" key="SettingsEditor/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1645439615330" />
+    <state x="504" y="248" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2" timestamp="1645533270222">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="504" y="248" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1645533270222" />
+    <state x="2424" y="248" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1645519791833" />
+    <state x="337" y="0" width="1599" height="652" key="dock-window-1" timestamp="1645525247441">
+      <screen x="0" y="0" width="1920" height="1040" />
+    </state>
+    <state x="337" y="0" width="1599" height="652" key="dock-window-1/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1645525247441" />
+    <state x="1920" y="0" width="1599" height="789" maximized="true" key="dock-window-2" timestamp="1645532552398">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="348" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1644821083630" />
-    <state width="1877" height="348" key="GridCell.Tab.1.bottom" timestamp="1644821083630">
-      <screen x="1920" y="0" width="1920" height="1040" />
+    <state x="1920" y="0" width="1599" height="789" maximized="true" key="dock-window-2/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1645532552398" />
+    <state x="664" y="256" width="598" height="532" key="find.popup" timestamp="1645586702520">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="348" key="GridCell.Tab.1.bottom/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1644821083630" />
-    <state width="1877" height="348" key="GridCell.Tab.1.center" timestamp="1644821083630">
-      <screen x="1920" y="0" width="1920" height="1040" />
+    <state x="664" y="256" width="598" height="532" key="find.popup/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1645586702520" />
+    <state x="2584" y="256" width="598" height="532" key="find.popup/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1645449155040" />
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1645601176699">
+      <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state width="1877" height="348" key="GridCell.Tab.1.center/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1644821083630" />
-    <state width="1877" height="348" key="GridCell.Tab.1.left" timestamp="1644821083630">
-      <screen x="1920" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1877" height="348" key="GridCell.Tab.1.left/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1644821083630" />
-    <state width="1877" height="348" key="GridCell.Tab.1.right" timestamp="1644821083630">
-      <screen x="1920" y="0" width="1920" height="1040" />
-    </state>
-    <state width="1877" height="348" key="GridCell.Tab.1.right/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1644821083630" />
+    <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1645601176699" />
+    <state x="2543" y="225" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1645525190244" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <default-breakpoints>
+        <breakpoint type="DlvErrorBreakpoint" />
+      </default-breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

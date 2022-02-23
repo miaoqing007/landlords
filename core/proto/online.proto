@@ -5,3 +5,9 @@ package command;
 message CSStartGameOnline{
    uint32 roomId =1;
 }
+
+message ServerPlayerMsgData{
+    uint64 playerId=1;
+    bytes data=2;
+    string clientAddr=3;
+}

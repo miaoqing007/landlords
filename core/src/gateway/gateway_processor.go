@@ -1,27 +1,28 @@
 package main
 
-//func (tcpSrv *TcpServer) msgToOnline(msgId uint16, data []byte) {
-//	msgRecv := &command.GatewayMsgToOnline{}
-//	err := tcpSrv.router.UnMarshal(data, msgRecv)
+//
+//func (conn *TcpConn) msgToOnline(msgId uint16, data []byte) {
+//	msgRecv := &command.ClientPlayerMsgData{}
+//	err := conn.router.UnMarshal(data, msgRecv)
 //	if err != nil {
 //		return
 //	}
-//	onlineStream, ok := tcpSrv.onlineStreams[msgRecv.RemoteAddr]
-//	if !ok {
+//	onineStream := tcpServer().getOnlineStream(conn.onlineStreamAddr)
+//	if onineStream == nil {
 //		return
 //	}
-//	onlineStream.addSendClientMsgChan(msgRecv.Data)
+//	onineStream.addToClientMsg(msgRecv)
 //}
 //
-//func (tcpSrv *TcpServer) msgToGateway(msgId uint16, data []byte) {
-//	msgRecv := &command.OnlineMsgToGateway{}
-//	err := tcpSrv.router.UnMarshal(data, msgRecv)
+//func (conn *TcpConn) msgToGateway(msgId uint16, data []byte) {
+//	msgRecv := &command.ClientPlayerMsgData{}
+//	err := conn.router.UnMarshal(data, msgRecv)
 //	if err != nil {
 //		return
 //	}
-//	tcpConn, ok := tcpSrv.tcpConnects[msgRecv.RemoteAddr]
-//	if !ok {
-//		return
-//	}
-//	tcpConn.addMsgChannel(msgRecv.Data)
+//	//tcpConn, ok := tcpServer().tcpConnects[conn.ipAddr]
+//	//if !ok {
+//	//	return
+//	//}
+//	conn.addMsgChannel(msgRecv.Data)
 //}

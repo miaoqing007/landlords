@@ -3,13 +3,14 @@ syntax = "proto3";
 package command;
 
 import "gateway.proto";
+import "online.proto";
 
 service OnlinePvp {
     rpc OnlinePvpStream(stream Online2PvpInfo) returns (stream Pvp2OnlineInfo){};
 }
 
 service GatewayOnline{
-    rpc GatewayOnlineStream(stream ClientPlayerMsgData) returns (stream ClientPlayerMsgData){};
+    rpc GatewayOnlineStream(stream ServerPlayerMsgData) returns (stream ClientPlayerMsgData){};
 }
 
 //

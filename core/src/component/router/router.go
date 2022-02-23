@@ -76,7 +76,7 @@ func (r *Router) Register(msgId uint16, msgHandler MsgHandler) bool {
 	return true
 }
 
-func (r *Router) RegisterGatewayOnline(msgId uint16, msgHandler GatewayOnlineHandler) bool {
+func (r *Router) RegisterGRPCTCP(msgId uint16, msgHandler GatewayOnlineHandler) bool {
 	if handler, ok := r.gatewayOnlineHandler[msgId]; ok {
 		glog.Errorf("error", handler)
 		return false

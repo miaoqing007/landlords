@@ -3,19 +3,56 @@ package main
 import (
 	command "core/command/pb"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/peer"
 	"io"
 	"net"
 )
 
 type server struct {
-	tcpServer *TcpServer
+	tcpSrv *TcpServer
 }
 
-func newServer(tcpServer *TcpServer) *server {
-	srv := &server{
-		tcpServer: tcpServer,
+func newServer(tcpSrv *TcpServer) *server {
+	return &server{
+		tcpSrv: tcpSrv,
 	}
-	return srv
+}
+
+type OnlineStreamInfo struct {
+	onlineStream command.GatewayOnline_GatewayOnlineStreamServer
+	//toClientMsgChan chan []byte                       //online-->grpc-->client
+	toOnlineMsgChan chan *command.ClientPlayerMsgData //client-->grpc-->online
+	addr            string                            //
+	//router          *router.Router
+}
+
+func newGatewayInfo(streamServer command.GatewayOnline_GatewayOnlineStreamServer) *OnlineStreamInfo {
+	gateway := &OnlineStreamInfo{
+		//toClientMsgChan: make(chan []byte, 1024),
+		toOnlineMsgChan: make(chan *command.ClientPlayerMsgData, 1024),
+		onlineStream:    streamServer,
+		//router:          router.NewRouter(),
+	}
+	return gateway
+}
+
+func (g *OnlineStreamInfo) addToOnlineMsg(data []byte) {
+	g.toOnlineMsgChan <- &command.ClientPlayerMsgData{Data: data}
+}
+
+//func (g *OnlineStreamInfo) addToClientMsg(data []byte) {
+//	g.toClientMsgChan <- data
+//}
+
+func (g *OnlineStreamInfo) getRemoteAddr() string {
+	pr, ok := peer.FromContext(g.onlineStream.Context())
+	if !ok {
+		return ""
+	}
+	if pr.Addr == net.Addr(nil) {
+		return ""
+	}
+	return pr.Addr.String()
 }
 
 func runGatewayOnlineGRPC(tcpSrv *TcpServer) {
@@ -35,34 +72,35 @@ func runGatewayOnlineGRPC(tcpSrv *TcpServer) {
 }
 
 func (s *server) GatewayOnlineStream(streamServer command.GatewayOnline_GatewayOnlineStreamServer) error {
-
 	gatewayInfo := newGatewayInfo(streamServer)
-	s.tcpServer.addOnlineStream(gatewayInfo)
-
+	s.tcpSrv.addOnlineStream(gatewayInfo)
 	go s.send(gatewayInfo)
 	s.recv(gatewayInfo)
 	return nil
 }
 
-func (s *server) send(gatewayInfo *GatewayInfo) {
+func (s *server) send(onlineStream *OnlineStreamInfo) {
 	for {
-		out, ok := <-gatewayInfo.sendClientMsgChan
+		out, ok := <-onlineStream.toOnlineMsgChan
 		if !ok {
 			return
 		}
-		gatewayInfo.onlineStream.Send(out)
+		onlineStream.onlineStream.Send(out)
 	}
 }
 
-func (s *server) recv(gatewayInfo *GatewayInfo) {
+func (s *server) recv(onlineStreamInfo *OnlineStreamInfo) {
 	defer func() {
-		s.tcpServer.delOnlineStream(gatewayInfo)
+		s.tcpSrv.delOnlineStream(onlineStreamInfo)
 	}()
 	for {
-		out, err := gatewayInfo.onlineStream.Recv()
+		out, err := onlineStreamInfo.onlineStream.Recv()
 		if err == io.EOF || err != nil {
 			return
 		}
-		s.tcpServer.addConnMsg(gatewayInfo.getRemoteAddr(), out.Data)
+		tconn := s.tcpSrv.getTcpConn(out.ClientAddr)
+		if tconn != nil {
+			tconn.addMsgChannel(out.Data)
+		}
 	}
 }

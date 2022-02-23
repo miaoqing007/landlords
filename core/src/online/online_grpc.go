@@ -11,7 +11,7 @@ import (
 
 type GRPCStream struct {
 	client       command.GatewayOnlineClient
-	msgChannel   chan *command.ClientPlayerMsgData
+	msgChannel   chan *command.ServerPlayerMsgData
 	recvChannel  chan *command.ClientPlayerMsgData
 	closeChannel chan bool
 	router       *router.Router
@@ -20,12 +20,12 @@ type GRPCStream struct {
 func newGRPCStream(client command.GatewayOnlineClient) *GRPCStream {
 	gs := &GRPCStream{
 		client:       client,
-		msgChannel:   make(chan *command.ClientPlayerMsgData, 64),
-		recvChannel:  make(chan *command.ClientPlayerMsgData, 64),
+		msgChannel:   make(chan *command.ServerPlayerMsgData, 1024),
+		recvChannel:  make(chan *command.ClientPlayerMsgData, 1024),
 		closeChannel: make(chan bool, 0),
 		router:       router.NewRouter(),
 	}
-	gs.loop()
+	go gs.loop()
 	return gs
 }
 

@@ -19,7 +19,7 @@ func WorldGetMe() *World {
 	worldOnce.Do(func() {
 		world = &World{
 			players:            sync.Map{},
-			fromGatewayMsgChan: make(chan *command.ClientPlayerMsgData, 64),
+			fromGatewayMsgChan: make(chan *command.ClientPlayerMsgData, 1024),
 		}
 		world.loop()
 	})

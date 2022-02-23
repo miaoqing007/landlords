@@ -47,6 +47,7 @@ func (player *Player) onMessage(data []byte) {
 func (player *Player) init() {
 	player.initBase()
 	player.regMsgHandler()
+	WorldGetMe()
 }
 
 func (player *Player) initBase() error {
