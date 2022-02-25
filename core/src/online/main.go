@@ -1,6 +1,11 @@
 package main
 
+import "core/component/logger"
+
 func main() {
+	logger.SetLogFile("../log/online"+"_"+"1", "online")
+	logger.SetLogLevel("DEBUG")
+
 	runGatewayOnlineGRPC()
 }
 

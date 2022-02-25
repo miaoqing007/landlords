@@ -1,7 +1,11 @@
 package main
 
+import "core/component/logger"
+
 func main() {
-	//run("127.0.0.1:8888")
-	run("127.0.0.1:8888")
+	logger.SetLogFile("../log/gateway"+"_"+"1", "gateway")
+	logger.SetLogLevel("DEBUG")
+
+	runTcpAndGRPC()
 
 }

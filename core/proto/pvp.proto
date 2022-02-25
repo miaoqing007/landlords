@@ -1,3 +1,24 @@
 syntax = "proto3";
 
 package command;
+
+//
+message Online2PvpInfo{
+    bytes data =1;
+    uint64 playerId =2;
+    string addr=3;
+}
+
+//
+message Pvp2OnlineInfo{
+    bytes data =1;
+    uint64 playerId =2;
+}
+
+message CSJoinPvpPool_Pvp{
+    uint64 playerId =1;
+}
+
+message CSExitPvpPool_Pvp{
+    uint64 playerId =1;
+}

@@ -3,52 +3,49 @@ package main
 import (
 	"context"
 	command "core/command/pb"
-	"core/component/router"
-	"fmt"
+	"core/component/logger"
 	"google.golang.org/grpc"
 	"io"
+	"time"
 )
 
-type GRPCStream struct {
-	client       command.GatewayOnlineClient
-	msgChannel   chan *command.ClientPlayerMsgData
-	recvChannel  chan *command.ServerPlayerMsgData
-	closeChannel chan bool
-	router       *router.Router
+type OnlineGRPCStream struct {
+	client             command.GatewayOnlineClient
+	msg2Online         chan *command.ClientPlayerMsgData //gateway-->online
+	isSuccessConnected bool                              //是否已成功连接
 }
 
-func newGRPCStream(client command.GatewayOnlineClient) *GRPCStream {
-	gs := &GRPCStream{
-		client:       client,
-		msgChannel:   make(chan *command.ClientPlayerMsgData, 1024),
-		recvChannel:  make(chan *command.ServerPlayerMsgData, 1024),
-		closeChannel: make(chan bool, 0),
-		router:       router.NewRouter(),
+func newOnlineGRPCStream(client command.GatewayOnlineClient) *OnlineGRPCStream {
+	gs := &OnlineGRPCStream{
+		client:     client,
+		msg2Online: make(chan *command.ClientPlayerMsgData, 1024),
 	}
 	return gs
 }
 
-func (gs *GRPCStream) close() {
-	gs.closeChannel <- true
+func (gs *OnlineGRPCStream) addMsgChannel(data []byte, clientAddr string) {
+	gs.msg2Online <- &command.ClientPlayerMsgData{PlayerId: 123456, Data: data, ClientAddr: clientAddr}
 }
 
-func (gs *GRPCStream) addMsgChannel(data []byte, clientAddr string) {
-	gs.msgChannel <- &command.ClientPlayerMsgData{PlayerId: 123456, Data: data, ClientAddr: clientAddr}
-}
-
-func (gs *GRPCStream) openStream() {
+func (gs *OnlineGRPCStream) openStream() {
 	stream, err := gs.client.GatewayOnlineStream(context.Background())
 	if err != nil {
 		return
 	}
+	gs.isSuccessConnected = true
+	logger.Info("开启grpc流成功 gateway-->online")
 	defer func() {
-		gs.close()
+		gs.isSuccessConnected = false
+		stream.CloseSend()
+		logger.Info("grpc流断开连接 gateway-->online")
 	}()
 	go func() {
 		for {
 			select {
-			case msg := <-gs.msgChannel:
-				stream.Send(msg)
+			case msg := <-gs.msg2Online:
+				if err := stream.Send(msg); err != nil {
+					return
+				}
 			}
 		}
 	}()
@@ -57,23 +54,31 @@ func (gs *GRPCStream) openStream() {
 		if err == io.EOF || err != nil {
 			return
 		}
-		conn := tcpServer().getTcpConn(msg.ClientAddr)
-		if conn != nil {
-			conn.addMsgChannel(msg.Data)
-		}
+		gs.onMessage(msg)
 	}
 }
 
-func runGRPCDial(addr string, tcpSrv *TcpServer) {
+func (gs *OnlineGRPCStream) onMessage(msg *command.ServerPlayerMsgData) {
+	conn := tcpServer().getTcpConn(msg.ClientAddr)
+	if conn != nil {
+		conn.addMsgChannel(msg.Data)
+	}
+}
+
+func runGatewayGRPCDial(addr string, tcpSrv *TcpServer) {
 	conn, err := grpc.Dial(addr, grpc.WithInsecure())
 	if err != nil {
-		fmt.Println(err)
+		logger.Error(err)
 		return
 	}
 	client := command.NewGatewayOnlineClient(conn)
 
-	gs := newGRPCStream(client)
+	gs := newOnlineGRPCStream(client)
 	tcpSrv.dialStream = gs
-
-	gs.openStream()
+	for {
+		if !gs.isSuccessConnected {
+			gs.openStream()
+		}
+		time.Sleep(5 * time.Second)
+	}
 }

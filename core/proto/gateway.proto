@@ -17,3 +17,7 @@ message OnlineMsgToGateway {
     string remoteAddr =1;
     bytes data =2;
 }
+
+message CSPlayerLogin_Gateway{
+    uint64 playerId=1;
+}

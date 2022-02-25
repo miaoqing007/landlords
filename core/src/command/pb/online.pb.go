@@ -20,45 +20,6 @@ var _ = math.Inf
 // proto package needs to be updated.
 const _ = proto.ProtoPackageIsVersion3 // please upgrade the proto package
 
-type CSStartGameOnline struct {
-	RoomId               uint32   `protobuf:"varint,1,opt,name=roomId,proto3" json:"roomId,omitempty"`
-	XXX_NoUnkeyedLiteral struct{} `json:"-"`
-	XXX_unrecognized     []byte   `json:"-"`
-	XXX_sizecache        int32    `json:"-"`
-}
-
-func (m *CSStartGameOnline) Reset()         { *m = CSStartGameOnline{} }
-func (m *CSStartGameOnline) String() string { return proto.CompactTextString(m) }
-func (*CSStartGameOnline) ProtoMessage()    {}
-func (*CSStartGameOnline) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2aeeec9a52ed8e15, []int{0}
-}
-
-func (m *CSStartGameOnline) XXX_Unmarshal(b []byte) error {
-	return xxx_messageInfo_CSStartGameOnline.Unmarshal(m, b)
-}
-func (m *CSStartGameOnline) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
-	return xxx_messageInfo_CSStartGameOnline.Marshal(b, m, deterministic)
-}
-func (m *CSStartGameOnline) XXX_Merge(src proto.Message) {
-	xxx_messageInfo_CSStartGameOnline.Merge(m, src)
-}
-func (m *CSStartGameOnline) XXX_Size() int {
-	return xxx_messageInfo_CSStartGameOnline.Size(m)
-}
-func (m *CSStartGameOnline) XXX_DiscardUnknown() {
-	xxx_messageInfo_CSStartGameOnline.DiscardUnknown(m)
-}
-
-var xxx_messageInfo_CSStartGameOnline proto.InternalMessageInfo
-
-func (m *CSStartGameOnline) GetRoomId() uint32 {
-	if m != nil {
-		return m.RoomId
-	}
-	return 0
-}
-
 type ServerPlayerMsgData struct {
 	PlayerId             uint64   `protobuf:"varint,1,opt,name=playerId,proto3" json:"playerId,omitempty"`
 	Data                 []byte   `protobuf:"bytes,2,opt,name=data,proto3" json:"data,omitempty"`
@@ -72,7 +33,7 @@ func (m *ServerPlayerMsgData) Reset()         { *m = ServerPlayerMsgData{} }
 func (m *ServerPlayerMsgData) String() string { return proto.CompactTextString(m) }
 func (*ServerPlayerMsgData) ProtoMessage()    {}
 func (*ServerPlayerMsgData) Descriptor() ([]byte, []int) {
-	return fileDescriptor_2aeeec9a52ed8e15, []int{1}
+	return fileDescriptor_2aeeec9a52ed8e15, []int{0}
 }
 
 func (m *ServerPlayerMsgData) XXX_Unmarshal(b []byte) error {
@@ -114,24 +75,156 @@ func (m *ServerPlayerMsgData) GetClientAddr() string {
 	return ""
 }
 
+//开始游戏
+type CSStartGame_Online struct {
+	RoomId               uint32   `protobuf:"varint,1,opt,name=roomId,proto3" json:"roomId,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *CSStartGame_Online) Reset()         { *m = CSStartGame_Online{} }
+func (m *CSStartGame_Online) String() string { return proto.CompactTextString(m) }
+func (*CSStartGame_Online) ProtoMessage()    {}
+func (*CSStartGame_Online) Descriptor() ([]byte, []int) {
+	return fileDescriptor_2aeeec9a52ed8e15, []int{1}
+}
+
+func (m *CSStartGame_Online) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_CSStartGame_Online.Unmarshal(m, b)
+}
+func (m *CSStartGame_Online) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_CSStartGame_Online.Marshal(b, m, deterministic)
+}
+func (m *CSStartGame_Online) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CSStartGame_Online.Merge(m, src)
+}
+func (m *CSStartGame_Online) XXX_Size() int {
+	return xxx_messageInfo_CSStartGame_Online.Size(m)
+}
+func (m *CSStartGame_Online) XXX_DiscardUnknown() {
+	xxx_messageInfo_CSStartGame_Online.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CSStartGame_Online proto.InternalMessageInfo
+
+func (m *CSStartGame_Online) GetRoomId() uint32 {
+	if m != nil {
+		return m.RoomId
+	}
+	return 0
+}
+
+//玩家进入Online
+type ClientInOnline_Online struct {
+	PlayerId             uint64   `protobuf:"varint,1,opt,name=playerId,proto3" json:"playerId,omitempty"`
+	ClientAddr           string   `protobuf:"bytes,2,opt,name=clientAddr,proto3" json:"clientAddr,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *ClientInOnline_Online) Reset()         { *m = ClientInOnline_Online{} }
+func (m *ClientInOnline_Online) String() string { return proto.CompactTextString(m) }
+func (*ClientInOnline_Online) ProtoMessage()    {}
+func (*ClientInOnline_Online) Descriptor() ([]byte, []int) {
+	return fileDescriptor_2aeeec9a52ed8e15, []int{2}
+}
+
+func (m *ClientInOnline_Online) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ClientInOnline_Online.Unmarshal(m, b)
+}
+func (m *ClientInOnline_Online) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ClientInOnline_Online.Marshal(b, m, deterministic)
+}
+func (m *ClientInOnline_Online) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ClientInOnline_Online.Merge(m, src)
+}
+func (m *ClientInOnline_Online) XXX_Size() int {
+	return xxx_messageInfo_ClientInOnline_Online.Size(m)
+}
+func (m *ClientInOnline_Online) XXX_DiscardUnknown() {
+	xxx_messageInfo_ClientInOnline_Online.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ClientInOnline_Online proto.InternalMessageInfo
+
+func (m *ClientInOnline_Online) GetPlayerId() uint64 {
+	if m != nil {
+		return m.PlayerId
+	}
+	return 0
+}
+
+func (m *ClientInOnline_Online) GetClientAddr() string {
+	if m != nil {
+		return m.ClientAddr
+	}
+	return ""
+}
+
+//玩家退出online
+type ClientOutOnline_Online struct {
+	PlayerId             uint64   `protobuf:"varint,1,opt,name=playerId,proto3" json:"playerId,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *ClientOutOnline_Online) Reset()         { *m = ClientOutOnline_Online{} }
+func (m *ClientOutOnline_Online) String() string { return proto.CompactTextString(m) }
+func (*ClientOutOnline_Online) ProtoMessage()    {}
+func (*ClientOutOnline_Online) Descriptor() ([]byte, []int) {
+	return fileDescriptor_2aeeec9a52ed8e15, []int{3}
+}
+
+func (m *ClientOutOnline_Online) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_ClientOutOnline_Online.Unmarshal(m, b)
+}
+func (m *ClientOutOnline_Online) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_ClientOutOnline_Online.Marshal(b, m, deterministic)
+}
+func (m *ClientOutOnline_Online) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_ClientOutOnline_Online.Merge(m, src)
+}
+func (m *ClientOutOnline_Online) XXX_Size() int {
+	return xxx_messageInfo_ClientOutOnline_Online.Size(m)
+}
+func (m *ClientOutOnline_Online) XXX_DiscardUnknown() {
+	xxx_messageInfo_ClientOutOnline_Online.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_ClientOutOnline_Online proto.InternalMessageInfo
+
+func (m *ClientOutOnline_Online) GetPlayerId() uint64 {
+	if m != nil {
+		return m.PlayerId
+	}
+	return 0
+}
+
 func init() {
-	proto.RegisterType((*CSStartGameOnline)(nil), "command.CSStartGameOnline")
 	proto.RegisterType((*ServerPlayerMsgData)(nil), "command.ServerPlayerMsgData")
+	proto.RegisterType((*CSStartGame_Online)(nil), "command.CSStartGame_Online")
+	proto.RegisterType((*ClientInOnline_Online)(nil), "command.ClientInOnline_Online")
+	proto.RegisterType((*ClientOutOnline_Online)(nil), "command.ClientOutOnline_Online")
 }
 
 func init() { proto.RegisterFile("online.proto", fileDescriptor_2aeeec9a52ed8e15) }
 
 var fileDescriptor_2aeeec9a52ed8e15 = []byte{
-	// 164 bytes of a gzipped FileDescriptorProto
+	// 198 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0xe2, 0xc9, 0xcf, 0xcb, 0xc9,
 	0xcc, 0x4b, 0xd5, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0x62, 0x4f, 0xce, 0xcf, 0xcd, 0x4d, 0xcc,
-	0x4b, 0x51, 0xd2, 0xe6, 0x12, 0x74, 0x0e, 0x0e, 0x2e, 0x49, 0x2c, 0x2a, 0x71, 0x4f, 0xcc, 0x4d,
-	0xf5, 0x07, 0xab, 0x11, 0x12, 0xe3, 0x62, 0x2b, 0xca, 0xcf, 0xcf, 0xf5, 0x4c, 0x91, 0x60, 0x54,
-	0x60, 0xd4, 0xe0, 0x0d, 0x82, 0xf2, 0x94, 0x52, 0xb9, 0x84, 0x83, 0x53, 0x8b, 0xca, 0x52, 0x8b,
-	0x02, 0x72, 0x12, 0x2b, 0x53, 0x8b, 0x7c, 0x8b, 0xd3, 0x5d, 0x12, 0x4b, 0x12, 0x85, 0xa4, 0xb8,
-	0x38, 0x0a, 0xc0, 0x02, 0x50, 0x0d, 0x2c, 0x41, 0x70, 0xbe, 0x90, 0x10, 0x17, 0x4b, 0x4a, 0x62,
-	0x49, 0xa2, 0x04, 0x93, 0x02, 0xa3, 0x06, 0x4f, 0x10, 0x98, 0x2d, 0x24, 0xc7, 0xc5, 0x95, 0x9c,
-	0x93, 0x99, 0x9a, 0x57, 0xe2, 0x98, 0x92, 0x52, 0x24, 0xc1, 0xac, 0xc0, 0xa8, 0xc1, 0x19, 0x84,
-	0x24, 0x92, 0xc4, 0x06, 0x76, 0xa3, 0x31, 0x20, 0x00, 0x00, 0xff, 0xff, 0x2c, 0xce, 0x61, 0x2b,
-	0xb3, 0x00, 0x00, 0x00,
+	0x4b, 0x51, 0x4a, 0xe5, 0x12, 0x0e, 0x4e, 0x2d, 0x2a, 0x4b, 0x2d, 0x0a, 0xc8, 0x49, 0xac, 0x4c,
+	0x2d, 0xf2, 0x2d, 0x4e, 0x77, 0x49, 0x2c, 0x49, 0x14, 0x92, 0xe2, 0xe2, 0x28, 0x00, 0x0b, 0x78,
+	0xa6, 0x48, 0x30, 0x2a, 0x30, 0x6a, 0xb0, 0x04, 0xc1, 0xf9, 0x42, 0x42, 0x5c, 0x2c, 0x29, 0x89,
+	0x25, 0x89, 0x12, 0x4c, 0x0a, 0x8c, 0x1a, 0x3c, 0x41, 0x60, 0xb6, 0x90, 0x1c, 0x17, 0x57, 0x72,
+	0x4e, 0x66, 0x6a, 0x5e, 0x89, 0x63, 0x4a, 0x4a, 0x91, 0x04, 0xb3, 0x02, 0xa3, 0x06, 0x67, 0x10,
+	0x92, 0x88, 0x92, 0x0e, 0x97, 0x90, 0x73, 0x70, 0x70, 0x49, 0x62, 0x51, 0x89, 0x7b, 0x62, 0x6e,
+	0x6a, 0xbc, 0x3f, 0xd8, 0x2d, 0x42, 0x62, 0x5c, 0x6c, 0x45, 0xf9, 0xf9, 0xb9, 0x50, 0x3b, 0x78,
+	0x83, 0xa0, 0x3c, 0xa5, 0x60, 0x2e, 0x51, 0x67, 0xb0, 0x5e, 0xcf, 0x3c, 0x88, 0x4a, 0x98, 0x06,
+	0x7c, 0xce, 0x42, 0x75, 0x02, 0x13, 0x86, 0x13, 0x4c, 0xb8, 0xc4, 0x20, 0x86, 0xfa, 0x97, 0x96,
+	0x10, 0x6d, 0x6a, 0x12, 0x1b, 0x38, 0xbc, 0x8c, 0x01, 0x01, 0x00, 0x00, 0xff, 0xff, 0xfc, 0xc2,
+	0x00, 0x80, 0x3f, 0x01, 0x00, 0x00,
 }

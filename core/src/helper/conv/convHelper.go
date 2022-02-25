@@ -1,7 +1,7 @@
 package conv
 
 import (
-	"github.com/golang/glog"
+	"core/component/logger"
 	"github.com/pkg/errors"
 	"strconv"
 )
@@ -9,7 +9,7 @@ import (
 func ParseInt(s string) int {
 	v, err := strconv.Atoi(s)
 	if err != nil {
-		glog.Error(errors.WithStack(err))
+		logger.Error(errors.WithStack(err))
 		return 0
 	}
 	return v
@@ -18,7 +18,7 @@ func ParseInt(s string) int {
 func ParseUint(s string) uint {
 	v, err := strconv.ParseUint(s, 10, 64)
 	if err != nil {
-		glog.Error(errors.WithStack(err))
+		logger.Error(errors.WithStack(err))
 		return 0
 	}
 	return uint(v)
@@ -27,7 +27,7 @@ func ParseUint(s string) uint {
 func ParseUint64(s string) uint64 {
 	v, err := strconv.ParseUint(s, 10, 64)
 	if err != nil {
-		glog.Error(errors.WithStack(err))
+		logger.Error(errors.WithStack(err))
 		return 0
 	}
 	return v
@@ -36,7 +36,7 @@ func ParseUint64(s string) uint64 {
 func ParseInt64(s string) int64 {
 	v, err := strconv.ParseInt(s, 10, 64)
 	if err != nil {
-		glog.Error(errors.WithStack(err))
+		logger.Error(errors.WithStack(err))
 		return 0
 	}
 	return v
@@ -45,7 +45,7 @@ func ParseInt64(s string) int64 {
 func ParseInt32(s string) int32 {
 	v, err := strconv.ParseInt(s, 10, 64)
 	if err != nil {
-		glog.Error(errors.WithStack(err))
+		logger.Error(errors.WithStack(err))
 		return 0
 	}
 	return int32(v)
@@ -54,7 +54,7 @@ func ParseInt32(s string) int32 {
 func ParseUint32(s string) uint32 {
 	v, err := strconv.ParseUint(s, 10, 64)
 	if err != nil {
-		glog.Error(errors.WithStack(err))
+		logger.Error(errors.WithStack(err))
 		return 0
 	}
 	return uint32(v)
@@ -63,7 +63,7 @@ func ParseUint32(s string) uint32 {
 func ParseInt16(s string) int16 {
 	v, err := strconv.ParseInt(s, 10, 64)
 	if err != nil {
-		glog.Error(errors.WithStack(err))
+		logger.Error(errors.WithStack(err))
 		return 0
 	}
 	return int16(v)
@@ -72,7 +72,7 @@ func ParseInt16(s string) int16 {
 func ParseUint16(s string) uint16 {
 	v, err := strconv.ParseUint(s, 10, 64)
 	if err != nil {
-		glog.Error(errors.WithStack(err))
+		logger.Error(errors.WithStack(err))
 		return 0
 	}
 	return uint16(v)

@@ -2,9 +2,7 @@ package main
 
 import (
 	"bufio"
-	command "core/command/pb"
-	"fmt"
-	"github.com/golang/glog"
+	"core/component/logger"
 	"log"
 	"net"
 	"sync"
@@ -13,17 +11,31 @@ import (
 var tServer *TcpServer
 
 type TcpServer struct {
-	tcpConnects map[string]*TcpConn //tcp连接
-	dialStream  *GRPCStream
-	sync.RWMutex
+	tcpConnects      *sync.Map //map[string]*TcpConn //tcp连接
+	dialStream       *OnlineGRPCStream
+	buffPool         *sync.Pool
+	isOpenGRPCStream bool
 }
 
 func newTcpServer() *TcpServer {
 	tcpServer := &TcpServer{
-		tcpConnects: make(map[string]*TcpConn),
+		tcpConnects: &sync.Map{},
 	}
+	tcpServer.initSyncPool()
 	tServer = tcpServer
 	return tcpServer
+}
+
+func (tcpSrv *TcpServer) getDialStream() *OnlineGRPCStream {
+	return tcpSrv.dialStream
+}
+
+func (tcpSrv *TcpServer) initSyncPool() {
+	tcpSrv.buffPool = &sync.Pool{
+		New: func() interface{} {
+			return make([]byte, 1024*1024)
+		},
+	}
 }
 
 func tcpServer() *TcpServer {
@@ -31,43 +43,35 @@ func tcpServer() *TcpServer {
 }
 
 func (tcpSrv *TcpServer) addConnMsg(addr string, data []byte) {
-	if conn, ok := tcpSrv.tcpConnects[addr]; ok {
-		conn.msgChannel <- data
+	if value, ok := tcpSrv.tcpConnects.Load(addr); ok {
+		value.(*TcpConn).msgChannel <- data
 	}
 }
 
 func (tcpSrv *TcpServer) addTcpConn(conn *net.TCPConn) *TcpConn {
-	if tconn, ok := tcpSrv.tcpConnects[conn.RemoteAddr().String()]; ok {
-		return tconn
+	if value, ok := tcpSrv.tcpConnects.Load(conn.RemoteAddr().String()); ok {
+		return value.(*TcpConn)
 	}
 	tconn := newTcpConn(conn)
-	tcpSrv.RLock()
-	tcpSrv.tcpConnects[tconn.clientAddr] = tconn
-	tcpSrv.RUnlock()
+	tcpSrv.tcpConnects.Store(tconn.clientAddr, tconn)
 	log.Printf("添加tcp连接 %v", conn.RemoteAddr().String())
 	return tconn
 }
 
 func (tcpSrv *TcpServer) delTcpConn(addr string) {
-	tcpSrv.RLock()
-	delete(tcpSrv.tcpConnects, addr)
-	tcpSrv.RUnlock()
+	tcpSrv.tcpConnects.Delete(addr)
 	log.Printf("移除tcp连接 %v", addr)
 }
 
-func (tcpSrv *TcpServer) addRecvChannel(msg *command.ServerPlayerMsgData) {
-	tcpSrv.dialStream.recvChannel <- msg
-}
-
 func (tcpSrv *TcpServer) getTcpConn(connAddr string) *TcpConn {
-	if conn, ok := tcpSrv.tcpConnects[connAddr]; ok {
-		return conn
+	if value, ok := tcpSrv.tcpConnects.Load(connAddr); ok {
+		return value.(*TcpConn)
 	}
 	return nil
 }
 
-func run(addr string) {
-	tcpAddr, err := net.ResolveTCPAddr("tcp", addr)
+func runTcpAndGRPC() {
+	tcpAddr, err := net.ResolveTCPAddr("tcp", "127.0.0.1:8888")
 	if err != nil {
 		return
 	}
@@ -79,16 +83,16 @@ func run(addr string) {
 
 	tcpSrv := newTcpServer()
 
-	//grpc
-	go runGRPCDial("127.0.0.1:9999", tcpSrv)
+	//连接grpc
+	go runGatewayGRPCDial("127.0.0.1:9999", tcpSrv)
 
 	for {
 		conn, err := listener.AcceptTCP()
 		if err != nil {
-			glog.Infoln("断开连接")
+			logger.Infoln("断开连接")
 			return
 		}
-		glog.Infof("message %s->%s\n", conn.RemoteAddr(), conn.LocalAddr())
+		logger.Infof("message %s->%s\n", conn.RemoteAddr(), conn.LocalAddr())
 		tcoon := tcpSrv.addTcpConn(conn)
 		go tcpSrv.recv(tcoon)
 		go tcpSrv.send(tcoon)
@@ -98,18 +102,20 @@ func run(addr string) {
 func (tcpSrv *TcpServer) recv(tconn *TcpConn) {
 	ipStr := tconn.conn.RemoteAddr().String()
 	defer func() {
+		tconn.disTcpConnected()
 		tcpSrv.delTcpConn(ipStr)
-		fmt.Println("Disconnected : " + ipStr)
+		logger.Infof("Disconnected : " + ipStr)
 		tconn.conn.Close()
 	}()
 	reader := bufio.NewReader(tconn.conn)
 	for {
-		buff := make([]byte, 1024*1024)
+		buff := tcpSrv.buffPool.Get().([]byte)
 		n, err := reader.Read(buff[:])
 		if err != nil {
 			return
 		}
 		tconn.onMessage(buff[:n])
+		tcpSrv.buffPool.Put(buff)
 	}
 }
 

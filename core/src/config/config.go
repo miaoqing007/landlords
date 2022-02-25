@@ -1,7 +1,7 @@
 package config
 
 import (
-	"github.com/golang/glog"
+	"core/component/logger"
 	"gopkg.in/ini.v1"
 )
 
@@ -13,7 +13,7 @@ var (
 func InitConfig() {
 	cfg, err := ini.Load("gameconfig.ini")
 	if err != nil {
-		glog.Info("load config", err)
+		logger.Info("load config", err)
 		return
 	}
 

@@ -1,17 +1,12 @@
 package main
 
 import (
-	//"landlords/src/config"
-	//"landlords/src/online/log"
-	//"landlords/src/online/redis"
-	"core/config"
-	"core/online/log"
-	"core/online/redis"
+	"core/component/logger"
 )
 
 func main() {
-	config.InitConfig()
-	log.InitLog()
-	redis.InitRedis()
+	logger.SetLogFile("../log/pvp"+"_"+"1", "pvp")
+	logger.SetLogLevel("DEBUG")
+
 	runOnlinePvpGRPC()
 }

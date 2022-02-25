@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	command "core/command/pb"
+	"core/component/logger"
 	"core/component/router"
 	"fmt"
 	"net"
@@ -37,7 +38,7 @@ func recv(conn *net.TCPConn) {
 		if err != nil {
 			return
 		}
-		msgRecv := &command.CSStartGameOnline{}
+		msgRecv := &command.CSStartGame_Online{}
 		r.UnMarshal(buf[:n], msgRecv)
 		fmt.Println("------", msgRecv)
 	}
@@ -48,7 +49,7 @@ func send(conn *net.TCPConn) {
 		select {
 		case data := <-ch:
 			conn.Write(data)
-			fmt.Println("========", string(data))
+
 		}
 	}
 }
@@ -58,17 +59,42 @@ func add() {
 	if r == nil {
 		return
 	}
-	i := uint32(0)
-	for {
-		msgSend := &command.CSStartGameOnline{}
-		msgSend.RoomId = 10000 + i
-		data, err := r.Marshal(uint16(command.Command_CSStartGame), msgSend)
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
-		ch <- data
-		time.Sleep(10 * time.Second)
-		i++
+
+	var (
+		msgSend interface{}
+		//cmd     command.Command
+		//i       = uint32(0)
+	)
+	msgSend = &command.ClientInOnline_Online{}
+	ch <- sendMsg(command.Command_ClientInOnline, msgSend)
+	time.Sleep(3 * time.Second)
+	//for {
+	//	if i%2 == 0 {
+	//		msgSend = &command.CSJoinPvpPool_Pvp{}
+	//		msgSend.(*command.CSJoinPvpPool_Pvp).PlayerId = 80000 + uint64(i)
+	//		cmd = command.Command_CSJoinPvpPool
+	//	} else {
+	//		msgSend = &command.CSStartGame_Online{}
+	//		msgSend.(*command.CSStartGame_Online).RoomId = 10000 + i
+	//		cmd = command.Command_CSStartGame
+	//	}
+	//	ch <- sendMsg(cmd, msgSend)
+	//	time.Sleep(10 * time.Second)
+	//	i++
+	//	if i == 6 {
+	//		break
+	//	}
+	//}
+	msgSend = &command.ClientOutOnline_Online{}
+	ch <- sendMsg(command.Command_ClientOutOnline, msgSend)
+}
+
+func sendMsg(cmd command.Command, msg interface{}) []byte {
+	fmt.Println("---==-=-=-", msg)
+	data, err := r.Marshal(uint16(cmd), msg)
+	if err != nil {
+		logger.Error(err)
+		return nil
 	}
+	return data
 }

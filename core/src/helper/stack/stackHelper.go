@@ -1,8 +1,8 @@
 package stack
 
 import (
+	"core/component/logger"
 	"fmt"
-	"github.com/golang/glog"
 	"runtime"
 )
 
@@ -20,7 +20,7 @@ func PrintRecoverFromPanic(isPanic ...*bool) {
 				*isPanic[0] = true
 			}
 		}
-		glog.Errorf("%+v", panicStack)
-		glog.Flush()
+		logger.Errorf("%+v", panicStack)
+		logger.Flush()
 	}
 }

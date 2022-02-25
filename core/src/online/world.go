@@ -2,7 +2,7 @@ package main
 
 import (
 	command "core/command/pb"
-	"log"
+	"core/component/logger"
 	"sync"
 )
 
@@ -12,29 +12,30 @@ var (
 )
 
 type World struct {
-	players            sync.Map
-	fromGatewayMsgChan chan *command.ClientPlayerMsgData
+	players                   sync.Map
+	fromOtherServerMsgMsgChan chan *command.ClientPlayerMsgData
 }
 
 func WorldGetMe() *World {
 	worldOnce.Do(func() {
 		world = &World{
-			players:            sync.Map{},
-			fromGatewayMsgChan: make(chan *command.ClientPlayerMsgData, 1024),
+			players:                   sync.Map{},
+			fromOtherServerMsgMsgChan: make(chan *command.ClientPlayerMsgData, 1024),
 		}
 		go world.loop()
 	})
 	return world
 }
 
-func (w *World) sendFromGatewayMsgChan(msg *command.ClientPlayerMsgData) {
-	w.fromGatewayMsgChan <- msg
+//接收其他服转发过来的消息
+func (w *World) sendFromOtherServerMsgChan(playerId uint64, data []byte) {
+	w.fromOtherServerMsgMsgChan <- &command.ClientPlayerMsgData{PlayerId: playerId, Data: data}
 }
 
 func (w *World) loop() {
 	for {
 		select {
-		case msg := <-w.fromGatewayMsgChan:
+		case msg := <-w.fromOtherServerMsgMsgChan:
 			player := WorldGetMe().getPlayer(msg.PlayerId)
 			if player != nil {
 				player.addPlayerChanMsg(msg.Data)
@@ -56,6 +57,12 @@ func (w *World) addPlayer(playerId uint64, clientAddr, gatewayGRPCAddr string) {
 		return
 	}
 	player := newPlayer(playerId, clientAddr, gatewayGRPCAddr)
+	logger.Infof("玩家(%v)进入 online", playerId)
 	w.players.Store(playerId, player)
-	log.Printf("添加玩家成功==", player)
+	logger.Infof("添加玩家(%v) onlineWorld", playerId)
+}
+
+func (w *World) delPlayer(playerId uint64) {
+	w.players.Delete(playerId)
+	logger.Infof("移除玩家(%v) onlineWorld", playerId)
 }
