@@ -7,6 +7,10 @@
 /core/src/online/serverLog
 # Test binary, build with `go test -c`
 *.test
-
+LOG
+core/log/~*
+core/src/command/pb
+../.idea/watcherTasks.xml
+../.idea/workspace.xml
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
