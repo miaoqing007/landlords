@@ -2,32 +2,91 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ca9b2a2f-39cd-4201-b7fe-3e407942b000" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/core/build.bat" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/conf/excel/AreaTable.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/conf/excel/server.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/src/config/config.ini" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/src/tools/xlsx2gocode/Makefile" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/core/src/tools/xlsx2gocode/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/proto/command.proto" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/proto/exec.go" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/proto/gateway.proto" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/proto/grpc.proto" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/proto/online.proto" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/proto/pvp.proto" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/client/client_tcp.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/client/client_tcp.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/client/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/client/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/component/logger/logger.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/component/logger/logger.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/config/config.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/config/config.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/gateway/gateway_grpc.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/gateway/gateway_grpc.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/gateway/gateway_processor.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/gateway/gateway_processor.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/gateway/gateway_server.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/gateway/gateway_server.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/gateway/gateway_tcp.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/gateway/gateway_tcp.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/gateway/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/gateway/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/go.mod" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/go.sum" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/online/LICENSE" beforeDir="false" afterPath="$PROJECT_DIR$/core/LICENSE" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/online/gameconfig.ini" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/online/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/online/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/online/online_gateway_grpc.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/online/online_gateway_grpc.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/online/online_pvp_grpc.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/online/online_pvp_grpc.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/pvp/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/pvp/main.go" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/core/src/pvp/pvp_grpc.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/src/pvp/pvp_grpc.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/build.bat" beforeDir="false" afterPath="$PROJECT_DIR$/core/build.bat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/conf/excel/AreaTable.xlsx" beforeDir="false" afterPath="$PROJECT_DIR$/conf/excel/AreaTable.xlsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/conf/excel/server.xml" beforeDir="false" afterPath="$PROJECT_DIR$/conf/excel/server.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/make_proto.bat" beforeDir="false" afterPath="$PROJECT_DIR$/core/make_proto.bat" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/proto/command.proto" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/proto/exec.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/proto/gateway.proto" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/proto/grpc.proto" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/proto/online.proto" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/proto/protoc-gen-go.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/proto/protoc.exe" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/proto/pvp.proto" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/client/client_tcp.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/client/client_tcp.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/client/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/client/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/command/pb/command.pb.go" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/command/pb/gateway.pb.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/command/pb/gateway.pb.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/command/pb/grpc.pb.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/command/pb/grpc.pb.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/command/pb/online.pb.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/command/pb/online.pb.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/command/pb/pvp.pb.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/command/pb/pvp.pb.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/component/idgenerator/init.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/component/idgenerator/init.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/component/idgenerator/sonyflake.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/component/idgenerator/sonyflake.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/component/idgenerator/uuid.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/component/idgenerator/uuid.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/component/logger/logger.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/component/logger/logger.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/component/logger/logger_file.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/component/logger/logger_file.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/component/router/router.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/component/router/router.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/config/config.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/config/config.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/config/config.ini" beforeDir="false" afterPath="$PROJECT_DIR$/core/config/config.ini" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/configtable/AreaTable.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/configtable/AreaTable.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/configtable/ConfigtableMgr.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/configtable/ConfigtableMgr.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/gateway/gateway_grpc.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/gateway/gateway_grpc.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/gateway/gateway_processor.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/gateway/gateway_processor.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/gateway/gateway_server.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/gateway/gateway_server.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/gateway/gateway_tcp.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/gateway/gateway_tcp.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/gateway/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/gateway/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/gateway/msg_register.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/gateway/msg_register.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/go.mod" beforeDir="false" afterPath="$PROJECT_DIR$/core/go.mod" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/go.sum" beforeDir="false" afterPath="$PROJECT_DIR$/core/go.sum" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/helper/common/common.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/helper/common/common.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/helper/conv/convHelper.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/helper/conv/convHelper.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/helper/encryption/encryption.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/helper/encryption/encryption.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/helper/redisgo/helper.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/helper/redisgo/helper.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/helper/redisgo/redis.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/helper/redisgo/redis.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/helper/stack/stackHelper.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/helper/stack/stackHelper.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/helper/util/util.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/helper/util/util.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/network/byte_buffer.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/network/byte_buffer.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/network/service.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/network/service.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/network/tcp_client.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/network/tcp_client.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/network/tcp_conn.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/network/tcp_conn.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/network/tcp_msg.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/network/tcp_msg.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/network/tcp_server.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/network/tcp_server.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/online/gateway_online_prcocessor.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/online/gateway_online_prcocessor.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/online/landlords" beforeDir="false" afterPath="$PROJECT_DIR$/core/online/landlords" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/online/loginManager.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/online/loginManager.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/online/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/online/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/online/msg_register.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/online/msg_register.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/online/online_gateway_grpc.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/online/online_gateway_grpc.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/online/online_gateway_server.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/online/online_gateway_server.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/online/online_pvp_grpc.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/online/online_pvp_grpc.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/online/online_tcp.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/online/online_tcp.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/online/player.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/online/player.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/online/player_processor.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/online/player_processor.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/online/player_pvp.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/online/player_pvp.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/online/roomManager.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/online/roomManager.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/online/userManager.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/online/userManager.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/online/world.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/online/world.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/pvp/grpc_connection.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/pvp/grpc_connection.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/pvp/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/pvp/main.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/pvp/msg_register.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/pvp/msg_register.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/pvp/pvp_grpc.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/pvp/pvp_grpc.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/pvp/pvp_onlinestream.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/pvp/pvp_onlinestream.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/pvp/pvp_player.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/pvp/pvp_player.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/pvp/pvp_player_processor.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/pvp/pvp_player_processor.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/pvp/pvp_room.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/pvp/pvp_room.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/pvp/pvp_roomserver.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/pvp/pvp_roomserver.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/pvp/pvp_world.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/pvp/pvp_world.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/pvp/room.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/pvp/room.go" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/tools/xlsx2gocode/Makefile" beforeDir="false" afterPath="$PROJECT_DIR$/core/tools/xlsx2gocode/Makefile" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/src/tools/xlsx2gocode/main.go" beforeDir="false" afterPath="$PROJECT_DIR$/core/tools/xlsx2gocode/main.go" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -59,6 +118,7 @@
     <option name="autoscrollFromSource" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="DefaultGoTemplateProperty" value="Go File" />
     <property name="GO_FMT" value="true" />
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
@@ -72,26 +132,26 @@
     <property name="go.import.settings.migrated" value="true" />
     <property name="go.sdk.automatically.set" value="true" />
     <property name="go.vendoring.notification.had.been.shown" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/core/bin" />
-    <property name="settings.editor.selected.configurable" value="go.sdk" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/core/src" />
+    <property name="settings.editor.selected.configurable" value="go.vgo" />
   </component>
   <component name="RecentsManager">
-    <key name="MoveFile.RECENT_KEYS">
-      <recent name="E:\workspace\Go\src\landlords\core" />
-      <recent name="E:\workspace\Go\src\landlords\core\src\config" />
-      <recent name="E:\workspace\Go\src\landlords\core\src\network" />
-      <recent name="E:\workspace\Go\src\landlords\core\src\gateway" />
-      <recent name="E:\workspace\Go\src\landlords\core\src\component" />
-    </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="E:\workspace\Go\src\landlords\core\src" />
       <recent name="E:\workspace\Go\src\landlords\core\bin" />
       <recent name="E:\workspace\Go\src\landlords\core\conf\excel" />
       <recent name="E:\workspace\Go\src\landlords\core\src\tools" />
       <recent name="E:\workspace\Go\src\landlords\core\src\component" />
-      <recent name="E:\workspace\Go\src\landlords\core\doc" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="E:\workspace\Go\src\landlords" />
+      <recent name="E:\workspace\Go\src\landlords\core\src\tools" />
+      <recent name="E:\workspace\Go\src\landlords\core\src" />
+      <recent name="E:\workspace\Go\src\landlords\core" />
+      <recent name="E:\workspace\Go\src\landlords\core\src\config" />
     </key>
   </component>
-  <component name="RunManager" selected="Go Build.go build core/tools/xlsx2gocode">
+  <component name="RunManager" selected="Go Build.go build core/gateway">
     <configuration default="true" type="GoApplicationRunConfiguration" factoryName="Go Application">
       <module name="Landlords" />
       <working_directory value="$PROJECT_DIR$/" />
@@ -104,7 +164,7 @@
     </configuration>
     <configuration name="go build core/client" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
       <module name="Landlords" />
-      <working_directory value="$PROJECT_DIR$/core/src" />
+      <working_directory value="$PROJECT_DIR$/core/" />
       <kind value="PACKAGE" />
       <filePath value="$PROJECT_DIR$/core/src/client/main.go" />
       <package value="core/client" />
@@ -113,7 +173,7 @@
     </configuration>
     <configuration name="go build core/gateway" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
       <module name="Landlords" />
-      <working_directory value="$PROJECT_DIR$/core/src" />
+      <working_directory value="$PROJECT_DIR$/core/" />
       <kind value="PACKAGE" />
       <filePath value="$PROJECT_DIR$/core/src/gateway/main.go" />
       <package value="core/gateway" />
@@ -122,7 +182,7 @@
     </configuration>
     <configuration name="go build core/online" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
       <module name="Landlords" />
-      <working_directory value="$PROJECT_DIR$/core/src" />
+      <working_directory value="$PROJECT_DIR$/core/" />
       <kind value="PACKAGE" />
       <filePath value="$PROJECT_DIR$/core/src/online/main.go" />
       <package value="core/online" />
@@ -131,7 +191,7 @@
     </configuration>
     <configuration name="go build core/pvp" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
       <module name="Landlords" />
-      <working_directory value="$PROJECT_DIR$/core/src" />
+      <working_directory value="$PROJECT_DIR$/core/" />
       <kind value="PACKAGE" />
       <filePath value="$PROJECT_DIR$/core/src/pvp/main.go" />
       <package value="core/pvp" />
@@ -140,7 +200,7 @@
     </configuration>
     <configuration name="go build core/tools/xlsx2gocode" type="GoApplicationRunConfiguration" factoryName="Go Application" temporary="true" nameIsGenerated="true">
       <module name="Landlords" />
-      <working_directory value="$PROJECT_DIR$/core/src" />
+      <working_directory value="$PROJECT_DIR$/core/" />
       <kind value="PACKAGE" />
       <filePath value="$PROJECT_DIR$/core/src/tools/xlsx2gocode/main.go" />
       <package value="core/tools/xlsx2gocode" />
@@ -167,10 +227,10 @@
     </list>
     <recent_temporary>
       <list>
-        <item itemvalue="Go Build.go build core/tools/xlsx2gocode" />
+        <item itemvalue="Go Build.go build core/gateway" />
         <item itemvalue="Go Build.go build core/pvp" />
         <item itemvalue="Go Build.go build core/online" />
-        <item itemvalue="Go Build.go build core/gateway" />
+        <item itemvalue="Go Build.go build core/tools/xlsx2gocode" />
         <item itemvalue="Go Build.go build core/client" />
       </list>
     </recent_temporary>
@@ -201,6 +261,7 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <ignored-roots>
       <path value="$PROJECT_DIR$/src/app/vendor/github.com/golang/glog" />
       <path value="$PROJECT_DIR$/src/app/vendor/github.com/gomodule/redigo" />
@@ -223,6 +284,7 @@
     <integration-enabled>true</integration-enabled>
     <environment>
       <map>
+        <entry key="GOGO111MODULE" value="auto" />
         <entry key="GOPROXY" value="https://goproxy.cn,direct" />
       </map>
     </environment>
@@ -233,93 +295,101 @@
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="2672" y="450" key="#GOROOT/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1645433384325" />
-    <state x="2334" y="174" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1645757611863">
+    <state x="2334" y="174" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1646039121869">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="414" y="174" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1645532466558" />
-    <state x="2334" y="174" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1645757611863" />
+    <state x="2334" y="174" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1646039121869" />
     <state x="2609" y="320" key="#com.intellij.fileTypes.FileTypeChooser" timestamp="1644828525948">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="2609" y="320" key="#com.intellij.fileTypes.FileTypeChooser/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1644828525948" />
+    <state x="2576" y="144" key="#go_build_core/tools/xlsx2gocode" timestamp="1646038448661">
+      <screen x="1920" y="0" width="1920" height="1040" />
+    </state>
+    <state x="2576" y="144" key="#go_build_core/tools/xlsx2gocode/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1646038448661" />
     <state width="596" height="466" key="DebuggerActiveHint" timestamp="1646034587086">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="824" height="466" key="DebuggerActiveHint/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1645621191148" />
     <state width="596" height="466" key="DebuggerActiveHint/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1646034587086" />
-    <state x="2660" y="274" key="FileChooserDialogImpl" timestamp="1645434264538">
+    <state x="2767" y="379" key="EnvironmentVariablesDialog" timestamp="1646038680110">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
-    <state x="2660" y="274" key="FileChooserDialogImpl/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1645434264538" />
-    <state width="1877" height="286" key="GridCell.Tab.0.bottom" timestamp="1646034677140">
+    <state x="2767" y="379" key="EnvironmentVariablesDialog/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1646038680110" />
+    <state x="2660" y="274" key="FileChooserDialogImpl" timestamp="1646038635246">
+      <screen x="1920" y="0" width="1920" height="1040" />
+    </state>
+    <state x="2660" y="274" key="FileChooserDialogImpl/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1646038635246" />
+    <state width="1877" height="280" key="GridCell.Tab.0.bottom" timestamp="1646039308787">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1877" height="337" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1645621736977" />
-    <state width="1877" height="286" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1646034677140" />
-    <state width="1877" height="286" key="GridCell.Tab.0.center" timestamp="1646034677140">
+    <state width="1877" height="280" key="GridCell.Tab.0.bottom/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1646039308787" />
+    <state width="1877" height="280" key="GridCell.Tab.0.center" timestamp="1646039308787">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1877" height="337" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1645621736977" />
-    <state width="1877" height="286" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1646034677140" />
-    <state width="1877" height="286" key="GridCell.Tab.0.left" timestamp="1646034677140">
+    <state width="1877" height="280" key="GridCell.Tab.0.center/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1646039308787" />
+    <state width="1877" height="280" key="GridCell.Tab.0.left" timestamp="1646039308787">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1877" height="337" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1645621736977" />
-    <state width="1877" height="286" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1646034677140" />
-    <state width="1877" height="286" key="GridCell.Tab.0.right" timestamp="1646034677140">
+    <state width="1877" height="280" key="GridCell.Tab.0.left/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1646039308787" />
+    <state width="1877" height="280" key="GridCell.Tab.0.right" timestamp="1646039308787">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1877" height="337" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1645621736977" />
-    <state width="1877" height="286" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1646034677140" />
-    <state width="1877" height="280" key="GridCell.Tab.1.bottom" timestamp="1646034646996">
+    <state width="1877" height="280" key="GridCell.Tab.0.right/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1646039308787" />
+    <state width="1877" height="280" key="GridCell.Tab.1.bottom" timestamp="1646039308787">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1877" height="337" key="GridCell.Tab.1.bottom/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1645621736977" />
-    <state width="1877" height="280" key="GridCell.Tab.1.bottom/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1646034646996" />
-    <state width="1877" height="280" key="GridCell.Tab.1.center" timestamp="1646034646996">
+    <state width="1877" height="280" key="GridCell.Tab.1.bottom/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1646039308787" />
+    <state width="1877" height="280" key="GridCell.Tab.1.center" timestamp="1646039308787">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1877" height="337" key="GridCell.Tab.1.center/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1645621736977" />
-    <state width="1877" height="280" key="GridCell.Tab.1.center/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1646034646996" />
-    <state width="1877" height="280" key="GridCell.Tab.1.left" timestamp="1646034646996">
+    <state width="1877" height="280" key="GridCell.Tab.1.center/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1646039308787" />
+    <state width="1877" height="280" key="GridCell.Tab.1.left" timestamp="1646039308787">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1877" height="337" key="GridCell.Tab.1.left/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1645621736977" />
-    <state width="1877" height="280" key="GridCell.Tab.1.left/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1646034646996" />
-    <state width="1877" height="280" key="GridCell.Tab.1.right" timestamp="1646034646996">
+    <state width="1877" height="280" key="GridCell.Tab.1.left/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1646039308787" />
+    <state width="1877" height="280" key="GridCell.Tab.1.right" timestamp="1646039308787">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state width="1877" height="337" key="GridCell.Tab.1.right/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1645621736977" />
-    <state width="1877" height="280" key="GridCell.Tab.1.right/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1646034646996" />
-    <state x="461" y="164" key="SettingsEditor" timestamp="1645606712490">
-      <screen x="0" y="0" width="1920" height="1040" />
+    <state width="1877" height="280" key="GridCell.Tab.1.right/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1646039308787" />
+    <state x="2445" y="152" key="SettingsEditor" timestamp="1646038683577">
+      <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="461" y="164" key="SettingsEditor/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1645606712490" />
-    <state x="2381" y="164" key="SettingsEditor/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1645439615330" />
+    <state x="2445" y="152" key="SettingsEditor/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1646038683577" />
     <state x="504" y="248" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2" timestamp="1645533270222">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="504" y="248" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1645533270222" />
     <state x="2424" y="248" key="com.intellij.xdebugger.impl.breakpoints.ui.BreakpointsDialogFactory$2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1645519791833" />
-    <state x="358" y="0" width="1578" height="887" key="dock-window-1" timestamp="1646012695358">
+    <state x="358" y="0" width="1578" height="887" key="dock-window-1" timestamp="1646037867822">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="358" y="0" width="1578" height="887" key="dock-window-1/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1646012695358" />
-    <state x="89" y="144" width="1599" height="789" maximized="true" key="dock-window-2" timestamp="1646031080732">
+    <state x="358" y="0" width="1578" height="887" key="dock-window-1/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1646037867822" />
+    <state x="89" y="144" width="1599" height="789" maximized="true" key="dock-window-2" timestamp="1646039028333">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
     <state x="2117" y="228" width="1599" height="789" maximized="true" key="dock-window-2/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1645619452561" />
-    <state x="89" y="144" width="1599" height="789" maximized="true" key="dock-window-2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1646031080732" />
+    <state x="89" y="144" width="1599" height="789" maximized="true" key="dock-window-2/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1646039028333" />
     <state x="2231" y="151" width="1376" height="789" key="find.popup" timestamp="1646031370658">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="664" y="256" width="598" height="532" key="find.popup/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1645608645775" />
     <state x="2231" y="151" width="1376" height="789" key="find.popup/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1646031370658" />
-    <state x="2543" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1646033533863">
+    <state x="2543" y="225" width="672" height="678" key="search.everywhere.popup" timestamp="1646038946798">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>
     <state x="623" y="225" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040/1920.0.1920.1040@0.0.1920.1040" timestamp="1645622911373" />
-    <state x="2543" y="225" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1646033533863" />
+    <state x="2543" y="225" width="672" height="678" key="search.everywhere.popup/0.0.1920.1040/1920.0.1920.1040@1920.0.1920.1040" timestamp="1646038946798" />
     <state x="2602" y="378" key="vcs.readOnlyHandler.ReadOnlyStatusDialog" timestamp="1645757240285">
       <screen x="1920" y="0" width="1920" height="1040" />
     </state>

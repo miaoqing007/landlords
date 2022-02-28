@@ -1,5 +1,6 @@
 @echo off
-.\bin\xlsxgocode.exe
+
+go run .\tools\xlsx2gocode\main.go
 
 echo compile proto ok
 
