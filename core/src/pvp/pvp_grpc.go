@@ -3,6 +3,7 @@ package main
 import (
 	command "core/command/pb"
 	"core/component/logger"
+	"core/config"
 	"google.golang.org/grpc"
 	"io"
 	"net"
@@ -51,7 +52,7 @@ func (srv *server) getOnlineStream(addr string) *OnlineStreamInfo {
 }
 
 func runOnlinePvpGRPC() {
-	tcpAddr, err := net.ResolveTCPAddr("tcp", "127.0.0.1:2222")
+	tcpAddr, err := net.ResolveTCPAddr("tcp", ":"+config.PvpGRPCPort)
 	if err != nil {
 		return
 	}
@@ -59,9 +60,12 @@ func runOnlinePvpGRPC() {
 	if err != nil {
 		return
 	}
+	defer listener.Close()
 	s := grpc.NewServer()
 	ins := newServer()
 	command.RegisterOnlinePvpServer(s, ins)
+
+	logger.Infof("GRPC listening on %s", listener.Addr().String())
 	s.Serve(listener)
 }
 

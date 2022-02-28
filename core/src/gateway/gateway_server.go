@@ -3,6 +3,8 @@ package main
 import (
 	"bufio"
 	"core/component/logger"
+	"core/config"
+	"io"
 	"log"
 	"net"
 	"sync"
@@ -11,9 +13,9 @@ import (
 var tServer *TcpServer
 
 type TcpServer struct {
-	tcpConnects      *sync.Map //map[string]*TcpConn //tcp连接
+	tcpConnects      *sync.Map  //map[string]*TcpConn //tcp连接
+	buffPool         *sync.Pool //tcpconn buff池 make([]byte,1024*1024)
 	dialStream       *OnlineGRPCStream
-	buffPool         *sync.Pool
 	isOpenGRPCStream bool
 }
 
@@ -71,7 +73,7 @@ func (tcpSrv *TcpServer) getTcpConn(connAddr string) *TcpConn {
 }
 
 func runTcpAndGRPC() {
-	tcpAddr, err := net.ResolveTCPAddr("tcp", "127.0.0.1:8888")
+	tcpAddr, err := net.ResolveTCPAddr("tcp", ":"+config.GatewayTCPPort)
 	if err != nil {
 		return
 	}
@@ -80,22 +82,23 @@ func runTcpAndGRPC() {
 		return
 	}
 	defer listener.Close()
+	logger.Infof("TCP listening on %s", listener.Addr().String())
 
 	tcpSrv := newTcpServer()
 
 	//连接grpc
-	go runGatewayGRPCDial("127.0.0.1:9999", tcpSrv)
+	go runGatewayGRPCDial(tcpSrv)
 
 	for {
 		conn, err := listener.AcceptTCP()
 		if err != nil {
-			logger.Infoln("断开连接")
+			//logger.Infoln("断开连接")
 			return
 		}
 		logger.Infof("message %s->%s\n", conn.RemoteAddr(), conn.LocalAddr())
 		tcoon := tcpSrv.addTcpConn(conn)
-		go tcpSrv.recv(tcoon)
 		go tcpSrv.send(tcoon)
+		go tcpSrv.recv(tcoon)
 	}
 }
 
@@ -104,14 +107,15 @@ func (tcpSrv *TcpServer) recv(tconn *TcpConn) {
 	defer func() {
 		tconn.disTcpConnected()
 		tcpSrv.delTcpConn(ipStr)
-		logger.Infof("Disconnected : " + ipStr)
+		tconn.closeWriteChannel <- true
 		tconn.conn.Close()
+		logger.Infof("Disconnected : " + ipStr)
 	}()
 	reader := bufio.NewReader(tconn.conn)
 	for {
 		buff := tcpSrv.buffPool.Get().([]byte)
 		n, err := reader.Read(buff[:])
-		if err != nil {
+		if err != nil || err == io.EOF {
 			return
 		}
 		tconn.onMessage(buff[:n])
@@ -123,7 +127,12 @@ func (tcpSrv *TcpServer) send(tconn *TcpConn) {
 	for {
 		select {
 		case data := <-tconn.msgChannel:
-			tconn.conn.Write(data)
+			if _, err := tconn.conn.Write(data); err != nil {
+				return
+			}
+		case <-tconn.closeWriteChannel:
+			logger.Infof("关闭玩家(%v) conn写入连接", tconn.playerId)
+			return
 		}
 	}
 }

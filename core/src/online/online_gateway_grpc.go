@@ -4,6 +4,7 @@ import (
 	command "core/command/pb"
 	"core/component/logger"
 	"core/component/router"
+	"core/config"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/peer"
 	"io"
@@ -24,6 +25,7 @@ type OnlineStreamInfo struct {
 	gatewayStream     command.GatewayOnline_GatewayOnlineStreamServer
 	toGatewayMsgChan  chan *command.ServerPlayerMsgData //online-->gateway-->client
 	gatewayRemoteAddr string                            //
+	closeSendChannel  chan bool
 	router            *router.Router
 }
 
@@ -31,6 +33,7 @@ func newGatewayInfo(streamServer command.GatewayOnline_GatewayOnlineStreamServer
 	gateway := &OnlineStreamInfo{
 		toGatewayMsgChan: make(chan *command.ServerPlayerMsgData, 1024),
 		gatewayStream:    streamServer,
+		closeSendChannel: make(chan bool, 0),
 		router:           router.NewRouter(),
 	}
 	gateway.gatewayRemoteAddr = gateway.getRemoteAddr()
@@ -68,7 +71,7 @@ func (os *OnlineStreamInfo) onMessage(out *command.ClientPlayerMsgData) {
 }
 
 func runGatewayOnlineGRPC() {
-	tcpAddr, err := net.ResolveTCPAddr("tcp", "127.0.0.1:9999")
+	tcpAddr, err := net.ResolveTCPAddr("tcp", ":"+config.OnlineGRPCPort)
 	if err != nil {
 		return
 	}
@@ -76,14 +79,18 @@ func runGatewayOnlineGRPC() {
 	if err != nil {
 		return
 	}
-	defer listener.Close()
 
-	go runOnlinePvpGRPC("127.0.0.1:2222")
+	defer listener.Close()
+	go runOnlinePvpGRPC()
 
 	s := grpc.NewServer()
 	ins := newServer()
 	command.RegisterGatewayOnlineServer(s, ins)
+
+	logger.Infof("GRPC listening on %s", listener.Addr().String())
+
 	s.Serve(listener)
+
 }
 
 func (s *server) GatewayOnlineStream(streamServer command.GatewayOnline_GatewayOnlineStreamServer) error {
@@ -96,19 +103,27 @@ func (s *server) GatewayOnlineStream(streamServer command.GatewayOnline_GatewayO
 
 func (s *server) send(onlineStream *OnlineStreamInfo) {
 	for {
-		out, ok := <-onlineStream.toGatewayMsgChan
-		if !ok {
+		select {
+		case out, ok := <-onlineStream.toGatewayMsgChan:
+			if !ok {
+				return
+			}
+			if err := onlineStream.gatewayStream.Send(out); err != nil {
+				return
+			}
+		case <-onlineStream.closeSendChannel:
+			logger.Infof("断开gprc send连接")
 			return
 		}
-		if err := onlineStream.gatewayStream.Send(out); err != nil {
-			return
-		}
+
 	}
 }
 
 func (s *server) recv(onlineStreamInfo *OnlineStreamInfo) {
 	defer func() {
 		s.tcpSrv.delGatewayStream(onlineStreamInfo)
+		onlineStreamInfo.closeSendChannel <- true
+		logger.Infof("断开gprc recv连接")
 	}()
 	for {
 		out, err := onlineStreamInfo.gatewayStream.Recv()
@@ -116,7 +131,5 @@ func (s *server) recv(onlineStreamInfo *OnlineStreamInfo) {
 			return
 		}
 		onlineStreamInfo.onMessage(out)
-		//WorldGetMe().addPlayer(out.PlayerId, out.ClientAddr, onlineStreamInfo.gatewayRemoteAddr)
-		//WorldGetMe().sendFromGatewayMsgChan(out.PlayerId, out.Data, out.ClientAddr)
 	}
 }

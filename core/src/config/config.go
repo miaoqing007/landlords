@@ -1,26 +1,34 @@
 package config
 
 import (
-	"core/component/logger"
 	"gopkg.in/ini.v1"
+	"log"
 )
 
 var (
-	GameIp, GamePort   string
-	RedisIp, RedisPort string
+	OnlineGRPCPort, PvpGRPCPort, GatewayTCPPort, RedisAddr string
 )
 
-func InitConfig() {
-	cfg, err := ini.Load("gameconfig.ini")
+func init() {
+	cfg, err := ini.Load("./config/config.ini")
 	if err != nil {
-		logger.Info("load config", err)
+		log.Printf("load config", err)
 		return
 	}
-
-	// 获取默认分区的key
-	GameIp = cfg.Section("GameAddr").Key("Ip").String()
-	GamePort = cfg.Section("GameAddr").Key("Port").String()
-
-	RedisIp = cfg.Section("RedisAddr").Key("Ip").String()
-	RedisPort = cfg.Section("RedisAddr").Key("Port").String()
+	online := cfg.Section("Online")
+	if online != nil {
+		OnlineGRPCPort = online.Key("GRPCPort").String()
+	}
+	pvp := cfg.Section("Pvp")
+	if pvp != nil {
+		PvpGRPCPort = pvp.Key("GRPCPort").String()
+	}
+	gateway := cfg.Section("Gateway")
+	if gateway != nil {
+		GatewayTCPPort = gateway.Key("TcpPort").String()
+	}
+	redis := cfg.Section("Redis")
+	if redis != nil {
+		RedisAddr = redis.Key("Addr").String()
+	}
 }

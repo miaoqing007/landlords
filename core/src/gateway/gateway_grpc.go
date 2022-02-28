@@ -4,6 +4,7 @@ import (
 	"context"
 	command "core/command/pb"
 	"core/component/logger"
+	"core/config"
 	"google.golang.org/grpc"
 	"io"
 	"time"
@@ -13,12 +14,14 @@ type OnlineGRPCStream struct {
 	client             command.GatewayOnlineClient
 	msg2Online         chan *command.ClientPlayerMsgData //gateway-->online
 	isSuccessConnected bool                              //是否已成功连接
+	closeSendChannel   chan bool
 }
 
 func newOnlineGRPCStream(client command.GatewayOnlineClient) *OnlineGRPCStream {
 	gs := &OnlineGRPCStream{
-		client:     client,
-		msg2Online: make(chan *command.ClientPlayerMsgData, 1024),
+		client:           client,
+		msg2Online:       make(chan *command.ClientPlayerMsgData, 1024),
+		closeSendChannel: make(chan bool, 0),
 	}
 	return gs
 }
@@ -37,7 +40,8 @@ func (gs *OnlineGRPCStream) openStream() {
 	defer func() {
 		gs.isSuccessConnected = false
 		stream.CloseSend()
-		logger.Info("grpc流断开连接 gateway-->online")
+		gs.closeSendChannel <- true
+		logger.Info("grpc流断recv开连接 gateway-->online")
 	}()
 	go func() {
 		for {
@@ -46,6 +50,9 @@ func (gs *OnlineGRPCStream) openStream() {
 				if err := stream.Send(msg); err != nil {
 					return
 				}
+			case <-gs.closeSendChannel:
+				logger.Info("grpc流断开send连接 gateway-->online")
+				return
 			}
 		}
 	}()
@@ -65,8 +72,8 @@ func (gs *OnlineGRPCStream) onMessage(msg *command.ServerPlayerMsgData) {
 	}
 }
 
-func runGatewayGRPCDial(addr string, tcpSrv *TcpServer) {
-	conn, err := grpc.Dial(addr, grpc.WithInsecure())
+func runGatewayGRPCDial(tcpSrv *TcpServer) {
+	conn, err := grpc.Dial(":"+config.OnlineGRPCPort, grpc.WithInsecure())
 	if err != nil {
 		logger.Error(err)
 		return

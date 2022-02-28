@@ -26,5 +26,6 @@ func (tcpConn *TcpConn) clientOutOnlineHandler(msgId uint16, data []byte) {
 		logger.Errorf("recv data:%v msg:%v", data, msgRecv)
 		return
 	}
-	logger.Infof("玩家(%v)进入online", msgRecv.PlayerId)
+	tcpConn.conn.Close()
+	logger.Infof("玩家(%v)退出online", tcpConn.playerId)
 }

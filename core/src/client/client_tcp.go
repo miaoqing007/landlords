@@ -5,6 +5,7 @@ import (
 	command "core/command/pb"
 	"core/component/logger"
 	"core/component/router"
+	"core/config"
 	"fmt"
 	"net"
 	"time"
@@ -15,8 +16,8 @@ var (
 	r  *router.Router
 )
 
-func runClientTcp(addr string) {
-	tcpAddr, err := net.ResolveTCPAddr("tcp", addr)
+func runClientTcp() {
+	tcpAddr, err := net.ResolveTCPAddr("tcp", ":"+config.GatewayTCPPort)
 	if err != nil {
 		return
 	}
@@ -32,6 +33,10 @@ func runClientTcp(addr string) {
 
 func recv(conn *net.TCPConn) {
 	reader := bufio.NewReader(conn)
+	defer func() {
+		conn.Close()
+	}()
+
 	for {
 		buf := make([]byte, 1024)
 		n, err := reader.Read(buf[:])
@@ -48,8 +53,9 @@ func send(conn *net.TCPConn) {
 	for {
 		select {
 		case data := <-ch:
-			conn.Write(data)
-
+			if _, err := conn.Write(data); err != nil {
+				return
+			}
 		}
 	}
 }
@@ -87,6 +93,7 @@ func add() {
 	//}
 	msgSend = &command.ClientOutOnline_Online{}
 	ch <- sendMsg(command.Command_ClientOutOnline, msgSend)
+	time.Sleep(100 * time.Second)
 }
 
 func sendMsg(cmd command.Command, msg interface{}) []byte {

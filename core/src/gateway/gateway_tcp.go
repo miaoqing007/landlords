@@ -8,19 +8,21 @@ import (
 )
 
 type TcpConn struct {
-	conn       *net.TCPConn
-	msgChannel chan []byte //发送给玩家消息队列
-	clientAddr string      //client地址
-	playerId   uint64      //玩家id
-	router     *router.Router
+	conn              *net.TCPConn
+	msgChannel        chan []byte //发送给玩家消息队列
+	clientAddr        string      //client地址
+	playerId          uint64      //玩家id
+	closeWriteChannel chan bool   //
+	router            *router.Router
 }
 
 func newTcpConn(conn *net.TCPConn) *TcpConn {
 	tcpConn := &TcpConn{
-		conn:       conn,
-		msgChannel: make(chan []byte, 64),
-		clientAddr: conn.RemoteAddr().String(),
-		router:     router.NewRouter(),
+		conn:              conn,
+		msgChannel:        make(chan []byte, 64),
+		clientAddr:        conn.RemoteAddr().String(),
+		router:            router.NewRouter(),
+		closeWriteChannel: make(chan bool, 0),
 	}
 	tcpConn.registerGatewayOnlineHandler()
 	return tcpConn

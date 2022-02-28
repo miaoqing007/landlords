@@ -4,6 +4,7 @@ import (
 	"context"
 	command "core/command/pb"
 	"core/component/logger"
+	"core/config"
 	"google.golang.org/grpc"
 	"io"
 	"time"
@@ -15,12 +16,14 @@ type PvpGRPCStream struct {
 	client             command.OnlinePvpClient      //pvpGrpcClient
 	msgPvpChannel      chan *command.Online2PvpInfo //online-->pvp
 	isSuccessConnected bool                         //是否已成功连接
+	closeWriteChannel  chan bool                    //
 }
 
 func newPvpGRPCStream(client command.OnlinePvpClient) *PvpGRPCStream {
 	ps := &PvpGRPCStream{
-		client:        client,
-		msgPvpChannel: make(chan *command.Online2PvpInfo, 1024),
+		client:            client,
+		msgPvpChannel:     make(chan *command.Online2PvpInfo, 1024),
+		closeWriteChannel: make(chan bool, 0),
 	}
 	pStream = ps
 	return ps
@@ -34,8 +37,8 @@ func (ps *PvpGRPCStream) addPvpMsgChannel(playerId uint64, data []byte) {
 	ps.msgPvpChannel <- &command.Online2PvpInfo{PlayerId: playerId, Data: data}
 }
 
-func runOnlinePvpGRPC(addr string) {
-	conn, err := grpc.Dial(addr, grpc.WithInsecure())
+func runOnlinePvpGRPC() {
+	conn, err := grpc.Dial(":"+config.PvpGRPCPort, grpc.WithInsecure())
 	if err != nil {
 		return
 	}
@@ -57,12 +60,12 @@ func (ps *PvpGRPCStream) openStream() {
 		return
 	}
 	ps.isSuccessConnected = true
-	//fmt.Println("开启grpc流成功 online-->pvp")
 	logger.Info("开启grpc流成功 online-->pvp")
 	defer func() {
 		ps.isSuccessConnected = false
 		stream.CloseSend()
-		logger.Info("grpc流断开连接 online-->pvp")
+		ps.closeWriteChannel <- true
+		logger.Info("grpc流断开recv连接 online-->pvp")
 	}()
 	go func() {
 		for {
@@ -71,6 +74,9 @@ func (ps *PvpGRPCStream) openStream() {
 				if err := stream.Send(msg); err != nil {
 					return
 				}
+			case <-ps.closeWriteChannel:
+				logger.Info("grpc流断开send连接 online-->pvp")
+				return
 			}
 		}
 	}()

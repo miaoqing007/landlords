@@ -10,7 +10,8 @@
 LOG
 core/log/~*
 core/src/command/pb
-../.idea/watcherTasks.xml
-../.idea/workspace.xml
+.idea/watcherTasks.xml
+.idea/workspace.xml
+core/src/configtable/~*
 # Output of the go coverage tool, specifically when used with LiteIDE
 *.out
