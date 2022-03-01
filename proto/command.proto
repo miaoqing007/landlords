@@ -1,0 +1,22 @@
+syntax = "proto3";
+
+package command;
+
+enum Command {
+
+    dummy=0;// The first enum value must be zero in proto3
+    //online
+    ClientInOnline   = 1;  //玩家进入online
+    ClientOutOnline  = 2;  //玩家退出online
+    CSStartGame      = 3;  //开始游戏
+
+
+    //gateway 10000-20000
+    MsgToOnline =10001 ; //消息到online
+    MsgTOGateway=10002;  //消息到gateway
+    CSPlayerLogin=10003; //玩家登陆
+
+    //pvp 20000-30000
+    CSJoinPvpPool=20001; //进入匹配池
+    CSExitPvpPool=20002; //退出匹配池
+}
